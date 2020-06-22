@@ -1,5 +1,7 @@
-'use strict';
+#!/usr/bin/env node
 
+'use strict';
+const fs = require('fs');        
 module.exports = {toJSON};
 
 // parses Access data export and converts it into a JSON object
@@ -9,7 +11,6 @@ module.exports = {toJSON};
 
 function toJSON(fileName) {
     return new Promise((resolve, reject) => {
-        const fs = require('fs');
         fs.readFile(fileName, 'utf8', (error, content) => {
             if (error) reject(error);
             // parse content as array of arrays

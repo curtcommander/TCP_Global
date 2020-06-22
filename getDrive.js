@@ -1,12 +1,11 @@
-'use strict';
+#!/usr/bin/env node
 
+'use strict';
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
-
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 const TOKEN_PATH = 'token.json';
-
 module.exports = {drive : getDrive}
 
 // gets drive object used to interact with Google Drive API
@@ -17,9 +16,9 @@ function getDrive() {
         .then(getAccessToken)
         .then(([client, token]) => {
             client.setCredentials(token);
-            console.log(client)
             const drive = google.drive({version: 'v3', auth: client});
-            resolve(drive);
+            let context = {drive};
+            resolve(context);
         }).catch((error) => {console.error(error)})
     })
 }
@@ -65,7 +64,7 @@ function checkAccessToken(client) {
 function getAccessToken(result) {
     return new Promise((resolve, reject) => {
         // pass result through
-        if (!(result[1])) {
+        if ((result[1])) {
             resolve(result);    
         // get token
         } else {
