@@ -6,16 +6,21 @@ const fs = require('fs');
 const getDrive = require('./getDrive');
 const {google} = require('googleapis');
 
-module.exports = {list, get, getFileId, getFileName, listChildren}
+module.exports = {list, get, getFileId, getFileName, getMimeType, listChildren};
+
+getDrive.drive()
+.then((context) => download(context, {fileName: 'Daily Logs'}))
+//.then((context) => getMimeType(context))
+.catch((error) => console.error(error))
 
 // method can be 'list' or 'get'
-function API(method, context, options, log=false) {
+function API(method, context, opts, log=true) {
     return new Promise((resolve, reject) => {
         if (log) {
             console.log('Method: ', method)
-            console.log('Options:', options)
+            console.log('Options:\n', opts)
         }
-        context.drive.files[method](options, (error, result) => {
+        context.drive.files[method](opts, (error, result) => {
             if (error) reject('Error from Google Drive API:', error);
             if (log) {
                 console.log('Response Data:\n', result.data);
@@ -28,23 +33,23 @@ function API(method, context, options, log=false) {
 }
 
 // API's list method
-// lists files satisfying the query conditions (options.q)
-function list(context, options) {
+// lists files satisfying the query conditions (opts.q)
+function list(context, opts) {
     // default value for fields property is 'files(name, id)'
-    if (!options.fields) {
-        options.fields = 'files(name, id)';
+    if (!opts.fields) {
+        opts.fields = 'files(name, id)';
     }
-    return API('list', context, options);
+    return API('list', context, opts);
 }
 
 // API's get method
-// gets info on the file with the file id specified (options.fileId)
-function get(context, options) {
+// gets info on the file with the file id specified (opts.fileId)
+function get(context, opts) {
     // use context.fileId if fileId not provided
-    if (!options.fileId && context.fileId) {
-        options.fileId = context.fileId;
+    if (!opts.fileId && context.fileId) {
+        opts.fileId = context.fileId;
     }
-    return API('get', context, options);
+    return API('get', context, opts);
 }
 
 // gets file id given file name
@@ -52,8 +57,12 @@ function getFileId(context, fileName) {
     if (!fileName && context.fileName) {
         fileName = context.fileName;
     }
+
     return list(context, {q:'name="'+fileName+'"', fields:'files(id)'})
     .then((context) => {
+        if (context.data.files.length > 1) {
+            throw new Error('Multiple files found for file name provided. Consider specifying parent.');
+        }
         context.fileId = context.data.files[0].id;
         return context;
     })
@@ -71,21 +80,82 @@ function getFileName(context, fileId) {
     })
 }
 
-// options properties either parentName or parentId
-function listChildren(context, options) {
-    if (!options.parentName && !options.parentId) {
-        if (context.fileName) {
-            options.parentName = context.fileName;
-        } else if (context.fileId) {            
-            options.parentId = context.fileId;
+function getMimeType(context, {fileId, fileName} = {}) {
+
+    function getMimeTypeFromId(context, fileId) {
+        if (!fileId && context.fileId) {
+            fileId = context.fileId
         }
+        return get(context, {fileId: fileId, fields: 'mimeType'})
+        .then((context) => {
+            context.mimeType = context.data.mimeType;
+            return context;
+        })
     }
-    if (options.parentName) {
-        // get id of parent from name
-        return getFileId(context, options.parentName)
-        .then((context) => {list(context, {q: "'"+context.fileId+"' in parents"})})
-        
-    } else if (options.parentId) {
-        return list(context, {q: "'"+options.parentId+"' in parents"})
+
+    const opts = arguments[1];
+    if (opts) {
+        // file id in opts
+        if (opts.fileId) {
+            return getMimeTypeFromId(context, opts.fileId)
+
+        // file name in opts
+        } else if (opts.fileName) {
+            return getFileId(context, opts.fileName)
+            .then((context) => getMimeTypeFromId(context))
+        }
+
+    // file id in context
+    } else if (context.fileId) {
+        return getMimeTypeFromId(context, context.fileId)
+
+    // file name in context
+    } else if (context.fileName) {
+        return getFileId(context, context.fileName)
+        .then((context) => getMimeTypeFromId(context))
+    }
+}
+
+function listChildren(context, {fileId, fileName} = {}, fields ='files(name, id)') {
+    const opts = arguments[1];
+    if (opts) {
+        // file id in opts
+        if (opts.fileId) {
+            let optsList = {
+                q : "'"+opts.fileId+"' in parents",
+                fields : fields
+            }
+            return list(context, optsList)
+
+        // file name in opts
+        } else if (opts.fileName) {
+            return getFileId(context, opts.fileName)
+            .then((context) => {
+                let optsList = {
+                    q:"'"+context.fileId+"' in parents",
+                    fields : fields
+                }
+                list(context, optsList)
+            })
+        }
+
+    // file id in context
+    } else if (context.fileId) {
+        let optsList = {
+            q : "'"+context.fileId+"' in parents",
+            fields : fields
+        }
+        return list(context, optsList)
+    
+    // file name in context
+    } else if (context.fileName) {
+        return getFileId(context, context.fileName)
+        .then((context) => {
+            let optsList = {
+                q:"'"+context.fileId+"' in parents",
+                fields : fields
+            }
+            list(context, optsList)
+        })
     }
 }
