@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 
 'use strict';
+
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
-const SCOPES = ['https://www.googleapis.com/auth/drive'];
-const TOKEN_PATH = 'token.json';
-module.exports = {drive : getDrive}
+const config = require('./config');
+const SCOPES = config.SCOPES;
+const TOKEN_PATH = config.TOKEN_PATH;
+
+module.exports = {getDrive};
 
 // gets drive object used to interact with Google Drive API
 function getDrive() {
