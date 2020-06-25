@@ -7,7 +7,7 @@ const {google} = require('googleapis');
 const getDrive = require('./drive').getDrive;
 const LOG = require('./config').LOG;
 
-module.exports = {API, _collapseToFileId, listFiles, getFiles, getFileId, getFileName, getMimeType, listChildren};
+module.exports = {API, _collapseOptsToFileId, listFiles, getFiles, getFileId, getFileName, getMimeType, listChildren};
 
 // base function for making requests
 function API(context, resource, method, opts) {
@@ -71,37 +71,43 @@ function getFileName(context, fileId) {
     })
 }
 
-// puts file id in context
-// thenned by a function that will access file id in context
-function _collapseToFileId(context, opts) {
-    
-    if (opts.fileId) {
-        return new Promise((resolve) => {
-            context.fileId = opts.fileId;
-            resolve(context);
-        })
-
-    } else if (opts.fileName) {
-        return getFileId(context, opts.fileName)
-
+// puts file id in opts
+// thenned by a function that will access file id in opts
+function _collapseOptsToFileId(context, opts) {
+    if (opts) {
+        if (opts.fileId) {
+            return new Promise((resolve) => {
+                resolve([context, opts]);
+            })
+        } else if (opts.fileName) {
+            return getFileId(context, opts.fileName)
+            .then((context) => {
+                opts.fileId = context.fileId;
+                return [context, opts]
+            })
+        }
     } else if (context.fileId) {
         return new Promise((resolve) => {
-            resolve(context);
+            const opts = {fildId : context.fileId};
+            resolve([context, opts]);
         })
-
     } else if (context.fileName) {
         return getFileId(context, context.fileName)
+        .then((context) => {
+            const opts = {fileId : context.fileId};
+            return [context, opts]
+        })
     }
 }
 
 // gets mime type given file id or file name
 function getMimeType(context, {fileId, fileName} = {}) {
     
-    return _collapseToFileId(context, arguments[1])
-    .then(_getMimeTypeFromId)
+    return _collapseOptsToFileId(context, arguments[1])
+    .then((result) => _getMimeTypeFromId(result[0], result[1]))
 
-    function _getMimeTypeFromId(context) {
-        return getFiles(context, {fileId: context.fileId, fields: 'mimeType'})
+    function _getMimeTypeFromId(context, opts) {
+        return getFiles(context, {fileId: opts.fileId, fields: 'mimeType'})
         .then((context) => {
             context.mimeType = context.responseData.mimeType;
             return context;
@@ -111,8 +117,14 @@ function getMimeType(context, {fileId, fileName} = {}) {
 
 // lists children given file id or file name
 function listChildren(context, {fileId, fileName, fields} = {}) {
-    return _collapseToFileId(context, arguments[1])
-    .then((context) => {
-        return listFiles(context, {q : "'"+context.fileId+"' in parents", fields : arguments[1].fields})
+    return _collapseOptsToFileId(context, arguments[1])
+    .then((result) => {
+        const context = result[0];
+        const opts = result[1];
+        let optsListChildren = {q : "'"+opts.fileId+"' in parents"};
+        if (opts.fields) {
+            optsListChildren[fields] = opts.fields;
+        }
+        return listFiles(context, optsListChildren)
     })
 }

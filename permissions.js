@@ -16,9 +16,10 @@ function listPermissions(context, opts) {
 
 // lists permissions given file id or file name
 function listPermissionsFile(context, {fileId, fileName} = {}) {
-    return utils._collapseToFileId(context, arguments[1])
-    .then((context) => listPermissions(context, {fileId: context.fileId}))
-    .then((context) => {
+    return utils._collapseOptsToFileId(context, arguments[1])
+    .then((result) => {
+        return listPermissions(result[0], {fileId: result[1].fileId})
+    }).then((context) => {
         context.permissions = context.responseData.permissions;
         return context;
     })
