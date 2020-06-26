@@ -9,7 +9,15 @@ const config = require('./config');
 const SCOPES = config.SCOPES;
 const TOKEN_PATH = config.TOKEN_PATH;
 
-module.exports = {getDrive};
+module.exports = {_checkDrive};
+
+// higher-order function that checks for drive in context
+function _checkDrive(fn) {
+    return async (...args) => {
+        if (!args[1] || args[1] && !args[1].drive) args[1] = await getDrive();
+        return fn.apply(this, args)
+    }
+}
 
 // gets drive object used to interact with Google Drive API
 function getDrive() {
