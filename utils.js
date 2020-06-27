@@ -78,13 +78,13 @@ function getFileName(fileId, drive) {
 function _collapseOptsToFileId(opts, drive) {
     if (opts.fileId) {
         return new Promise((resolve) => {
-            resolve([opts, drive]);
+            resolve(opts);
         })
     } else if (opts.fileName) {
         return getFileId(opts.fileName, drive)
         .then((result) => {
             opts.fileId = result[0];
-            return [opts, drive];
+            return opts;
         })
     }
 }
@@ -92,11 +92,11 @@ function _collapseOptsToFileId(opts, drive) {
 // gets mime type given file id or file name
 getMimeType = _checkDrive(getMimeType);
 function getMimeType({fileId, fileName}, drive) {
-    
-    _collapseOptsToFileId(arguments[0], drive)
-    .then((result) => {
-        getFiles({fileId: result[0].fileId, fields: 'mimeType'}, result[1])
+    return _collapseOptsToFileId(arguments[0], drive)
+    .then((opts) => {
+        return getFiles({fileId: opts.fileId, fields: 'mimeType'}, drive)
         .then((result) => {
+            console.log(result[0])
             return [result[0].mimeType, result[1]];
         })
     })
@@ -114,11 +114,9 @@ function getMimeTypeFileName(fileName, drive) {
 
 // lists children given file id or file name
 listChildren = _checkDrive(listChildren);
-function listChildren({fileId, fileName, fields} = {}, drive) {
+function listChildren({fileId, fileName, fields}, drive) {
     return _collapseOptsToFileId(arguments[0], drive)
-    .then((result) => {
-        const opts = result[0];
-        const drive = result[1];
+    .then((opts) => {
         let optsListChildren = {q : "'"+opts.fileId+"' in parents"};
         if (opts.fields) {
             optsListChildren[fields] = opts.fields;

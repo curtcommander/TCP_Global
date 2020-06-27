@@ -8,7 +8,7 @@ const utils = require('./utils');
 const { getFiles } = require('./utils');
 
 downloadFile = _checkDrive(downloadFile);
-function downloadFile({fileId, fileName} = {}, drive) {
+function downloadFile({fileId, fileName}, drive) {
     
     return utils._collapseOptsToFileId(arguments[0])
     .then((opts) => _getFileMetadata(opts.fileId))
@@ -35,7 +35,7 @@ function downloadFile({fileId, fileName} = {}, drive) {
          }
         // download file
         const dest = fs.createWriteStream(metadata.fileName);
-        drive.files.get({fileId: metadata.fileId, alt: 'media'}, {responseType: 'stream'},
+        return drive.files.get({fileId: metadata.fileId, alt: 'media'}, {responseType: 'stream'},
         (error, response) => {
             if (error) return console.error(error);
             response.data
