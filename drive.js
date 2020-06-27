@@ -28,8 +28,7 @@ function getDrive() {
         .then(([client, token]) => {
             client.setCredentials(token);
             const drive = google.drive({version: 'v3', auth: client});
-            let context = {drive};
-            resolve(context);
+            resolve(drive);
         }).catch((error) => {console.error(error)})
     })
 }

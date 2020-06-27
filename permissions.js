@@ -6,7 +6,7 @@ const fs = require('fs');
 const {_checkDrive} = require('./drive');
 const utils = require('./utils');
 
-module.exports = {listPermissions, listPermissionsFile, listPermissionsFile, listPermissionsFileName};
+module.exports = {listPermissions, listPermissionsFile, listPermissionsFileId, listPermissionsFileName};
 
 // base function for permissions resource's list method
 function listPermissions(context, opts) {
@@ -16,7 +16,7 @@ function listPermissions(context, opts) {
 // lists permissions given file id or file name
 listPermissionsFile = _checkDrive(listPermissionsFile)
 async function listPermissionsFile({fileId, fileName} = {}, context) {
-    return utils._collapseOptsToFileId(context, arguments[0])
+    return utils._collapseOptsToFileId(arguments[0], context)
     .then(async (result) => {
         await listPermissions(result[0], {fileId: result[1].fileId})
         context.permissions = context.responseData.permissions;
