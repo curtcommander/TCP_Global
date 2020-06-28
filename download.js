@@ -5,18 +5,17 @@
 const fs = require('fs');
 const {_checkDrive} = require('./drive');
 const utils = require('./utils');
-const { getFiles } = require('./utils');
 
 downloadFile = _checkDrive(downloadFile);
 function downloadFile({fileId, fileName}, drive) {
     
     return utils._collapseOptsToFileId(arguments[0])
-    .then((opts) => _getFileMetadata(opts.fileId))
-    .then((metadata) => _download(metadata))
+    .then(opts => _getFileMetadata(opts.fileId))
+    .then(metadata => _download(metadata))
     
     function _getFileMetadata(fileId) {
-        return getFiles({fileId, fields: 'name, id, mimeType'}, drive)
-        .then((result) => {
+        return utils.getFiles({fileId, fields: 'name, id, mimeType'}, drive)
+        .then(result => {
             const responseData = result[0];
             const metadata = {
                 fileId : responseData.id,

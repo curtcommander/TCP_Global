@@ -6,8 +6,6 @@ const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
 const config = require('./config');
-const SCOPES = config.SCOPES;
-const TOKEN_PATH = config.TOKEN_PATH;
 
 module.exports = {_checkDrive};
 
@@ -53,7 +51,7 @@ function getClient() {
 function checkAccessToken(client) {
     return new Promise((resolve, reject) => {
         // check if token already stored
-        fs.readFile(TOKEN_PATH, 'utf8', (error, token) => {
+        fs.readFile(config.TOKEN_PATH, 'utf8', (error, token) => {
             // token not found
             if (error) {
                 if (error.code == 'ENOENT') {
@@ -81,7 +79,7 @@ function getAccessToken(result) {
             const client = result[0];
             const authUrl = client.generateAuthUrl({
                 access_type: 'offline',
-                scope: SCOPES,
+                scope: config.SCOPES,
             });
             console.log('Authorize this app by visiting this url:\n\n'+authUrl+'\n');
             const rl = readline.createInterface({
@@ -94,9 +92,9 @@ function getAccessToken(result) {
                     if (error) return reject ('Error retrieving access token: ', error);
                     client.setCredentials(token);
                     // store token to disk for later program executions
-                    fs.writeFile(TOKEN_PATH, JSON.stringify(token), (error) => {
+                    fs.writeFile(config.TOKEN_PATH, JSON.stringify(token), (error) => {
                         if (error) return reject('Error writing token to file:', error);
-                        console.log('Token stored to', TOKEN_PATH);
+                        console.log('Token stored to', config.TOKEN_PATH);
                         resolve([client, token])
                     })
                 })

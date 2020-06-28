@@ -4,11 +4,12 @@
 
 const fs = require('fs');
 const {_checkDrive} = require('./drive');
-const LOG = require('./config').LOG;
+const {LOG} = require('./config');
 
-module.exports = {API, _collapseOptsToFileId, listFiles, getFiles, getFileId,
-                  getFileName, getMimeType, getMimeTypeFileId, getMimeTypeFileName,
-                  listChildren, listChildrenFileId, listChildrenFileName};
+module.exports = {API, _collapseOptsToFileId, _collapseOptsToParentId, listFiles, getFiles, 
+                  deleteFile, getFileId, getFileName, getMimeType, getMimeTypeFileId, 
+                  getMimeTypeFileName, listChildren, listChildrenFileId, listChildrenFileName,
+                  deleteFile};
 
 // base function for making requests
 function API(drive, resource, method, opts) {
@@ -50,9 +51,17 @@ function getFiles(opts, drive) {
 
 // gets file id given file name
 getFileId = _checkDrive(getFileId);
-function getFileId(fileName, drive) {
-    return listFiles({q:'name="'+fileName+'"', fields:'files(id)'}, drive)
-    .then((result) => {
+async function getFileId(fileName, drive, {parentId, parentName} = {}) {
+    const parentOpts = arguments[2];
+    console.log(arguments)
+    let q = 'name="'+fileName+'" and trashed=false'
+    if (parentOpts) {
+        await _collapseOptsToParentId(parentOpts, drive)
+        q += ' and "'+parentOpts.parentId+'" in parents';
+        
+    }
+    return listFiles({q:q, fields:'files(id)'}, drive)
+    .then(result => {
         const data = result[0];
         const drive = result[1];
         if (data.files.length > 1) {
@@ -66,37 +75,55 @@ function getFileId(fileName, drive) {
 getFileName = _checkDrive(getFileName);
 function getFileName(fileId, drive) {
     return getFiles({fileId: fileId, fields: 'name'}, drive)
-    .then((result) => {
+    .then(result => {
         const data = result[0];
         const drive = result[1];
         return [data.name, drive];
     })
 }
 
-// puts file id in opts
-// thenned by a function that will access file id in opts
-function _collapseOptsToFileId(opts, drive) {
-    if (opts.fileId) {
+// propPrefix can be either 'file' or 'parent'
+function _collapseOptsToId(opts, propPrefix, drive) {
+    const propId = propPrefix+'Id';
+    const propName = propPrefix+'Name';
+
+    // id given
+    if (opts[propId]) {
         return new Promise((resolve) => {
-            resolve(opts);
+            resolve();
         })
-    } else if (opts.fileName) {
-        return getFileId(opts.fileName, drive)
-        .then((result) => {
-            opts.fileId = result[0];
-            return opts;
+    // name given
+    } else if (opts[propName]) {
+        return getFileId(opts[propName], drive)
+        .then(result => {
+            opts[propId] = result[0];
+            return;
+        })
+    // use root as default if id nor name given
+    } else {
+        return new Promise((resolve) => {
+            opts[propId] = 'root';
+            resolve();
         })
     }
+}
+
+function _collapseOptsToFileId(opts, drive) {
+    return _collapseOptsToId(opts, 'file', drive);
+}
+
+function _collapseOptsToParentId(opts, drive) {
+    return _collapseOptsToId(opts, 'parent', drive);
 }
 
 // gets mime type given file id or file name
 getMimeType = _checkDrive(getMimeType);
 function getMimeType({fileId, fileName}, drive) {
-    return _collapseOptsToFileId(arguments[0], drive)
-    .then((opts) => {
+    const opts = arguments[0];
+    return _collapseOptsToFileId(opts, drive)
+    .then(() => {
         return getFiles({fileId: opts.fileId, fields: 'mimeType'}, drive)
         .then((result) => {
-            console.log(result[0])
             return [result[0].mimeType, result[1]];
         })
     })
@@ -115,9 +142,10 @@ function getMimeTypeFileName(fileName, drive) {
 // lists children given file id or file name
 listChildren = _checkDrive(listChildren);
 function listChildren({fileId, fileName, fields}, drive) {
-    return _collapseOptsToFileId(arguments[0], drive)
-    .then((opts) => {
-        let optsListChildren = {q : "'"+opts.fileId+"' in parents"};
+    const opts = arguments[0];
+    return _collapseOptsToFileId(opts, drive)
+    .then(() => {
+        let optsListChildren = {q : "'"+opts.fileId+"' in parents  and trashed=false"};
         if (opts.fields) {
             optsListChildren[fields] = opts.fields;
         }
@@ -133,4 +161,34 @@ function listChildrenFileId(fileId, drive) {
 // lists children given file name
 function listChildrenFileName(fileName, drive) {
     return listChildren({fileName}, drive);
+}
+
+// deletes a file
+deleteFile = _checkDrive(deleteFile);
+function deleteFile({fileId, fileName}, drive, {parentId, parentName} = {}) {
+    const opts = arguments[0];
+
+    if (opts.fileId) {
+        return _delete();
+    } else if (opts.fileName) {
+        const parentOpts = arguments[2];
+        console.log(parentOpts)
+        if (parentOpts) {
+            if (parentOpts.parentName === 'root' ) {
+                parentOpts.parentId = 'root';
+            }
+        }
+        getFileId(opts.fileName, drive, parentOpts)
+        .then(result => {
+            opts.fileId = result[0];
+            _delete();
+        })
+    }
+    
+    function _delete() {
+        return drive.files.delete({fileId: opts.fileId}, (error, response) => {
+            if (error) return console.error(error);
+            console.log(opts.fileId, 'has been deleted');
+        })
+    }
 }

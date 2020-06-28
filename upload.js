@@ -30,20 +30,18 @@ uploadFile = _checkDrive(uploadFile);
 function uploadFile({filePath, parentId, parentName}, drive) {
     const opts = arguments[0];
 
-    _collapseOptsToParentId()
-    .then(_checkFileExists)
-    .then(_upload)
-    .catch(error => console.error(error))
-    
-
     // mimeType
-    const ext = opts.filePath.slice(opts.filePath.lastIndexOf('.')+1);
+    const idxDot = opts.filePath.lastIndexOf('.');
+    if (idxDot == -1) {
+        return console.error(new Error('Name of file to be uploaded didn\'t include file extension.'));
+    }
+    const ext = opts.filePath.slice(idxDot+1);
     const mimeType = mimeTypesByExt[ext]
     
     // fileMetaData
-    let idx = opts.filePath.lastIndexOf('/')
-    if (idx == -1) idx = 0;
-    const fileName = opts.filePath.slice(idx);
+    let idxSlash = opts.filePath.lastIndexOf('/')
+    if (idxSlash == -1) idxSlash = 0;
+    const fileName = opts.filePath.slice(idxSlash);
     const fileMetadata = {name: fileName};
 
     // media
@@ -51,28 +49,11 @@ function uploadFile({filePath, parentId, parentName}, drive) {
         mimeType: mimeType,
         body: fs.createReadStream(opts.filePath)
     };
-
-    function _collapseOptsToParentId() {  
-
-        // parent id given
-        if (opts.parentId) {
-            return new Promise((resolve) => {
-                resolve(opts.parentId);
-            })
-
-        // parent name given
-        } else if (opts.parentName) {
-            return utils.getFileId(opts.parentName, drive)
-            .then(result => result[0])
-
-        // use root as default if parent not specified
-        } else {
-            return new Promise((resolve) => {
-                resolve('root');
-            })
-            
-        }
-    }
+    
+    utils._collapseOptsToParentId(opts, drive)
+    .then(opts => _checkFileExists(opts.parentId))
+    .then(_upload)
+    .catch(error => console.error(error))
 
     function _checkFileExists(parentId) {
         const q = 'name="'+fileName+'" and mimeType="'+mimeType+'" and "'+parentId+'" in parents and trashed=false';
