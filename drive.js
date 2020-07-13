@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 'use strict';
 
 const fs = require('fs');
@@ -7,98 +5,116 @@ const readline = require('readline');
 const {google} = require('googleapis');
 const config = require('./config');
 
-module.exports = {_checkDrive};
+module.exports = {_addDrive};
 
-// higher-order function that checks for drive in context
-function _checkDrive(fn) {
-    return async (...args) => {
-        if (!args[1] || args[1] && !args[1].drive) args[1] = await getDrive();
-        return fn.apply(this, args)
+/**
+ * Higher-order function that adds client object (`drive`) to instance
+ * of utilsGDrive if not present and then executes `fn`.
+ * @param {function} fn - Function to be executed
+ * @return {void} - None
+ * @access private
+ */
+function _addDrive(fn) {
+  return async (...args) => {
+    if (!this.drive) {
+      this.drive = await _getDrive();
     }
+    return fn.apply(this, args);
+  };
 }
 
-// gets drive object used to interact with Google Drive API
-function getDrive() {
-    return new Promise((resolve, reject) => {
-        getClient()
-        .then(checkAccessToken)
-        .then(getAccessToken)
-        .then(([client, token]) => {
-            client.setCredentials(token);
-            const drive = google.drive({version: 'v3', auth: client});
-            resolve(drive);
-        }).catch((error) => {console.error(error)})
-    })
+/**
+ * Gets and authenticates client object used to
+ * interact with Google Drive API
+ * @return {google.auth.OAuth2} - Authenticated client object
+ * @access private
+ */
+async function _getDrive() {
+  const client = await _getClient();
+  const token = await _getToken(client);
+  client.setCredentials(token);
+  const drive = google.drive({version: 'v3', auth: client});
+  return drive;
 }
 
-// gets client object with credentials (but without token)
-function getClient() {
-    return new Promise((resolve, reject) => {
-        fs.readFile('credentials.json', 'utf8', (error, content) => {    
-            if (error) return reject(error);
-            const credentials = JSON.parse(content);
-            const {client_secret, client_id, redirect_uris} = credentials.installed;
-            const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
-            resolve(oAuth2Client);
-        })
-    })  
+/**
+ * Instantiates client object with credentials
+ * @return {google.auth.OAuth2} - Client object
+ * @access private
+ */
+function _getClient() {
+  const content = fs.readFileSync(config.CREDS_PATH);
+  const credentials = JSON.parse(content);
+  const {client_secret, client_id, redirect_uris} = credentials.installed;
+  const oAuth2Client = new google.auth.OAuth2(client_id,
+      client_secret, redirect_uris[0]);
+  return oAuth2Client;
 }
 
-// checks for access token
-// promise resolves to array
-// first element is the client object
-// second element is token if found, false (boolean) if not found
-function checkAccessToken(client) {
-    return new Promise((resolve, reject) => {
-        // check if token already stored
-        fs.readFile(config.TOKEN_PATH, 'utf8', (error, token) => {
-            // token not found
-            if (error) {
-                if (error.code == 'ENOENT') {
-                    return resolve([client, false]);
-                } else {
-                    return reject(error);
-                }
-            }
-            // token found
-            token = JSON.parse(token);
-            resolve([client, token]);
-        })
-    })
+/**
+ * Gets token to authenticate client object
+ * @param {google.auth.OAuth2} client - Client object
+ * returned by `getClient`
+ * @return {Object} - Token object
+ * @access private
+ */
+function _getToken(client) {
+  let token = _getTokenStored();
+  if (!token) token = _getTokenAPI(client);
+  return token;
 }
 
-// if access token not found, gets access token and writes it to TOKEN_PATH
-// promise resolves to array [client, token]
-function getAccessToken(result) {
-    return new Promise((resolve, reject) => {
-        // pass result through
-        if ((result[1])) {
-            resolve(result);    
-        // get token
-        } else {
-            const client = result[0];
-            const authUrl = client.generateAuthUrl({
-                access_type: 'offline',
-                scope: config.SCOPES,
-            });
-            console.log('Authorize this app by visiting this url:\n\n'+authUrl+'\n');
-            const rl = readline.createInterface({
-                input: process.stdin,
-                output: process.stdout,
-            });
-            rl.question('Enter the code from that page here: ', (code) => {
-                rl.close();
-                client.getToken(code, (error, token) => {
-                    if (error) return reject ('Error retrieving access token: ', error);
-                    client.setCredentials(token);
-                    // store token to disk for later program executions
-                    fs.writeFile(config.TOKEN_PATH, JSON.stringify(token), (error) => {
-                        if (error) return reject('Error writing token to file:', error);
-                        console.log('Token stored to', config.TOKEN_PATH);
-                        resolve([client, token])
-                    })
-                })
-            })
-        }
-    })
+/**
+ * Gets locally-stored access token.
+ * @return {Object|Boolean} - Returns token if found
+ * and `false` if not
+ * @access private
+ */
+function _getTokenStored() {
+  try {
+    const content = fs.readFileSync(config.TOKEN_PATH);
+    const token = JSON.parse(content);
+    return token;
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      return false;
+    } else {
+      throw e;
+    }
+  }
+}
+
+/**
+ * Gets token from Google and stores to disk.
+ * @param {google.auth.OAuth2} client - Client object
+ * @return {Object} - Token object
+ * @access private
+ */
+function _getTokenAPI(client) {
+  const authUrl = client.generateAuthUrl({
+    access_type: 'offline',
+    scope: config.SCOPES,
+  });
+  console.log('Authorize this app by visiting this url:\n\n'+authUrl+'\n');
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  return new Promise((resolve) => {
+    rl.question('Enter the code from that page here: ', (code) => {
+      rl.close();
+      client.getToken(code, (error, token) => {
+        if (error) throw new Error('Error retrieving access token:', error);
+        // store token to disk for later program executions
+        fs.writeFile(config.TOKEN_PATH, JSON.stringify(token), (error) => {
+          if (error) {
+            console.error(
+                new Error('Error writing token to file:', error));
+          }
+          console.log('Token stored to', config.TOKEN_PATH);
+          resolve(token);
+        });
+      });
+    });
+  });
 }
