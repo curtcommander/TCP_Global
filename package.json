@@ -1,0 +1,32 @@
+{
+  "name": "utils-gdrive",
+  "version": "0.0.5",
+  "description": "Package for interacting with the Google Drive API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/curtcommander/utils-gdrive.git"
+  },
+  "keywords": [
+    "google",
+    "drive",
+    "API"
+  ],
+  "author": "Curt Commander",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/curtcommander/utils-gdrive/issues"
+  },
+  "homepage": "https://github.com/curtcommander/utils-gdrive#readme",
+  "dependencies": {
+    "googleapis": "^39.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-config-google": "^0.14.0",
+    "jsdoc": "^3.6.4"
+  }
+}

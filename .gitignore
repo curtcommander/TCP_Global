@@ -1,3 +1,8 @@
+notes.txt
+credentials.json
+token.json
+.eslintrc.json
+
 # Logs
 logs
 *.log
