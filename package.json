@@ -4,7 +4,7 @@
   "description": "Package for interacting with the Google Drive API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,6 @@
   },
   "devDependencies": {
     "eslint": "^7.4.0",
-    "eslint-config-google": "^0.14.0",
-    "jsdoc": "^3.6.4"
+    "eslint-config-google": "^0.14.0"
   }
 }
