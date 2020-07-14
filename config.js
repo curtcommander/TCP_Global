@@ -2,7 +2,7 @@
 'use strict';
 
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
-const LOG = true;
+const LOG = false;
 
 let TOKEN_PATH = 'token.json';
 let CREDS_PATH = 'credentials.json';

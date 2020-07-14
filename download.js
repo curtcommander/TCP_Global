@@ -16,10 +16,10 @@ module.exports = {downloadFile, downloadFileId, downloadFileName};
  * @return {void} - None
  * @example donwloadFile({fileName: 'report.txt', out: Reports/report'})
  */
-function downloadFile(params) {
-  return utils._collapseparamsToId(params)
-      .then(() => _getFileMetadata(params.fileId))
-      .then((metadata) => _download(metadata));
+async function downloadFile(params) {
+  await utils._collapseParamsToId(params);
+  const metadata = await _getFileMetadata(params.fileId);
+  _download(metadata);
 
   /**
    * Gets file metadata (id, name, and MIME type).
@@ -27,35 +27,34 @@ function downloadFile(params) {
    * @return {Object} - Object with `id`, `name`, and `mimeType`
    * @access private
    */
-  function _getFileMetadata(fileId) {
-    return utils.getFiles({fileId, fields: 'name, id, mimeType'})
-        .then((data) => {
-          const metadata = {
-            fileId: data.id,
-            fileName: data.name,
-            mimeType: data.mimeType,
-          };
-          return metadata;
-        });
+  async function _getFileMetadata(fileId) {
+    data = await utils.getFiles({fileId, fields: 'name, id, mimeType'});
+    const metadata = {
+      fileId: data.id,
+      fileName: data.name,
+      mimeType: data.mimeType,
+    };
+    return metadata;
   }
 
   /**
    * Makes request to API to donwload file and writes it to `out`
    * @param {Object} metadata - Object returned by `_getFileMetadata`
    * @return {void} - None
+   * @this utilsGDrive
+   * @throws Throws error when a directory is specified rather than a file.
    * @access private
    */
   function _download(metadata) {
     // folder specified, throw error
     if (metadata.mimeType === 'application/vnd.google-apps.folder') {
-      throw new Error('A directory (rather than a file) was specified.');
+      return console.error(new Error('A directory was specified.'));
     }
     // download file
     if (!params.out) params.out = '.';
     const dest = fs.createWriteStream(params.out+'/'+metadata.fileName);
-    return this.drive.files.get(
-        {fileId: metadata.fileId, alt: 'media'},
-        {responseType: 'stream'},
+    this.drive.files.get(
+        {fileId: metadata.fileId, alt: 'media'},{responseType: 'stream'},
         (error, response) => {
           if (error) return console.error(error);
           response.data
