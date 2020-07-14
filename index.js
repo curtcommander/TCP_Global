@@ -1,16 +1,30 @@
 #!/usr/bin/env node
 'use strict';
 
-const config = require('./config');
-const utils = require('./utils');
-const download = require('./download');
+const utils = require('./lib/utils');
+const download = require('./lib/download');
+
+const SCOPES = ['https://www.googleapis.com/auth/drive'];
+const LOG = false;
+
+let TOKEN_PATH = 'token.json';
+let CREDS_PATH = 'credentials.json';
+let entryPoint;
+Object.keys(require.cache).map((key) => {
+  const cacheEntry = require.cache[key];
+  if (cacheEntry.filename.indexOf('/utils-gdrive/index.js') !== -1) {
+    entryPoint = cacheEntry.path;
+  }
+});
+TOKEN_PATH = entryPoint + '/' + TOKEN_PATH;
+CREDS_PATH = entryPoint + '/' + CREDS_PATH;
 
 class utilsGDrive {
     constructor() {
-        this.SCOPES     = config.SCOPES;
-        this.TOKEN_PATH = config.TOKEN_PATH, 
-        this.CREDS_PATH = config.CREDS_PATH,
-        this.LOG        = config.LOG
+        this.SCOPES     = SCOPES,
+        this.TOKEN_PATH = TOKEN_PATH, 
+        this.CREDS_PATH = CREDS_PATH,
+        this.LOG        = LOG
     }
     
     api                  = utils.api;
