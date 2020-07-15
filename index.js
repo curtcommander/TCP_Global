@@ -4,7 +4,8 @@
 const config = require('./config');
 const utils = require('./lib/utils');
 const download = require('./lib/download');
-const upload = require('./lib/upload');
+const create = require('./lib/create');
+const deleteFile = require('./lib/deleteFile');
 
 class utilsGDrive {
     constructor() {
@@ -14,20 +15,26 @@ class utilsGDrive {
         this.LOG        = config.LOG
     }
     
-    api                  = utils.api;
-    listFiles            = utils.listFiles;
-    getFiles             = utils.getFiles;
-    getFileId            = utils.getFileId;
-    getFileName          = utils.getFileName; 
-    listChildren         = utils.listChildren;
-    listChildrenFileId   = utils.listChildrenFileId; 
-    listChildrenFileName = utils.listChildrenFileName;
+    api                       = utils.api;
+    listFiles                 = utils.listFiles;
+    getFiles                  = utils.getFiles;
+    getFileId                 = utils.getFileId;
+    getFileName               = utils.getFileName; 
+    listChildren              = utils.listChildren;
+    listChildrenFileId        = utils.listChildrenFileId; 
+    listChildrenFileName      = utils.listChildrenFileName;
     
-    downloadFile         = download.downloadFile;
-    downloadFileId       = download.downloadFileId;
-    downloadFileName     = download.downloadFileName;
+    downloadFile              = download.downloadFile;
+    downloadFileId            = download.downloadFileId;
+    downloadFileName          = download.downloadFileName;
 
-    uploadFile           = upload.uploadFile;
+    uploadFile                = create.uploadFile;
+    mkDir                     = create.mkDir;
+
+    deleteFile                = deleteFile.deleteFile;
+    deleteFileId              = deleteFile.deleteFileId;
+    deleteFileNameParentId    = deleteFile.deleteFileNameParentId;
+    deleteFileNameParentName  = deleteFile.deleteFileNameParentName;
 }
 
 module.exports = new utilsGDrive();
