@@ -5,7 +5,7 @@ const config = require('./config');
 const utils = require('./lib/utils');
 const download = require('./lib/download');
 const create = require('./lib/create');
-const deleteFile = require('./lib/deleteFile');
+const del = require('./lib/delete');
 
 class utilsGDrive {
     constructor() {
@@ -29,12 +29,16 @@ class utilsGDrive {
     downloadFileName          = download.downloadFileName;
 
     uploadFile                = create.uploadFile;
+    uploadFileParentId        = create.uploadFileParentId;
+    uploadFileParentName      = create.uploadFileParentName;
     mkDir                     = create.mkDir;
+    mkDirParentId             = create.mkDirParentId;
+    mkDirParentName           = create.mkDirParentName;
 
-    deleteFile                = deleteFile.deleteFile;
-    deleteFileId              = deleteFile.deleteFileId;
-    deleteFileNameParentId    = deleteFile.deleteFileNameParentId;
-    deleteFileNameParentName  = deleteFile.deleteFileNameParentName;
+    deleteFile                = del.deleteFile;
+    deleteFileId              = del.deleteFileId;
+    deleteFileNameParentId    = del.deleteFileNameParentId;
+    deleteFileNameParentName  = del.deleteFileNameParentName;
 }
 
 module.exports = new utilsGDrive();
