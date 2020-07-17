@@ -7,6 +7,9 @@ const download = require('./lib/download');
 const create = require('./lib/create');
 const del = require('./lib/delete');
 
+/**
+ * Base class for utils-gdrive
+ */
 class utilsGDrive {
     constructor() {
         this.SCOPES     = config.SCOPES,
