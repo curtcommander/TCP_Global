@@ -1,14 +1,14 @@
 {
-  "name": "utils-gdrive",
+  "name": "utils-google-drive",
   "version": "0.0.5",
-  "description": "Package for interacting with the Google Drive API",
+  "description": "Package for interfacing with the Google Drive API",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/curtcommander/utils-gdrive.git"
+    "url": "git+https://github.com/curtcommander/utils-google-drive.git"
   },
   "keywords": [
     "google",
@@ -18,9 +18,9 @@
   "author": "Curt Commander",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/curtcommander/utils-gdrive/issues"
+    "url": "https://github.com/curtcommander/utils-google-drive/issues"
   },
-  "homepage": "https://github.com/curtcommander/utils-gdrive#readme",
+  "homepage": "https://curtcommander.github.io/utils-google-drive",
   "dependencies": {
     "googleapis": "^39.2.0"
   },
