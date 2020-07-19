@@ -8,7 +8,7 @@ let CREDS_PATH = 'credentials.json';
 let entryPoint;
 Object.keys(require.cache).map((key) => {
   const cacheEntry = require.cache[key];
-  if (cacheEntry.filename.indexOf('/utils-gdrive/index.js') !== -1) {
+  if (cacheEntry.filename.indexOf('/utils-google-drive/index.js') !== -1) {
     entryPoint = cacheEntry.path;
   }
 });
