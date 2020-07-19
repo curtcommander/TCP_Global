@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#deleteFile">deleteFile</a></li><li><a href="global.html#deleteFileId">deleteFileId</a></li><li><a href="global.html#deleteFileNameParentId">deleteFileNameParentId</a></li><li><a href="global.html#deleteFileNameParentName">deleteFileNameParentName</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#downloadFile">downloadFile</a></li><li><a href="global.html#downloadFileId">downloadFileId</a></li><li><a href="global.html#downloadFileName">downloadFileName</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileIdPId">getFileIdPId</a></li><li><a href="global.html#getFileIdPName">getFileIdPName</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#getMimeFId">getMimeFId</a></li><li><a href="global.html#getMimeFNamePId">getMimeFNamePId</a></li><li><a href="global.html#getMimeFNamePName">getMimeFNamePName</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listChildrenFId">listChildrenFId</a></li><li><a href="global.html#listChildrenFNamePId">listChildrenFNamePId</a></li><li><a href="global.html#listChildrenFNamePName">listChildrenFNamePName</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mkDirParentId">mkDirParentId</a></li><li><a href="global.html#mkDirParentName">mkDirParentName</a></li><li><a href="global.html#uploadFile">uploadFile</a></li><li><a href="global.html#uploadFileParentId">uploadFileParentId</a></li><li><a href="global.html#uploadFileParentName">uploadFileParentName</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#deleteFile">deleteFile</a></li><li><a href="global.html#deleteFileFId">deleteFileFId</a></li><li><a href="global.html#deleteFileFNamePId">deleteFileFNamePId</a></li><li><a href="global.html#deleteFileFNamePName">deleteFileFNamePName</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#downloadFile">downloadFile</a></li><li><a href="global.html#downloadFileId">downloadFileId</a></li><li><a href="global.html#downloadFileName">downloadFileName</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileIdPId">getFileIdPId</a></li><li><a href="global.html#getFileIdPName">getFileIdPName</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#getMimeFId">getMimeFId</a></li><li><a href="global.html#getMimeFNamePId">getMimeFNamePId</a></li><li><a href="global.html#getMimeFNamePName">getMimeFNamePName</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listChildrenFId">listChildrenFId</a></li><li><a href="global.html#listChildrenFNamePId">listChildrenFNamePId</a></li><li><a href="global.html#listChildrenFNamePName">listChildrenFNamePName</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mkDirParentId">mkDirParentId</a></li><li><a href="global.html#mkDirParentName">mkDirParentName</a></li><li><a href="global.html#uploadFile">uploadFile</a></li><li><a href="global.html#uploadFileParentId">uploadFileParentId</a></li><li><a href="global.html#uploadFileParentName">uploadFileParentName</a></li></ul>
 </nav>
 
 <div id="main">
@@ -44,8 +44,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>#!/usr/bin/env node
-'use strict';
+            <pre class="prettyprint source linenums"><code>'use strict';
 
 const drive = require('./drive');
 const utils = require('./utils');
@@ -54,59 +53,71 @@ deleteFile = drive._addDrive(deleteFile);
 
 module.exports = {
   deleteFile,
-  deleteFileId,
-  deleteFileNameParentId,
-  deleteFileNameParentName,
+  deleteFileFId,
+  deleteFileFNamePId,
+  deleteFileFNamePName,
 };
 
 /**
  * Deletes a file in Google drive.
- * @param {Object} paramsFile - An object identifying the file
- * to be deleted with either `fileId` or `fileName`
- * @param {Object} [paramsParent] - An object identifying the parent
- * of the file to be deleted with either `parentId` or `parentName`
- * @return {void} - None
- * @this {utilsGDrive}
+ * @param {Object} fileParams - An object identifying the file
+ * to be deleted with either &lt;code>fileId&lt;/code> or &lt;code>fileName&lt;/code>
+ * @param {Object} [parentParams] - An object identifying the parent
+ * of the file to be deleted with either 
+ * &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>
+ * @return {void} None
+ * @example
+ * // delete file "File Name" whose parent is "Folder Name"
+ * utilsGDrive.deleteFile({fileName: "File Name"}, {parentName: "Folder Name"});
  */
-async function deleteFile(paramsFile, paramsParent = {}) {
-  if (!paramsFile.fileId &amp;&amp; paramsFile.fileName) {
-    paramsFile.fileId = await utils.getFileId(paramsFile.fileName, paramsParent);
+async function deleteFile(fileParams, parentParams = {}) {
+  if (!fileParams.folderId &amp;&amp; fileParams.folderName) {
+    fileParams.fileId = await utils.getFileId(fileParams.fileName, parentParams);
   }
-  await this.drive.files.delete({fileId: paramsFile.fileId}, (error) => {
+  await this.drive.files.delete({fileId: fileParams.fileId}, (error) => {
     if (error) return console.error(error);
-    console.log(paramsFile.fileId, 'has been deleted');
+    console.log(fileParams.fileId, 'has been deleted');
   });
 }
 
 /**
- * Deletes a file in Google Drive given file id.
- * Wraps `deleteFile`.
+ * Deletes a file in given file id.
+ * @see Wraps {@link deleteFile}
  * @param {String} fileId - Id of file to be deleted
- * @return {void} - None
+ * @return {void} None
+ * @example
+ * // delete file whose id is "XXX_FILE_ID_XXX"
+ * utilsGDrive.deleteFileFId("XXX_FILE_ID_XXX");
  */
-function deleteFileId(fileId) {
+function deleteFileFId(fileId) {
   return deleteFile({fileId});
 }
 
 /**
- * Deletes a file in Google Drive given file name and id of parent.
- * Wraps `deleteFile`.
- * @param {String} fileName - Name of file to be deleted
- * @param {String} parentId - Id of file to be deleted's parent
- * @return {void} - None
+ * Deletes a file given file name and parent id.
+ * @see Wraps {@link deleteFile}
+ * @param {String} fileName - File name
+ * @param {String} [parentId] - Parent id
+ * @return {void} None
+ * @example
+ * // delete file "File Name" in the folder with id "XXX_FOLDER_ID_XXX"
+ * utilsGDrive.deleteFileFNamePId("File Name", "XXX_FOLDER_ID_XXX")
  */
-function deleteFileNameParentId(fileName, parentId) {
+function deleteFileFNamePId(fileName, parentId) {
   return deleteFile({fileName}, {parentId});
 }
 
 /**
- * Deletes a file in Google Drive given file name and parent name.
- * Wraps `deleteFile`.
- * @param {String} fileName - Name of file to be deleted
- * @param {String} parentName - Name of file to be deleted's parent
- * @return {void} - None
+ * Deletes a file given file name and parent name.
+ * @see Wraps {@link deleteFile}
+ * @param {String} fileName - File name
+ * @param {String} [parentName] - Parent name
+ * @return {void} None
+ * @example
+ * // delete file "File Name" in the folder "Folder Name"
+ * utilsGDrive.deleteFileFNamePName("File Name", "Folder Name");
  */
-function deleteFileNameParentName(fileName, parentName) {
+function deleteFileFNamePName(fileName, parentName) {
   return deleteFile({fileName}, {parentName});
 }
 </code></pre>
@@ -123,7 +134,7 @@ function deleteFileNameParentName(fileName, parentName) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat Jul 18 2020 20:13:25 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sun Jul 19 2020 13:07:14 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
