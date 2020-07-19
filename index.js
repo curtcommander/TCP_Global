@@ -47,9 +47,9 @@ class utilsGDrive {
     mkDirPName              = create.mkDirParentName;
 
     deleteFile              = del.deleteFile;
-    deleteFId               = del.deleteFileId;
-    deleteFNamePId          = del.deleteFileNameParentId;
-    deleteFNamePName        = del.deleteFileNameParentName;
+    deleteFileFId           = del.deleteFileFId;
+    deleteFileFNamePId      = del.deleteFileFNamePId;
+    deleteFileFNamePName    = del.deleteFileFNamePName;
 }
 
 module.exports = new utilsGDrive();
