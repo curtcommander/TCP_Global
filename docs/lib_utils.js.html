@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#deleteFile">deleteFile</a></li><li><a href="global.html#deleteFileFId">deleteFileFId</a></li><li><a href="global.html#deleteFileFNamePId">deleteFileFNamePId</a></li><li><a href="global.html#deleteFileFNamePName">deleteFileFNamePName</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#downloadFile">downloadFile</a></li><li><a href="global.html#downloadFileId">downloadFileId</a></li><li><a href="global.html#downloadFileName">downloadFileName</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileIdPId">getFileIdPId</a></li><li><a href="global.html#getFileIdPName">getFileIdPName</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#getMimeFId">getMimeFId</a></li><li><a href="global.html#getMimeFNamePId">getMimeFNamePId</a></li><li><a href="global.html#getMimeFNamePName">getMimeFNamePName</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listChildrenFId">listChildrenFId</a></li><li><a href="global.html#listChildrenFNamePId">listChildrenFNamePId</a></li><li><a href="global.html#listChildrenFNamePName">listChildrenFNamePName</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mkDirParentId">mkDirParentId</a></li><li><a href="global.html#mkDirParentName">mkDirParentName</a></li><li><a href="global.html#uploadFile">uploadFile</a></li><li><a href="global.html#uploadFileParentId">uploadFileParentId</a></li><li><a href="global.html#uploadFileParentName">uploadFileParentName</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#deleteFile">deleteFile</a></li><li><a href="global.html#deleteFileFId">deleteFileFId</a></li><li><a href="global.html#deleteFileFNamePId">deleteFileFNamePId</a></li><li><a href="global.html#deleteFileFNamePName">deleteFileFNamePName</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#downloadFId">downloadFId</a></li><li><a href="global.html#downloadFNamePId">downloadFNamePId</a></li><li><a href="global.html#downloadFNamePName">downloadFNamePName</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileIdPId">getFileIdPId</a></li><li><a href="global.html#getFileIdPName">getFileIdPName</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#getMimeFId">getMimeFId</a></li><li><a href="global.html#getMimeFNamePId">getMimeFNamePId</a></li><li><a href="global.html#getMimeFNamePName">getMimeFNamePName</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listChildrenFId">listChildrenFId</a></li><li><a href="global.html#listChildrenFNamePId">listChildrenFNamePId</a></li><li><a href="global.html#listChildrenFNamePName">listChildrenFNamePName</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mkDirPId">mkDirPId</a></li><li><a href="global.html#mkDirPName">mkDirPName</a></li><li><a href="global.html#upload">upload</a></li><li><a href="global.html#uploadPId">uploadPId</a></li><li><a href="global.html#uploadPName">uploadPName</a></li></ul>
 </nav>
 
 <div id="main">
@@ -68,7 +68,8 @@ module.exports = {
   listChildrenFId,
   listChildrenFNamePId,
   listChildrenFNamePName,
-  _collapseParamsToId,
+  _resolveParamsId,
+  _resolveFId
 };
 
 /**
@@ -153,38 +154,34 @@ function getFiles(params) {
 }
 
 /**
- * Resolves id property in &lt;code>params&lt;/code>. Defaults to 'root'
- * if &lt;code>params&lt;/code> doesn't have any property ending in
- * either "Name" or "Id".
+ * Resolves id of file/folder using &lt;code>params&lt;/code>.
  * @param {Object} params - An object with a property whose name
  * ends in either "Name" or "Id"
- * @return {void} None
+ * @return {String} File/folder id
  * @example
  * // resolve file id for a file's parent
- * _collapseParamsToId({
+ * _resolveParamsId({
  *  parentName: "Parent Name"
  * });
  * @access private
  */
-async function _collapseParamsToId(params) {
+async function _resolveParamsId(params) {
   let propPrefix;
   for (const key in params) {
     if (key.indexOf('Name') + key.indexOf('Id') > -2) {
       propPrefix = key.replace('Id', '').replace('Name', '');
+      break;
     }
   }
   // id given
   if (params[propPrefix+'Id']) {
-    return;
+    return params[propPrefix+'Id'];
   // name given
   } else if (params[propPrefix+'Name']) {
-    const responseData = await getFileId(params[propPrefix+'Name']);
-    params[propPrefix+'Id'] = responseData;
-    return;
+    return await getFileId(params[propPrefix+'Name']);
   // default to root if neither id nor name given
   } else {
-    params[propPrefix+'Id'] = 'root';
-    return;
+    return 'root';
   }
 }
 
@@ -195,8 +192,8 @@ async function _collapseParamsToId(params) {
  * the parent with either &lt;code>parentId&lt;/code>
  * or &lt;code>parentName&lt;/code>
  * @return {String} File id
- * @throws Throws an error if multiple files are found given
- * parameters specified.
+ * @throws Throws an error if exactly one file isn't found
+ * given itendifiers specified.
  * @example
  * // get id of file whose name is "File Name"
  * utilsGDrive.getFileId("File Name");
@@ -204,12 +201,15 @@ async function _collapseParamsToId(params) {
 async function getFileId(fileName, paramsParent = {}) {
   let q = 'name="'+fileName+'" and trashed=false';
   if (Object.keys(paramsParent).length) {
-    await _collapseParamsToId(paramsParent);
-    q += ' and "'+paramsParent.parentId+'" in parents';
+    const parentId = await _resolveParamsId(paramsParent);
+    q += ' and "'+parentId+'" in parents';
   }
   const responseData = await listFiles({q: q, fields: 'files(id)'});
-  if (responseData.files.length > 1) {
+  const nFiles = responseData.files.length; 
+  if (nFiles > 1) {
     throw new Error('Multiple files found. Consider specifying parent.');
+  } else if (nFiles === 0) {
+    throw new Error('No files found matching identifiers specified.');
   }
   return responseData.files[0].id;
 }
@@ -218,7 +218,7 @@ async function getFileId(fileName, paramsParent = {}) {
  * Gets file id given file name and parent id.
  * @see Wraps {@link getFileId}
  * @param {String} fileName - File name
- * @param {String} parentId - Parent id
+ * @param {String} [parentId] - Parent id
  * @return {String} File id
  * @example
  * // get id of file whose name is "File Name" and that resides
@@ -226,6 +226,7 @@ async function getFileId(fileName, paramsParent = {}) {
  * utilsGDrive.getFileIdPId("File Name", "XXX_FOLDER_ID_XXX");
  */ 
 function getFileIdPId(fileName, parentId) {
+  if (!parentId) return getFileId(fileName);
   return getFileId(fileName, {parentId});
 }
 
@@ -233,7 +234,7 @@ function getFileIdPId(fileName, parentId) {
  * Gets file id given file name and parent name.
  * @see Wraps {@link getFileId}
  * @param {String} fileName - File name
- * @param {String} parentName - Parent name
+ * @param {String} [parentName] - Parent name
  * @return {String} File id 
  * @example
  * // get id of file whose name is "File Name" and that resides
@@ -241,6 +242,7 @@ function getFileIdPId(fileName, parentId) {
  * utilsGDrive.getFileIdPId("File Name", "Folder Name");
  */
 function getFileIdPName(fileName, parentName) {
+  if (!parentName) return getFileId(fileName);
   return getFileId(fileName, {parentName});
 }
 
@@ -258,23 +260,60 @@ async function getFileName(fileId) {
 }
 
 /**
+ * Resolves file id given object with data
+ * identifying the file.
+ * @param {Object} identifiers - An object identifying the file/folder
+ * with either &lt;code>fileId&lt;/code>/&lt;code>folderId&lt;/code>
+ * or &lt;code>fileName&lt;/code>/&lt;code>folderName&lt;/code>
+ * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code> properties may
+ * also be included.
+ * @return {String} File id 
+ * @access private
+ */
+async function _resolveFId(identifiers) {
+  if (identifiers.fileId) return identifiersfileId;
+  if (identifiers.folderId) return identifiers.folderId;
+  const fIdentifiers = ['fileId', 'fileName', 'folderId', 'folderName'];
+  const pIdentifiers = ['parentId', 'parentName'];
+  let fParams = {};
+  let pParams = {};
+  for (const key in identifiers) {
+    if (fIdentifiers.includes(key)) {
+      fParams[key] = identifiers[key];
+    } else if (pIdentifiers.includes(key)) {
+      pParams[key] = identifiers[key];
+    } else {
+      throw new Error('Invalid property name: '+key);
+    }
+  }
+  let fName;
+  (fParams.fileName) ? fName = fParams.fileName : fName = fParams.folderName;
+  let parentId;
+  if (Object.keys(pParams).length) parentId = await _resolveParamsId(pParams);
+  if (!parentId) return await getFileIdPId(fName);
+  return await getFileIdPId(fName, parentId);
+}
+
+/**
  * Gets a file's MIME type.
- * @param {Object} fileParams - An object identifying
- * the file with either &lt;code>fileId&lt;/code> or &lt;code>fileName&lt;/code>
+ * @param {Object} identifiers - An object identifying the file/folder
+ * with either &lt;code>fileId&lt;/code>/&lt;code>folderId&lt;/code>
+ * or &lt;code>fileName&lt;/code>/&lt;code>folderName&lt;/code>.
+ * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code> properties may
+ * also be included
  * @param {Object} [parentParams] - An object identifying
  * the parent with either &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>
  * @return {String} MIME type
  * @example
  * // get MIME type of file whose id is "XXX_FILE_ID_XXX"
  * // and that resides in folder whose id is "XXX_FOLDER_ID_XXX"
- * utilsGDrive.getMime({fileId: "XXX_FILE_ID_XXX"}, {parentId: "XXX_FOLDER_ID_XXX"});
+ * utilsGDrive.getMime({fileId: "XXX_FILE_ID_XXX", parentId: "XXX_FOLDER_ID_XXX"});
  */
-async function getMime(fileParams, parentParams = {}) {
-  if (!fileParams.fileId &amp;&amp; fileParams.fileName) {
-    fileParams.fileId = await getFileId(fileParams.fileName, parentParams);
-  }
+async function getMime(identifiers) {
+  const fileId = await _resolveFId(identifiers);
   const responseData = await getFiles({
-    fileId: fileParams.fileId, fields: 'mimeType',
+    fileId,
+    fields: 'mimeType',
   });
   return responseData.mimeType;
 }
@@ -304,7 +343,8 @@ function getMimeFId(fileId) {
  * utilsGDrive.getMimeFNamePId("File Name", "XXX_FOLDER_ID_XXX");
  */
 function getMimeFNamePId(fileName, parentId) {
-  return getMime({fileName}, {parentId})
+  if (!parentId) return getMime({fileName});
+  return getMime({fileName, parentId})
 }
 
 /**
@@ -319,42 +359,36 @@ function getMimeFNamePId(fileName, parentId) {
  * utilsGDrive.getMimeFNamePName("File Name", "Folder Name");
  */
 function getMimeFNamePName(fileName, parentName) {
-  return getMime({fileName}, {parentName})
+  if (!parentName) return getMime({fileName});
+  return getMime({fileName, parentName})
 } 
 
 /**
  * Gets data on files in a folder.
- * @param {Object} folderParams - An object identifying the folder with either
- * &lt;code>folderId&lt;/code> or &lt;code>folderName&lt;/code>
- * @param {Object} [parentParams] - An object identifying
- * the parent with either &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>
+ * @param {Object} identifiers - An object identifying the folder
+ * with either &lt;code>folderId&lt;/code> or &lt;code>folderName&lt;/code>.
+ * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code> properties may
+ * also be included
  * @param {String} [fields] - The data fields to request. Format should
  * follow the pattern &lt;code>'files(field1, field2,...)'&lt;/code>
  * @return {Array} Each entry in the array returned is an object containing data on a file 
  * that resides in the folder specified
  * @example
  * // check if folder has any subfolders
- * utilsGDrive.listChildren({folderName: "Folder Name"}, null, 'files(mimeType)')
+ * utilsGDrive.listChildren({folderName: "Folder Name"}, 'files(mimeType)')
  * .then(data => {
  *  for (const d of data) {
  *    if (d.mimeType === "application/vnd.google-apps.folder") {
- *      console.log("Folder has subfolders")
+ *      console.log("Folder has subfolders");
  *      break;
  *    }
  *  }
  * });
  */
-async function listChildren(
-  folderParams, 
-  parentParams = {},
-  fields = 'files(name, id, mimeType)'
-) {
-  if (parentParams == null || typeof(parentParams) != 'object') parentParams = {};
-  if (!folderParams.folderId &amp;&amp; folderParams.folderName) {
-    folderParams.folderId = await getFileId(folderParams.folderName, parentParams);
-  }
+async function listChildren(identifiers, fields = 'files(name, id, mimeType)') {
+  const folderId = await _resolveFId(identifiers);
   const listFilesParams = {
-    q       : '\''+folderParams.folderId+'\' in parents and trashed=false',
+    q       : '\''+folderId+'\' in parents and trashed=false',
     fields  : fields 
   };
   const responseData = await listFiles(listFilesParams);
@@ -374,7 +408,7 @@ async function listChildren(
  * utisGDrive.listChildrenFId("Folder Name", "files(name)");
  */
 function listChildrenFId(folderId, fields = 'files(name, id, mimeType)') {
-  return listChildren({folderId}, null, fields);
+  return listChildren({folderId}, fields);
 }
 
 /**
@@ -382,9 +416,9 @@ function listChildrenFId(folderId, fields = 'files(name, id, mimeType)') {
  * and parent id.
  * @see Wraps {@link listChildren}
  * @param {String} folderName - Folder name
+ * @param {String} [parentId] - Parent id
  * @param {String} [fields] - The data fields to request. Format should
  * follow the pattern &lt;code>'files(field1, field2,...)'&lt;/code>
- * @param {String} [parentId] - Parent id
  * @return {Array} Each entry in the array returned is an object containing data on a file 
  * that resides in the folder specified
  * @example
@@ -397,7 +431,8 @@ function listChildrenFNamePId(
   parentId,  
   fields = 'files(name, id, mimeType)'
 ) {
-  return listChildren({folderName}, {parentId}, fields);
+  if (!parentId) return listChildren({folderName}, fields);
+  return listChildren({folderName, parentId}, fields);
 }
 
 /**
@@ -420,7 +455,8 @@ function listChildrenFNamePName(
   parentName,  
   fields = 'files(name, id, mimeType)'
 ) {
-  return listChildren({folderName}, {parentName}, fields);
+  if (!parentName) return listChildren({folderName}, fields);
+  return listChildren({folderName, parentName}, fields);
 }</code></pre>
         </article>
     </section>
@@ -435,7 +471,7 @@ function listChildrenFNamePName(
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sun Jul 19 2020 13:07:14 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 03:03:52 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

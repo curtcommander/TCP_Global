@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#deleteFile">deleteFile</a></li><li><a href="global.html#deleteFileFId">deleteFileFId</a></li><li><a href="global.html#deleteFileFNamePId">deleteFileFNamePId</a></li><li><a href="global.html#deleteFileFNamePName">deleteFileFNamePName</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#downloadFile">downloadFile</a></li><li><a href="global.html#downloadFileId">downloadFileId</a></li><li><a href="global.html#downloadFileName">downloadFileName</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileIdPId">getFileIdPId</a></li><li><a href="global.html#getFileIdPName">getFileIdPName</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#getMimeFId">getMimeFId</a></li><li><a href="global.html#getMimeFNamePId">getMimeFNamePId</a></li><li><a href="global.html#getMimeFNamePName">getMimeFNamePName</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listChildrenFId">listChildrenFId</a></li><li><a href="global.html#listChildrenFNamePId">listChildrenFNamePId</a></li><li><a href="global.html#listChildrenFNamePName">listChildrenFNamePName</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mkDirParentId">mkDirParentId</a></li><li><a href="global.html#mkDirParentName">mkDirParentName</a></li><li><a href="global.html#uploadFile">uploadFile</a></li><li><a href="global.html#uploadFileParentId">uploadFileParentId</a></li><li><a href="global.html#uploadFileParentName">uploadFileParentName</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#deleteFile">deleteFile</a></li><li><a href="global.html#deleteFileFId">deleteFileFId</a></li><li><a href="global.html#deleteFileFNamePId">deleteFileFNamePId</a></li><li><a href="global.html#deleteFileFNamePName">deleteFileFNamePName</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#downloadFId">downloadFId</a></li><li><a href="global.html#downloadFNamePId">downloadFNamePId</a></li><li><a href="global.html#downloadFNamePName">downloadFNamePName</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileIdPId">getFileIdPId</a></li><li><a href="global.html#getFileIdPName">getFileIdPName</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#getMimeFId">getMimeFId</a></li><li><a href="global.html#getMimeFNamePId">getMimeFNamePId</a></li><li><a href="global.html#getMimeFNamePName">getMimeFNamePName</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listChildrenFId">listChildrenFId</a></li><li><a href="global.html#listChildrenFNamePId">listChildrenFNamePId</a></li><li><a href="global.html#listChildrenFNamePName">listChildrenFNamePName</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mkDirPId">mkDirPId</a></li><li><a href="global.html#mkDirPName">mkDirPName</a></li><li><a href="global.html#upload">upload</a></li><li><a href="global.html#uploadPId">uploadPId</a></li><li><a href="global.html#uploadPName">uploadPName</a></li></ul>
 </nav>
 
 <div id="main">
@@ -49,8 +49,8 @@
 
 const config = require('./config');
 const utils = require('./lib/utils');
-const down = require('./lib/download');
-const create = require('./lib/create');
+const download = require('./lib/download');
+const upload = require('./lib/upload');
 const del = require('./lib/delete');
 
 /**
@@ -81,16 +81,17 @@ class utilsGDrive {
     listChildrenFNamePId    = utils.listChildrenFNamePId;
     listChildrenFNamePName  = utils.listChildrenFNamePName;
     
-    downloadFile            = down.downloadFile;
-    downloadFileId          = down.downloadFileId;
-    downloadFileName        = down.downloadFileName;
+    download                = download.download;
+    downloadFId             = download.downloadFId;
+    downloadFNamePId        = download.downloadFNamePId;
+    downloadFNamePName      = download.downloadFNamePName;
 
-    uploadFile              = create.uploadFile;
-    uploadFilePId           = create.uploadFileParentId;
-    uploadFilePName         = create.uploadFileParentName;
-    mkDir                   = create.mkDir;
-    mkDirPId                = create.mkDirParentId;
-    mkDirPName              = create.mkDirParentName;
+    mkDir                   = upload.mkDir;
+    mkDirPId                = upload.mkDirPId;
+    mkDirPName              = upload.mkDirPName;
+    upload                  = upload.upload;
+    uploadFilePId           = upload.uploadPId;
+    uploadFilePName         = upload.uploadPName;
 
     deleteFile              = del.deleteFile;
     deleteFileFId           = del.deleteFileFId;
@@ -112,7 +113,7 @@ module.exports = new utilsGDrive();</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sun Jul 19 2020 13:07:14 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 03:03:52 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -3,8 +3,8 @@
 
 const config = require('./config');
 const utils = require('./lib/utils');
-const down = require('./lib/download');
-const create = require('./lib/create');
+const download = require('./lib/download');
+const upload = require('./lib/upload');
 const del = require('./lib/delete');
 
 /**
@@ -35,16 +35,17 @@ class utilsGDrive {
     listChildrenFNamePId    = utils.listChildrenFNamePId;
     listChildrenFNamePName  = utils.listChildrenFNamePName;
     
-    downloadFile            = down.downloadFile;
-    downloadFileId          = down.downloadFileId;
-    downloadFileName        = down.downloadFileName;
+    download                = download.download;
+    downloadFId             = download.downloadFId;
+    downloadFNamePId        = download.downloadFNamePId;
+    downloadFNamePName      = download.downloadFNamePName;
 
-    uploadFile              = create.uploadFile;
-    uploadFilePId           = create.uploadFileParentId;
-    uploadFilePName         = create.uploadFileParentName;
-    mkDir                   = create.mkDir;
-    mkDirPId                = create.mkDirParentId;
-    mkDirPName              = create.mkDirParentName;
+    mkDir                   = upload.mkDir;
+    mkDirPId                = upload.mkDirPId;
+    mkDirPName              = upload.mkDirPName;
+    upload                  = upload.upload;
+    uploadFilePId           = upload.uploadPId;
+    uploadFilePName         = upload.uploadPName;
 
     deleteFile              = del.deleteFile;
     deleteFileFId           = del.deleteFileFId;
