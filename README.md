@@ -2,14 +2,15 @@
 Node package for interfacing with the Google Drive API.
 
 Current functionalities include:
- - Download files
- - Upload files
+ - Get info on files and folders
+ - Download files and folders
+ - Upload files and folders
  - Move files
  - Delete files
- - Make directories
+ - Make folders
 
 Backlog:
- - Download directories
- - Upload directories
+ - Delete folders
+ - Permissions
 
 Documentation can be found [here](https://curtcommander.github.io/utils-google-drive/).
