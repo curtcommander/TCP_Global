@@ -1,16 +1,15 @@
 # utils-google-drive
 Node package for interfacing with the Google Drive API.
 
-#### Current functionalities include:
- - Get info on files and folders
- - Download files and folders
- - Upload files and folders
- - Move files
- - Delete files
+#### Supports the following actions on files and folders in Google Drive:
+ - Get metadata
+ - Download
+ - Upload
+ - Delete
  - Make folders
 
 #### Backlog:
- - Delete folders
+ - Move
  - Permissions
  - Batch requests
 
