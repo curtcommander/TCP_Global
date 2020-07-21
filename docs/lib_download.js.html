@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#deleteFile">deleteFile</a></li><li><a href="global.html#deleteFileFId">deleteFileFId</a></li><li><a href="global.html#deleteFileFNamePId">deleteFileFNamePId</a></li><li><a href="global.html#deleteFileFNamePName">deleteFileFNamePName</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#downloadFId">downloadFId</a></li><li><a href="global.html#downloadFNamePId">downloadFNamePId</a></li><li><a href="global.html#downloadFNamePName">downloadFNamePName</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileIdPId">getFileIdPId</a></li><li><a href="global.html#getFileIdPName">getFileIdPName</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#getMimeFId">getMimeFId</a></li><li><a href="global.html#getMimeFNamePId">getMimeFNamePId</a></li><li><a href="global.html#getMimeFNamePName">getMimeFNamePName</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listChildrenFId">listChildrenFId</a></li><li><a href="global.html#listChildrenFNamePId">listChildrenFNamePId</a></li><li><a href="global.html#listChildrenFNamePName">listChildrenFNamePName</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mkDirPId">mkDirPId</a></li><li><a href="global.html#mkDirPName">mkDirPName</a></li><li><a href="global.html#upload">upload</a></li><li><a href="global.html#uploadPId">uploadPId</a></li><li><a href="global.html#uploadPName">uploadPName</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#del">del</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mv">mv</a></li><li><a href="global.html#rename">rename</a></li><li><a href="global.html#updateFiles">updateFiles</a></li><li><a href="global.html#upload">upload</a></li></ul>
 </nav>
 
 <div id="main">
@@ -54,9 +54,6 @@ download = drive._addDrive(download);
 
 module.exports = {
   download,
-  downloadFId,
-  downloadFNamePId,
-  downloadFNamePName
 };
 
 /**
@@ -108,11 +105,11 @@ async function download(identifiers, out = './') {
     try {
       fs.mkdirSync(out);
     } catch (e) {
-      if (e.code !== 'EEXIST') {
-        throw e;
-      }
+      const d = new Date();
+      if (e.code === 'EEXIST') fs.utimesSync(out, d, d);
+      else throw e;
     }
-    const children = await utils.listChildrenFId(fileId);
+    const children = await utils.listChildren({fileId});
     for (const child of children) {
       await download({
         fileId: child.id,
@@ -152,54 +149,7 @@ async function _downloadFile(fileId, fileName, out, utilsGDrive) {
     }
   )
 }
-
-/**
- * Downloads file/folder given id.
- * @see Wraps {@link download}
- * @param {String} fileId - File/folder id
- * @param {String} [out] - Path to download location
- * @return {void} None
- * @example
- * // download file with the id "XXX_FILE_ID_XXX" to current working directory
- * utilsGDrive.downloadFId("XXX_FILE_ID_XXX");
- */
-function downloadFId(fileId, out = './') {
-  return download({fileId}, out);
-}
-
-/**
- * Downloads a file/folder given file/folder name
- * and parent id.
- * @see Wraps {@link download}
- * @param {String} fileName - File/folder name
- * @param {String} [parentId] - Parent id
- * @param {String} [out] - Path to download location
- * @return {void} None
- * @example
- * // download file "File Name" in folder with id "XXX_FOLDER_ID_XXX"
- * downloadFNamePId("File Name", "XXX_FOLDER_ID_XXX");
- */
-function downloadFNamePId(fileName, parentId, out = './') {
-  if (!parentId) return download({fileName}, out);
-  return download({fileName, parentId}, out);
-}
-
-/**
- * Downloads a file/folder given file/folder name
- * and parent name.
- * @see Wraps {@link download}
- * @param {String} fileName - File id
- * @param {String} [parentName] - Parent name
- * @param {String} [out] - Path to download location
- * @return {void} None
- * @example
- * // download file "File Name" in folder "Folder Name"
- * utilsGDrive.downloadFNamePName("File Name", "Folder Name");
- */
-function downloadFNamePName(fileName, parentName, out = './') {
-  if (!parentName) return download({fileName}, out);
-  return download({fileName, parentName}, out);
-}</code></pre>
+</code></pre>
         </article>
     </section>
 
@@ -213,7 +163,7 @@ function downloadFNamePName(fileName, parentName, out = './') {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 03:03:52 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Tue Jul 21 2020 13:36:21 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#deleteFile">deleteFile</a></li><li><a href="global.html#deleteFileFId">deleteFileFId</a></li><li><a href="global.html#deleteFileFNamePId">deleteFileFNamePId</a></li><li><a href="global.html#deleteFileFNamePName">deleteFileFNamePName</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#downloadFId">downloadFId</a></li><li><a href="global.html#downloadFNamePId">downloadFNamePId</a></li><li><a href="global.html#downloadFNamePName">downloadFNamePName</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileIdPId">getFileIdPId</a></li><li><a href="global.html#getFileIdPName">getFileIdPName</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#getMimeFId">getMimeFId</a></li><li><a href="global.html#getMimeFNamePId">getMimeFNamePId</a></li><li><a href="global.html#getMimeFNamePName">getMimeFNamePName</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listChildrenFId">listChildrenFId</a></li><li><a href="global.html#listChildrenFNamePId">listChildrenFNamePId</a></li><li><a href="global.html#listChildrenFNamePName">listChildrenFNamePName</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mkDirPId">mkDirPId</a></li><li><a href="global.html#mkDirPName">mkDirPName</a></li><li><a href="global.html#upload">upload</a></li><li><a href="global.html#uploadPId">uploadPId</a></li><li><a href="global.html#uploadPName">uploadPName</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#del">del</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mv">mv</a></li><li><a href="global.html#rename">rename</a></li><li><a href="global.html#updateFiles">updateFiles</a></li><li><a href="global.html#upload">upload</a></li></ul>
 </nav>
 
 <div id="main">
@@ -138,7 +138,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line46">line 46</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -349,7 +349,7 @@ utilsGDrive.api("files", "list", {
 
     
 
-    <h4 class="name" id="deleteFile"><span class="type-signature">(async) </span>deleteFile<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="del"><span class="type-signature">(async) </span>del<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
 
     
 
@@ -361,7 +361,7 @@ utilsGDrive.api("files", "list", {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_delete.js.html">lib/delete.js</a>, <a href="lib_delete.js.html#line26">line 26</a>
+        <a href="lib_delete.js.html">lib/delete.js</a>, <a href="lib_delete.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -401,7 +401,7 @@ utilsGDrive.api("files", "list", {
 
 
 <div class="description usertext">
-    Deletes a file in Google drive.
+    Deletes a file or folder in Google drive.
 </div>
 
 
@@ -415,7 +415,7 @@ utilsGDrive.api("files", "list", {
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>// delete file "File Name" whose parent is "Folder Name"
-utilsGDrive.deleteFile({fileName: "File Name", parentName: "Folder Name"});</code></pre>
+utilsGDrive.del({fileName: "File Name", parentName: "Folder Name"});</code></pre>
 
 
 
@@ -461,8 +461,9 @@ utilsGDrive.deleteFile({fileName: "File Name", parentName: "Folder Name"});</cod
 
             
 
-            <td class="description last">An object identifying the file
-with either <code>fileId</code> or <code>fileName</code>.
+            <td class="description last">An object identifying the file/folder
+with either <code>fileId</code>/<code>folderId</code>
+or <code>fileName</code>/<code>folderName</code>.
 <code>parentId</code> and <code>parentName</code> properties may
 also be included</td>
         </tr>
@@ -501,606 +502,7 @@ also be included</td>
     </dt>
     <dd>
         
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="deleteFileFId"><span class="type-signature"></span>deleteFileFId<span class="signature">(fileId)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_delete.js.html">lib/delete.js</a>, <a href="lib_delete.js.html#line43">line 43</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#deleteFile">deleteFile</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Deletes a file in given file id.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// delete file whose id is "XXX_FILE_ID_XXX"
-utilsGDrive.deleteFileFId("XXX_FILE_ID_XXX");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Id of file to be deleted</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    None
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="deleteFileFNamePId"><span class="type-signature"></span>deleteFileFNamePId<span class="signature">(fileName, parentId<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_delete.js.html">lib/delete.js</a>, <a href="lib_delete.js.html#line57">line 57</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#deleteFile">deleteFile</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Deletes a file given file name and parent id.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// delete file "File Name" in the folder with id "XXX_FOLDER_ID_XXX"
-utilsGDrive.deleteFileFNamePId("File Name", "XXX_FOLDER_ID_XXX");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">File name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Parent id</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    None
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="deleteFileFNamePName"><span class="type-signature"></span>deleteFileFNamePName<span class="signature">(fileName, parentName<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_delete.js.html">lib/delete.js</a>, <a href="lib_delete.js.html#line72">line 72</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#deleteFile">deleteFile</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Deletes a file given file name and parent name.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// delete file "File Name" in the folder "Folder Name"
-utilsGDrive.deleteFileFNamePName("File Name", "Folder Name");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">File name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Parent name</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    None
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
+<span class="param-type">undefined</span>
 
 
     </dd>
@@ -1127,7 +529,7 @@ utilsGDrive.deleteFileFNamePName("File Name", "Folder Name");</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line29">line 29</a>
+        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -1338,760 +740,6 @@ also be included</td>
 
     
 
-    <h4 class="name" id="downloadFId"><span class="type-signature"></span>downloadFId<span class="signature">(fileId, out<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line120">line 120</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#download">download</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Downloads file/folder given id.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// download file with the id "XXX_FILE_ID_XXX" to current working directory
-utilsGDrive.downloadFId("XXX_FILE_ID_XXX");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">File/folder id</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>out</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>./</code>
-                
-                </td>
-            
-
-            <td class="description last">Path to download location</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    None
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="downloadFNamePId"><span class="type-signature"></span>downloadFNamePId<span class="signature">(fileName, parentId<span class="signature-attributes">opt</span>, out<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line136">line 136</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#download">download</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Downloads a file/folder given file/folder name
-and parent id.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// download file "File Name" in folder with id "XXX_FOLDER_ID_XXX"
-downloadFNamePId("File Name", "XXX_FOLDER_ID_XXX");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">File/folder name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Parent id</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>out</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>./</code>
-                
-                </td>
-            
-
-            <td class="description last">Path to download location</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    None
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="downloadFNamePName"><span class="type-signature"></span>downloadFNamePName<span class="signature">(fileName, parentName<span class="signature-attributes">opt</span>, out<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line153">line 153</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#download">download</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Downloads a file/folder given file/folder name
-and parent name.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// download file "File Name" in folder "Folder Name"
-utilsGDrive.downloadFNamePName("File Name", "Folder Name");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">File id</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Parent name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>out</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>./</code>
-                
-                </td>
-            
-
-            <td class="description last">Path to download location</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    None
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
     <h4 class="name" id="getFileId"><span class="type-signature">(async) </span>getFileId<span class="signature">(fileName, paramsParent<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
 
     
@@ -2104,7 +752,7 @@ utilsGDrive.downloadFNamePName("File Name", "Folder Name");</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line155">line 155</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line168">line 168</a>
     </li></ul></dd>
     
 
@@ -2314,436 +962,6 @@ given itendifiers specified.
 
     
 
-    <h4 class="name" id="getFileIdPId"><span class="type-signature"></span>getFileIdPId<span class="signature">(fileName, parentId<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line182">line 182</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#getFileId">getFileId</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Gets file id given file name and parent id.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// get id of file whose name is "File Name" and that resides
-// in the folder whose id is "XXX_FOLDER_ID_XXX" 
-utilsGDrive.getFileIdPId("File Name", "XXX_FOLDER_ID_XXX");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">File name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Parent id</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    File id
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">String</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getFileIdPName"><span class="type-signature"></span>getFileIdPName<span class="signature">(fileName, parentName<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line198">line 198</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#getFileId">getFileId</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Gets file id given file name and parent name.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// get id of file whose name is "File Name" and that resides
-// in the folder whose name is "Folder Name" 
-utilsGDrive.getFileIdPId("File Name", "Folder Name");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">File name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Parent name</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    File id
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">String</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
     <h4 class="name" id="getFileName"><span class="type-signature">(async) </span>getFileName<span class="signature">(fileId)</span><span class="type-signature"> &rarr; {String}</span></h4>
 
     
@@ -2756,7 +974,7 @@ utilsGDrive.getFileIdPId("File Name", "Folder Name");</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line211">line 211</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line192">line 192</a>
     </li></ul></dd>
     
 
@@ -2920,7 +1138,7 @@ utilsGDrive.getFileId("XXX_FILE_ID_XXX");</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line104">line 104</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -3110,7 +1328,7 @@ when <code>params.fileId</code> is falsy.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line266">line 266</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line247">line 247</a>
     </li></ul></dd>
     
 
@@ -3311,607 +1529,6 @@ the parent with either <code>parentId</code> or <code>parentName</code></td>
 
     
 
-    <h4 class="name" id="getMimeFId"><span class="type-signature"></span>getMimeFId<span class="signature">(fileId)</span><span class="type-signature"> &rarr; {String}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line284">line 284</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#getMime">getMime</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Gets MIME type given file id.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// get MIME type of file whose id is "XXX_FILE_ID_XXX"
-utilsGDrive.getMimeFId("XXX_FILE_ID_XXX", "XXX_FOLDER_ID_XXX");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">File id</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    MIME type
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">String</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getMimeFNamePId"><span class="type-signature"></span>getMimeFNamePId<span class="signature">(fileName, parentId<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line299">line 299</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#getMime">getMime</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Gets MIME type given file name and parent id.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// get MIME type of file whose name is "File Name"
-// and that resides in folder whose id is "XXX_FOLDER_ID_XXX"
-utilsGDrive.getMimeFNamePId("File Name", "XXX_FOLDER_ID_XXX");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">File name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Parent id</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    MIME type
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">String</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getMimeFNamePName"><span class="type-signature"></span>getMimeFNamePName<span class="signature">(fileName, parentName<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line315">line 315</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#getMime">getMime</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Gets MIME type given file name and parent name.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// get MIME type of file whose name is "File Name"
-// and that resides in folder whose name is "Folder Name"
-utilsGDrive.getMimeFNamePName("File Name", "Folder Name");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">File name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Parent name</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    MIME type
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">String</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
     <h4 class="name" id="listChildren"><span class="type-signature">(async) </span>listChildren<span class="signature">(identifiers, fields<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array}</span></h4>
 
     
@@ -3924,7 +1541,7 @@ utilsGDrive.getMimeFNamePName("File Name", "Folder Name");</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line342">line 342</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line278">line 278</a>
     </li></ul></dd>
     
 
@@ -4144,768 +1761,6 @@ that resides in the folder specified
 
     
 
-    <h4 class="name" id="listChildrenFId"><span class="type-signature"></span>listChildrenFId<span class="signature">(folderId, fields<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line364">line 364</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#listChildren">listChildren</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Gets data on files in a folder given folder id.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// get the names of the files in the folder whose name is "Folder Name"
-utisGDrive.listChildrenFId("Folder Name", "files(name)");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>folderId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Folder id</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>fields</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>files(name, id, mimeType)</code>
-                
-                </td>
-            
-
-            <td class="description last">The data fields to request. Format should
-follow the pattern <code>'files(field1, field2,...)'</code></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Each entry in the array returned is an object containing data on a file 
-that resides in the folder specified
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Array</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="listChildrenFNamePId"><span class="type-signature"></span>listChildrenFNamePId<span class="signature">(folderName, parentId<span class="signature-attributes">opt</span>, fields<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line383">line 383</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#listChildren">listChildren</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Gets data on files in a folder given folder name
-and parent id.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// get ids of the files in the folder "Folder Name"
-// whose parent folder's id is "XXX_FOLDER_ID_XXX"
-utilsGDrive.listChildrenFNamePId("Folder Name", "XXX_FOLDER_ID_XXX", "files(id)")</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>folderName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Folder name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Parent id</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>fields</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>files(name, id, mimeType)</code>
-                
-                </td>
-            
-
-            <td class="description last">The data fields to request. Format should
-follow the pattern <code>'files(field1, field2,...)'</code></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Each entry in the array returned is an object containing data on a file 
-that resides in the folder specified
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Array</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="listChildrenFNamePName"><span class="type-signature"></span>listChildrenFNamePName<span class="signature">(folderName, parentName<span class="signature-attributes">opt</span>, fields<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line407">line 407</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#listChildren">listChildren</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Gets data on files in a folder given folder name
-and parent name.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// get names of the files in the folder "Folder Name" 
-// whose parent folder's name is "Parent Folder Name"
-utilsGDrive.listChildrenFNamePName("Folder Name", "Parent Folder Name", "files(name)")</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>folderName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Folder name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Parent name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>fields</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>files(name, id, mimeType)</code>
-                
-                </td>
-            
-
-            <td class="description last">The data fields to request. Format should
-follow the pattern <code>'files(field1, field2,...)'</code></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Each entry in the array returned is an object containing data on a file 
-that resides in the folder specified
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Array</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
     <h4 class="name" id="listFiles"><span class="type-signature"></span>listFiles<span class="signature">(params)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
@@ -4918,7 +1773,7 @@ that resides in the folder specified
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line82">line 82</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -5097,7 +1952,7 @@ utilsGDrive.listFiles({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line76">line 76</a>
+        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line71">line 71</a>
     </li></ul></dd>
     
 
@@ -5295,7 +2150,7 @@ folder should be created with either
 
     
 
-    <h4 class="name" id="mkDirPId"><span class="type-signature"></span>mkDirPId<span class="signature">(dirName, parentId<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="mv"><span class="type-signature">(async) </span>mv<span class="signature">(identifiers, newParentParams<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
 
     
 
@@ -5307,7 +2162,399 @@ folder should be created with either
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line108">line 108</a>
+        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line47">line 47</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Moves a file or folder in Google Drive.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// move the file "File Name" to the folder "Folder Name"utilsGDrive.mv({fileName: "File Name"}, {newParentName: "Folder Name"})</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>identifiers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">An object identifying the file/folderwith either <code>fileId</code>/<code>folderId</code>or <code>fileName</code>/<code>folderName</code><code>parentId</code> and <code>parentName</code> properties mayalso be included</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newParentParams</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">An object identifyingthe new parent with either <code>parentId</code> or <code>parentName</code></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    None
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="rename"><span class="type-signature">(async) </span>rename<span class="signature">(identifiers, newName)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Renames a file or folder in Google Drive.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// rename file "File Name" to "New File Name"utilsGDrive.renmae({fileName: "File Name"}, "New File Name")</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>identifiers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An object identifying the file/folderwith either <code>fileId</code>/<code>folderId</code>or <code>fileName</code>/<code>folderName</code><code>parentId</code> and <code>parentName</code> properties mayalso be included</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">New file/folder name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    None
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="updateFiles"><span class="type-signature"></span>updateFiles<span class="signature">(params)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line119">line 119</a>
     </li></ul></dd>
     
 
@@ -5341,7 +2588,7 @@ folder should be created with either
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li>Wraps <a href="global.html#mkDir">mkDir</a></li>
+            <li>Wraps <a href="global.html#api">api</a></li>
         </ul>
     </dd>
     
@@ -5354,8 +2601,11 @@ folder should be created with either
 
 
 <div class="description usertext">
-    Makes a folder in Google Drive given name
-of folder and id of parent.
+    Makes a request to API's files resource using 
+update method. The update method
+can be used to change a file's name or to move a file to a different location
+within Google Drive. Files are accessed by id. As such,
+<code>fileId</code> is a required property of <code>params</code>.
 </div>
 
 
@@ -5368,8 +2618,12 @@ of folder and id of parent.
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// make a new folder named "New Folder" in the folder with id "XXX_PARENT_ID_XXX"
-utilsGDrive.mkDirPId("New Folder", "XXX_PARENT_ID_XXX");</code></pre>
+    <pre class="prettyprint"><code>// change the name of a file whose id is "XXX_FILE_ID_XXX"
+// to "New File Name"
+utilsGDrive.updateFiles({
+ fileId: "XXX_FILE_ID_XXX"
+ resource: {name: "New File Name"}
+});</code></pre>
 
 
 
@@ -5387,8 +2641,6 @@ utilsGDrive.mkDirPId("New Folder", "XXX_PARENT_ID_XXX");</code></pre>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -5401,64 +2653,23 @@ utilsGDrive.mkDirPId("New Folder", "XXX_PARENT_ID_XXX");</code></pre>
 
         <tr>
             
-                <td class="name"><code>dirName</code></td>
+                <td class="name"><code>params</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Object</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">Name of folder to be created</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Id of parent folder where the folder should be created</td>
+            <td class="description last">Method parameters</td>
         </tr>
 
     
@@ -5484,7 +2695,7 @@ utilsGDrive.mkDirPId("New Folder", "XXX_PARENT_ID_XXX");</code></pre>
 
         
 <div class="param-desc">
-    - Id of the folder created
+    Data from response
 </div>
 
 
@@ -5495,7 +2706,7 @@ utilsGDrive.mkDirPId("New Folder", "XXX_PARENT_ID_XXX");</code></pre>
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type">Object</span>
 
 
     </dd>
@@ -5510,7 +2721,7 @@ utilsGDrive.mkDirPId("New Folder", "XXX_PARENT_ID_XXX");</code></pre>
 
     
 
-    <h4 class="name" id="mkDirPName"><span class="type-signature"></span>mkDirPName<span class="signature">(dirName, parentName<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="upload"><span class="type-signature">(async) </span>upload<span class="signature">(localPath, parentParams<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
 
     
 
@@ -5522,222 +2733,7 @@ utilsGDrive.mkDirPId("New Folder", "XXX_PARENT_ID_XXX");</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line124">line 124</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#mkDir">mkDir</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Makes a folder in Google Drive given name
-of folder and name of parent.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// make a new folder named "New Folder" in the folder "Parent Folder"
-utilsGDrive.mkDirPName("New Folder", "Parent Folder");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>dirName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Name of folder to be created</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Name of parent folder where the folder should be created</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    - Id of the folder created
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">String</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="upload"><span class="type-signature">(async) </span>upload<span class="signature">(localPath, parentParams<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line142">line 142</a>
+        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line104">line 104</a>
     </li></ul></dd>
     
 
@@ -5920,441 +2916,7 @@ file or folder should be uploaded with either
     </dt>
     <dd>
         
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="uploadPId"><span class="type-signature"></span>uploadPId<span class="signature">(localPath, parentId<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line220">line 220</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#upload">upload</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Uploads a file or folder to Google Drive
-given id of parent.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// upload the folder "Folder Name" to the folder in Gooogle Drive
-// with id "XXX_PARENT_ID_XXX"
-utilsGDrive.uploadPId("Folder Name", "XXX_PARENT_ID_XXX");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>localPath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Path to file or folder on disk</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Id of folder to upload the
-local file/folder to</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    None
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="uploadPName"><span class="type-signature"></span>uploadPName<span class="signature">(localPath, parentName<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line239">line 239</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Wraps <a href="global.html#upload">upload</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    Uploads a file or folder to Google Drive
-given name of parent.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// upload the folder "Folder Name" to the 
-// folder "Parent Folder" in Gooogle Drive
-utilsGDrive.uploadPId("Folder Name", "Parent Folder");</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>localPath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Path to file or folder on disk</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Name of folder to upload
-the local file/folder too</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    None
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
+<span class="param-type">undefined</span>
 
 
     </dd>
@@ -6384,7 +2946,7 @@ the local file/folder too</td>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 03:03:52 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Tue Jul 21 2020 13:36:21 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
