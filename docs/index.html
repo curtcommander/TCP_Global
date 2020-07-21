@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#deleteFile">deleteFile</a></li><li><a href="global.html#deleteFileFId">deleteFileFId</a></li><li><a href="global.html#deleteFileFNamePId">deleteFileFNamePId</a></li><li><a href="global.html#deleteFileFNamePName">deleteFileFNamePName</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#downloadFId">downloadFId</a></li><li><a href="global.html#downloadFNamePId">downloadFNamePId</a></li><li><a href="global.html#downloadFNamePName">downloadFNamePName</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileIdPId">getFileIdPId</a></li><li><a href="global.html#getFileIdPName">getFileIdPName</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#getMimeFId">getMimeFId</a></li><li><a href="global.html#getMimeFNamePId">getMimeFNamePId</a></li><li><a href="global.html#getMimeFNamePName">getMimeFNamePName</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listChildrenFId">listChildrenFId</a></li><li><a href="global.html#listChildrenFNamePId">listChildrenFNamePId</a></li><li><a href="global.html#listChildrenFNamePName">listChildrenFNamePName</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mkDirPId">mkDirPId</a></li><li><a href="global.html#mkDirPName">mkDirPName</a></li><li><a href="global.html#upload">upload</a></li><li><a href="global.html#uploadPId">uploadPId</a></li><li><a href="global.html#uploadPName">uploadPName</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#del">del</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mv">mv</a></li><li><a href="global.html#rename">rename</a></li><li><a href="global.html#updateFiles">updateFiles</a></li><li><a href="global.html#upload">upload</a></li></ul>
 </nav>
 
 <div id="main">
@@ -60,21 +60,52 @@
 
     <section class="readme usertext">
         <article><h1>utils-google-drive</h1>
-<p>Node package for interfacing with the Google Drive API.</p>
-<p>Current functionalities include:</p>
+<p>Node package for interfacing with the Google Drive API. Documentation can be found <a href="https://curtcommander.github.io/utils-google-drive/">here</a>.</p>
+<p>Perform the following actions on files and folders in Google Drive:</p>
 <ul>
-<li>Download files</li>
-<li>Upload files</li>
-<li>Move files</li>
-<li>Delete files</li>
-<li>Make directories</li>
+<li>Get metadata</li>
+<li>Change name</li>
+<li>Download</li>
+<li>Upload</li>
+<li>Move</li>
+<li>Delete</li>
+<li>Make folders</li>
 </ul>
-<p>Backlog:</p>
+<h4>Flexible file/folder specification:</h4>
+<p>Files and folders in Google Drive can be specified by either name (<code>fileName</code>/<code>folderName</code>) or id (<code>fileId</code>/<code>folderId</code>).
+Information on the parent folder can and many times should also be included (<code>parentName</code> or <code>parentId</code>).
+For example, specifying a parent will resolve the ambiguity
+of specifying a file or folder by name when there are multiple files/folders in Google Drive with that name.</p>
+<h4>Examples:</h4>
+<pre class="prettyprint source lang-javascript"><code>// get id of folder in Google Drive whose name is &quot;mainFolder&quot;
+// and whose parent folder is named &quot;parentFolder&quot;
+utilsGDrive.getFileId({fileName: &quot;mainFolder&quot;, parentName: &quot;parentFolder&quot;});
+
+// change name of folder from &quot;beforeName&quot; to &quot;afterName&quot;
+utilsGDrive.rename({fileName: &quot;beforeName&quot;}, &quot;afterName&quot;);
+
+// download file &quot;excelFile.xlsx&quot; in the folder &quot;dataFolder&quot;
+// to the local folder &quot;driveDownloads&quot;
+utilsGDrive.download({fileName: &quot;excelFile.xlsx&quot;, parentName: &quot;dataFolder&quot;}, &quot;./driveDownloads&quot;);
+
+// upload file &quot;report.pdf&quot; in local folder &quot;reports&quot; 
+// to the folder in Google Drive with the id &quot;XXX_FOLDER_ID_XXX&quot;
+
+// move folder &quot;reports&quot; in Google Drive to root
+utilsGDrive.mv({fileName: &quot;reports&quot;}, {parentId: &quot;root&quot;});
+
+// delete file with id &quot;XXX_FILE_ID_XXX&quot;
+utilsGDrive.del({fileId: &quot;XXX_FILE_ID_XXX&quot;});
+
+// make a new folder in the folder &quot;parentFolder&quot;
+utilsGDrive.mkDir(&quot;newFolder&quot;, {parentName: &quot;parentFolder&quot;});
+</code></pre>
+<h4>Backlog:</h4>
 <ul>
-<li>Download directories</li>
-<li>Upload directories</li>
-</ul>
-<p>Documentation can be found <a href="https://curtcommander.github.io/utils-google-drive/">here</a>.</p></article>
+<li>Permissions</li>
+<li>Asynchronous requests with rate limit constraint</li>
+<li>Batch requests</li>
+</ul></article>
     </section>
 
 
@@ -89,7 +120,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 03:03:52 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Tue Jul 21 2020 13:36:21 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

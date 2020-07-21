@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#deleteFile">deleteFile</a></li><li><a href="global.html#deleteFileFId">deleteFileFId</a></li><li><a href="global.html#deleteFileFNamePId">deleteFileFNamePId</a></li><li><a href="global.html#deleteFileFNamePName">deleteFileFNamePName</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#downloadFId">downloadFId</a></li><li><a href="global.html#downloadFNamePId">downloadFNamePId</a></li><li><a href="global.html#downloadFNamePName">downloadFNamePName</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileIdPId">getFileIdPId</a></li><li><a href="global.html#getFileIdPName">getFileIdPName</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#getMimeFId">getMimeFId</a></li><li><a href="global.html#getMimeFNamePId">getMimeFNamePId</a></li><li><a href="global.html#getMimeFNamePName">getMimeFNamePName</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listChildrenFId">listChildrenFId</a></li><li><a href="global.html#listChildrenFNamePId">listChildrenFNamePId</a></li><li><a href="global.html#listChildrenFNamePName">listChildrenFNamePName</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mkDirPId">mkDirPId</a></li><li><a href="global.html#mkDirPName">mkDirPName</a></li><li><a href="global.html#upload">upload</a></li><li><a href="global.html#uploadPId">uploadPId</a></li><li><a href="global.html#uploadPName">uploadPName</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api">api</a></li><li><a href="global.html#del">del</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#getFileId">getFileId</a></li><li><a href="global.html#getFileName">getFileName</a></li><li><a href="global.html#getFiles">getFiles</a></li><li><a href="global.html#getMime">getMime</a></li><li><a href="global.html#listChildren">listChildren</a></li><li><a href="global.html#listFiles">listFiles</a></li><li><a href="global.html#mkDir">mkDir</a></li><li><a href="global.html#mv">mv</a></li><li><a href="global.html#rename">rename</a></li><li><a href="global.html#updateFiles">updateFiles</a></li><li><a href="global.html#upload">upload</a></li></ul>
 </nav>
 
 <div id="main">
@@ -50,7 +50,6 @@ const fs = require('fs');
 const path = require('path');
 const drive = require('./drive');
 const utils = require('./utils');
-const { _resolveParamsId } = require('./utils');
 
 const mimeTypesByExt = {
   'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -77,11 +76,7 @@ mkDir = drive._addDrive(mkDir);
 
 module.exports = {
   mkDir,
-  mkDirPId,
-  mkDirPName,
   upload,
-  uploadPId,
-  uploadPName
 };
 
 /**
@@ -93,7 +88,7 @@ module.exports = {
  * to the parent id.
  * @throws Throws an error if a file or folder with the same name, MIME
  * type, and parent is found.
- * @return {void} None
+ * @return {undefined} None
  * @access private
  */
 async function _checkExistsDrive(fileMetadata) {
@@ -141,46 +136,13 @@ async function mkDir(dirName, parentParams = {}) {
 }
 
 /**
- * Makes a folder in Google Drive given name
- * of folder and id of parent.
- * @see Wraps {@link mkDir}
- * @param {String} dirName - Name of folder to be created
- * @param {String} [parentId] - Id of parent folder where the folder should be created
- * @return {String} - Id of the folder created
- * @example
- * // make a new folder named "New Folder" in the folder with id "XXX_PARENT_ID_XXX"
- * utilsGDrive.mkDirPId("New Folder", "XXX_PARENT_ID_XXX");
- */
-function mkDirPId(dirName, parentId) {
-  if (!parentId) return mkDir(dirName);
-  return mkDir(dirName, {parentId});
-}
-
-/**
- * Makes a folder in Google Drive given name
- * of folder and name of parent.
- * @see Wraps {@link mkDir}
- * @param {String} dirName - Name of folder to be created
- * @param {String} [parentName] - Name of parent folder where the folder should be created
- * @return {String} - Id of the folder created
- * @example
- * // make a new folder named "New Folder" in the folder "Parent Folder"
- * utilsGDrive.mkDirPName("New Folder", "Parent Folder");
- */
-function mkDirPName(dirName, parentName) {
-  if (!parentName) return mkDir(dirName);
-  return mkDir(dirName, {parentName});
-}
-
-
-/**
  * Uploads a file or folder to Google Drive.
  * Default location is &lt;code>'root'&lt;/code> if parent not specified.
  * @param {String} localPath - Path to file or folder on disk
  * @param {Object} [parentParams] - An object identifying where the
  * file or folder should be uploaded with either
  * &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>
- * @return {void} None
+ * @return {undefined} None
  * @example
  * // upload folder "foo" to the folder "bar" in Google Drive
  * utilsGDrive.upload("./lorem/foo", {parentName: "bar"});
@@ -190,7 +152,7 @@ async function upload(localPath, parentParams = {}) {
 
   // check if file/folder exists in drive
   const fileName = path.basename(localPath)
-  const parentId = await _resolveParamsId(parentParams);
+  const parentId = await utils._resolveParamsId(parentParams);
   const isDir = fs.lstatSync(localPath).isDirectory();
   let mimeType;
   if (isDir) {
@@ -206,8 +168,8 @@ async function upload(localPath, parentParams = {}) {
   
   await _checkExistsDrive(fileMetadata);
   // handle directories
-  if (fs.lstatSync(localPath).isfolder()) {
-    const parentIdChildren = await mkDirPId(path.basename(localPath), parentId);
+  if (fs.lstatSync(localPath).isDirectory()) {
+    const parentIdChildren = await mkDir(path.basename(localPath), {parentId});
     const children = fs.readdirSync(localPath);
     for (const child of children) {
       const localPathChild = localPath+'/'+child;
@@ -229,7 +191,7 @@ async function upload(localPath, parentParams = {}) {
  * &lt;code>parents&lt;/code> is a list with a single string corresponding
  * to the parent id.
  * @param {utilsGDrive} utilsGDrive - An instance of &lt;code>utilsGDrive&lt;/code>
- * @return {void} None
+ * @return {undefined} None
  * @access private
  */
 async function _uploadFile(localPath, fileMetadata, utilsGDrive) {
@@ -249,43 +211,7 @@ async function _uploadFile(localPath, fileMetadata, utilsGDrive) {
     });
   });
 }
-
-/**
- * Uploads a file or folder to Google Drive
- * given id of parent.
- * @see Wraps {@link upload}
- * @param {String} localPath - Path to file or folder on disk
- * @param {String} [parentId] - Id of folder to upload the
- * local file/folder to
- * @return {void} None
- * @example
- * // upload the folder "Folder Name" to the folder in Gooogle Drive
- * // with id "XXX_PARENT_ID_XXX"
- * utilsGDrive.uploadPId("Folder Name", "XXX_PARENT_ID_XXX");
- */
-function uploadPId(localPath, parentId) {
-  if (!parentId) return upload(localPath);
-  return upload(localPath, {parentId});
-
-}
-
-/**
- * Uploads a file or folder to Google Drive
- * given name of parent.
- * @see Wraps {@link upload}
- * @param {String} localPath - Path to file or folder on disk
- * @param {String} [parentName] - Name of folder to upload
- * the local file/folder too
- * @return {void} None
- * @example
- * // upload the folder "Folder Name" to the 
- * // folder "Parent Folder" in Gooogle Drive
- * utilsGDrive.uploadPId("Folder Name", "Parent Folder");
- */
-function uploadPName(localPath, parentName) {
-  if (!parentName) return upload(localPath);
-  return upload(localPath, {parentName});
-}</code></pre>
+</code></pre>
         </article>
     </section>
 
@@ -299,7 +225,7 @@ function uploadPName(localPath, parentName) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 03:03:52 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Tue Jul 21 2020 13:36:21 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

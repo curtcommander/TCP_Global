@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>index.js - Documentation</title>
+    <title>lib/update.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">index.js</h1>
+    <h1 class="page-title">lib/update.js</h1>
     
 
     
@@ -44,46 +44,64 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>#!/usr/bin/env node
-'use strict';
+            <pre class="prettyprint source linenums"><code>'use strict';
 
-const config = require('./config');
-const utils = require('./lib/utils');
-const download = require('./lib/download');
-const upload = require('./lib/upload');
-const del = require('./lib/delete');
-const update = require('./lib/update');
+const utils = require('./utils');
+const drive = require('./drive');
 
-/**
- * Base class whose methods are utils-google-drive functions.
- * An instance of this class is returned when requiring the package.
- */
-class utilsGDrive {
-    constructor() {
-        this.SCOPES     = config.SCOPES,
-        this.TOKEN_PATH = config.TOKEN_PATH, 
-        this.CREDS_PATH = config.CREDS_PATH,
-        this.LOG        = config.LOG
-    }
-    
-    api                     = utils.api;
-    listFiles               = utils.listFiles;
-    getFiles                = utils.getFiles;
-    updateFiles             = utils.updateFiles;
-    getFileId               = utils.getFileId;
-    getFileName             = utils.getFileName;
-    getMime                 = utils.getMime;
-    listChildren            = utils.listChildren;
-    download                = download.download;
-    mkDir                   = upload.mkDir;
-    upload                  = upload.upload;
-    del                     = del.del;
-    rename                  = update.rename;
-    mv                      = update.mv;
+module.exports = {
+    rename,
+    mv
 }
 
-module.exports = new utilsGDrive();
-</code></pre>
+/**
+ * Renames a file or folder in Google Drive.
+ * @param {Object} identifiers - An object identifying the file/folder
+ * with either &lt;code>fileId&lt;/code>/&lt;code>folderId&lt;/code>
+ * or &lt;code>fileName&lt;/code>/&lt;code>folderName&lt;/code>
+ * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code> properties may
+ * also be included
+ * @param {String} newName - New file/folder name
+ * @return {undefined} None
+ * @example
+ * // rename file "File Name" to "New File Name"
+ * utilsGDrive.renmae({fileName: "File Name"}, "New File Name")
+ */
+async function rename(identifiers, newName) {
+    const fileId = await utils._resolveFId(identifiers);
+    const params = {
+        fileId,
+        resource: {name: newName}
+    };
+    await utils.updateFiles(params);
+}
+
+/**
+ * Moves a file or folder in Google Drive.
+ * @param {Object} identifiers - An object identifying the file/folder
+ * with either &lt;code>fileId&lt;/code>/&lt;code>folderId&lt;/code>
+ * or &lt;code>fileName&lt;/code>/&lt;code>folderName&lt;/code>
+ * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code> properties may
+ * also be included
+ * @param {Object} [newParentParams] - An object identifying
+ * the new parent with either &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>
+ * @return {undefined} None
+ * @example
+ * // move the file "File Name" to the folder "Folder Name"
+ * utilsGDrive.mv({fileName: "File Name"}, {newParentName: "Folder Name"})
+ */
+async function mv(identifiers, newParentParams) {
+    const fileId = await utils._resolveFId(identifiers);
+    const responseData = await utils.getFiles({fileId, fields: 'parents'});
+    const oldParentId = responseData.parents[0];
+    const newParentId = await utils._resolveParamsId(newParentParams);
+    const params = {
+        fileId,
+        removeParents: oldParentId,
+        addParents: newParentId,
+    }
+    await utils.updateFiles(params);
+}</code></pre>
         </article>
     </section>
 

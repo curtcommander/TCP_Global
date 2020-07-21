@@ -1,6 +1,7 @@
 notes.txt
 credentials.json
 token.json
+lib/permissions.js
 
 # Logs
 logs
