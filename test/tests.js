@@ -41,6 +41,12 @@ describe('setup', function() {
 });
 
 describe('resolve identifiers', function() {
+
+  it('_resolveParamsId(), string given', async function() {
+    const fileId = await utilsGDrive._resolveParamsId('testId');
+    assert(fileId === 'testId');
+  });
+
   it('_resolveParamsId(), id property given', async function() {
     const fileId = await utilsGDrive._resolveParamsId({
       testId: 'testId',
@@ -57,6 +63,11 @@ describe('resolve identifiers', function() {
   it('_resolveParamsId(), default to root', async function() {
     const fileId = await utilsGDrive._resolveParamsId({});
     assert(fileId === 'root');
+  });
+
+  it('_resolveFId(), string', async function() {
+    const fileId = await utilsGDrive._resolveFId('testId');
+    assert(fileId === 'testId');
   });
 
   it('_resolveFId(), file id given', async function() {
@@ -109,7 +120,7 @@ describe('utils', function() {
   });
 
   it('getFileId()', async function() {
-    const fileId = await utilsGDrive.getFileId(fileNameTest, {parentId: parentIdTest});
+    const fileId = await utilsGDrive.getFileId(fileNameTest, parentIdTest);
     assert(fileId === fileIdTest);
   });
 
@@ -119,7 +130,7 @@ describe('utils', function() {
   });
 
   it('getMime()', async function() {
-    const mimeType = await utilsGDrive.getMime({fileId: fileIdTest});
+    const mimeType = await utilsGDrive.getMime(fileIdTest);
     assert(mimeType === mimeTypeTest);
   });
 
@@ -133,7 +144,8 @@ describe('utils', function() {
 });
 
 describe('other modules', function() {
-  this.timeout(7000);
+  this.timeout(8000);
+  
   let mkDirPassed;
   it('mkDir()', async function() {
     const fileId = await utilsGDrive.mkDir('testMkDir');

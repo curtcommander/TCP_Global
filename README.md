@@ -1,5 +1,5 @@
 # utils-google-drive
-Node package for interfacing with the Google Drive API. Documentation can be found [here](https://curtcommander.github.io/utils-google-drive/).
+Node package for interfacing with the Google Drive API.
 
 Perform the following actions on files and folders in Google Drive:
  - Get metadata
@@ -10,11 +10,15 @@ Perform the following actions on files and folders in Google Drive:
  - Delete
  - Make folders
  
+ Documentation can be found [here](https://curtcommander.github.io/utils-google-drive/).
+ 
  #### Flexible file/folder specification:
-Files and folders in Google Drive can be specified by either name (`fileName`/`folderName`) or id (`fileId`/`folderId`).
-Information on the parent folder can and many times should also be included (`parentName` or `parentId`).
+Files and folders in Google Drive can be specified by either name or id.
+Information on the parent folder can and many times should also be included.
 For example, specifying a parent will resolve the ambiguity 
 of specifying a file or folder by name when there are multiple files/folders in Google Drive with that name.
+
+Objects with the properties `fileId`/`folderId`, `fileName`/`folderName`, `parentId`, and `parentName` are generally used to specify a file or folder. For convenience, a string containing the file/folder id may also be used instead.
  
  #### Examples:
  ```javascript
@@ -31,12 +35,13 @@ utilsGDrive.download({fileName: "excelFile.xlsx", parentName: "dataFolder"}, "./
 
 // upload file "report.pdf" in local folder "reports" 
 // to the folder in Google Drive with the id "XXX_FOLDER_ID_XXX"
+utilsGDrive.upload('reports/report.pdf', "XXX_FOLDER_ID_XXX");
 
 // move folder "reports" in Google Drive to root
 utilsGDrive.mv({fileName: "reports"}, {parentId: "root"});
 
 // delete file with id "XXX_FILE_ID_XXX"
-utilsGDrive.del({fileId: "XXX_FILE_ID_XXX"});
+utilsGDrive.del("XXX_FILE_ID_XXX");
 
 // make a new folder in the folder "parentFolder"
 utilsGDrive.mkDir("newFolder", {parentName: "parentFolder"});
