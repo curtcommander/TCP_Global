@@ -11,13 +11,6 @@
         "ecmaVersion": 11
     },
     "rules": {
-    },
-    "overrides": [
-        {
-            "files":[],
-            "rules": {
-                "no-invalid-this" : "off"
-            }
-        }
-    ]
+        "no-invalid-this": "off"
+    }
 }
