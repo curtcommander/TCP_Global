@@ -35,7 +35,6 @@ class utilsGDrive {
 
     download                = drive._addDrive(download.download, this);
     _downloadFile           = download._downloadFile;
-
     _checkExistsDrive       = upload._checkExistsDrive;
     mkDir                   = upload.mkDir;
     upload                  = upload.upload;
