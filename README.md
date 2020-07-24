@@ -31,17 +31,18 @@ utilsGDrive.rename({fileName: "beforeName"}, "afterName");
 
 // download file "excelFile.xlsx" in the folder "dataFolder"
 // to the local folder "driveDownloads"
-utilsGDrive.download({fileName: "excelFile.xlsx", parentName: "dataFolder"}, "./driveDownloads");
+utilsGDrive.download({fileName: "excelFile.xlsx", parentName: "dataFolder"}, "path/to/driveDownloads");
 
-// upload file "report.pdf" in local folder "reports" 
-// to the folder in Google Drive with the id "XXX_FOLDER_ID_XXX"
-utilsGDrive.upload('reports/report.pdf', "XXX_FOLDER_ID_XXX");
+// upload file "report.pdf" to the folder in Google Drive
+// with the id "folderId"
+utilsGDrive.upload('path/to/report.pdf', "folderId");
 
-// move folder "reports" in Google Drive to root
+// move folder "reports" in Google Drive to root folder
+// "root" is special API keyword
 utilsGDrive.mv({fileName: "reports"}, {parentId: "root"});
 
-// delete file with id "XXX_FILE_ID_XXX"
-utilsGDrive.del("XXX_FILE_ID_XXX");
+// delete file with id "fileId"
+utilsGDrive.del("fileId");
 
 // make a new folder in the folder "parentFolder"
 utilsGDrive.mkDir("newFolder", {parentName: "parentFolder"});
