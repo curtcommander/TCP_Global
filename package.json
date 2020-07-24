@@ -23,7 +23,8 @@
   "homepage": "https://curtcommander.github.io/utils-google-drive",
   "dependencies": {
     "docdash": "^1.2.0",
-    "googleapis": "^39.2.0"
+    "googleapis": "^39.2.0",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "eslint": "^7.5.0",
