@@ -138,7 +138,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line38">line 38</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -174,8 +174,8 @@
         <ul>
             <li>Consult
 <a href="https://developers.google.com/drive/api/v3/reference">Google Drive API reference</a>
-for information on the resources and methods available 
-and on the parameters that methods accept.</li>
+for information on the resources and methods available
+and on the parameters that API methods accept.</li>
         </ul>
     </dd>
     
@@ -201,10 +201,11 @@ and on the parameters that methods accept.</li>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// Use the files resource and list method to get IDs of files with the name "File Name"
+    <pre class="prettyprint"><code>// Use the files resource and list method to
+// get ids of files with the name "fileName"
 utilsGDrive.api("files", "list", {
- q: "name = 'File Name'",
- fields: "files(id)"
+  q: "name = 'fileName'",
+  fields: "files(id)"
 });</code></pre>
 
 
@@ -251,7 +252,7 @@ utilsGDrive.api("files", "list", {
 
             
 
-            <td class="description last">An API resource</td>
+            <td class="description last">Name of API resource</td>
         </tr>
 
     
@@ -323,7 +324,7 @@ utilsGDrive.api("files", "list", {
 
         
 <div class="param-desc">
-    Data from response object
+    Data from response
 </div>
 
 
@@ -361,7 +362,7 @@ utilsGDrive.api("files", "list", {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_delete.js.html">lib/delete.js</a>, <a href="lib_delete.js.html#line24">line 24</a>
+        <a href="lib_delete.js.html">lib/delete.js</a>, <a href="lib_delete.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -414,8 +415,11 @@ utilsGDrive.api("files", "list", {
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// delete file "File Name" whose parent is "Folder Name"
-utilsGDrive.del({fileName: "File Name", parentName: "Folder Name"});</code></pre>
+    <pre class="prettyprint"><code>// delete file "fileName" whose parent is "folderName"
+utilsGDrive.del({
+  fileName: "fileName",
+  parentName: "folderName"
+});</code></pre>
 
 
 
@@ -452,6 +456,9 @@ utilsGDrive.del({fileName: "File Name", parentName: "Folder Name"});</code></pre
             
                 
 <span class="param-type">Object</span>
+|
+
+<span class="param-type">String</span>
 
 
             
@@ -465,7 +472,8 @@ utilsGDrive.del({fileName: "File Name", parentName: "Folder Name"});</code></pre
 with either <code>fileId</code>/<code>folderId</code>
 or <code>fileName</code>/<code>folderName</code>.
 <code>parentId</code> and <code>parentName</code> properties may
-also be included</td>
+also be included.
+This parameter can also be a string containing the file/folder id.</td>
         </tr>
 
     
@@ -517,7 +525,7 @@ also be included</td>
 
     
 
-    <h4 class="name" id="download"><span class="type-signature">(async) </span>download<span class="signature">(identifiers, out<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="download"><span class="type-signature">(async) </span>download<span class="signature">(identifiers, out<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
 
     
 
@@ -529,7 +537,7 @@ also be included</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line26">line 26</a>
+        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -582,8 +590,8 @@ also be included</td>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// download the folder "Folder Name" to the local directory "Local Dir"  
-utilsGDrive.Download({folderName: "Folder Name"}, "Local Dir");</code></pre>
+    <pre class="prettyprint"><code>// download the folder "folderName" to the local directory "localDir"
+utilsGDrive.download({folderName: "folderName"}, "path/to/localDir");</code></pre>
 
 
 
@@ -624,6 +632,9 @@ utilsGDrive.Download({folderName: "Folder Name"}, "Local Dir");</code></pre>
             
                 
 <span class="param-type">Object</span>
+|
+
+<span class="param-type">String</span>
 
 
             
@@ -649,7 +660,8 @@ utilsGDrive.Download({folderName: "Folder Name"}, "Local Dir");</code></pre>
 with either <code>fileId</code>/<code>folderId</code>
 or <code>fileName</code>/<code>folderName</code>.
 <code>parentId</code> and <code>parentName</code> properties may
-also be included</td>
+also be included.
+This parameter can also be a string containing the file/folder id.</td>
         </tr>
 
     
@@ -683,7 +695,7 @@ also be included</td>
             
                 <td class="default">
                 
-                    <code>./</code>
+                    <code>.</code>
                 
                 </td>
             
@@ -725,7 +737,7 @@ also be included</td>
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">undefined</span>
 
 
     </dd>
@@ -752,7 +764,7 @@ also be included</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line168">line 168</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line171">line 171</a>
     </li></ul></dd>
     
 
@@ -792,7 +804,7 @@ also be included</td>
 
 
 <div class="description usertext">
-    Gets file id given file name.
+    Gets file/folder id given name.
 </div>
 
 
@@ -805,8 +817,8 @@ also be included</td>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// get id of file whose name is "File Name"
-utilsGDrive.getFileId("File Name");</code></pre>
+    <pre class="prettyprint"><code>// get id of file whose name is "fileName"
+utilsGDrive.getFileId("fileName");</code></pre>
 
 
 
@@ -862,7 +874,7 @@ utilsGDrive.getFileId("File Name");</code></pre>
 
             
 
-            <td class="description last">File name</td>
+            <td class="description last">File/folder name</td>
         </tr>
 
     
@@ -876,6 +888,9 @@ utilsGDrive.getFileId("File Name");</code></pre>
             
                 
 <span class="param-type">Object</span>
+|
+
+<span class="param-type">String</span>
 
 
             
@@ -895,9 +910,9 @@ utilsGDrive.getFileId("File Name");</code></pre>
 
             
 
-            <td class="description last">An object identifying 
-the parent with either <code>parentId</code>
-or <code>parentName</code></td>
+            <td class="description last">An object identifying
+the parent with either <code>parentId</code> or <code>parentName</code>.
+Can also be a string containing the parent id.</td>
         </tr>
 
     
@@ -923,8 +938,8 @@ or <code>parentName</code></td>
 
     <div class="param-desc usertext">
     
-        Throws an error if exactly one file isn't found
-given itendifiers specified.
+        Throws an error if exactly one file/folder isn't found
+given itendifiers specified
     
     </div>
 
@@ -936,7 +951,7 @@ given itendifiers specified.
 
         
 <div class="param-desc">
-    File id
+    File/folder id
 </div>
 
 
@@ -974,7 +989,7 @@ given itendifiers specified.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line192">line 192</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line200">line 200</a>
     </li></ul></dd>
     
 
@@ -1014,7 +1029,7 @@ given itendifiers specified.
 
 
 <div class="description usertext">
-    Gets file name given file id.
+    Gets file/folder name given id.
 </div>
 
 
@@ -1027,8 +1042,8 @@ given itendifiers specified.
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// get name of file whose id is "XXX_FILE_ID_XXX"
-utilsGDrive.getFileId("XXX_FILE_ID_XXX");</code></pre>
+    <pre class="prettyprint"><code>// get name of file whose id is "fileId"
+utilsGDrive.getFileId("fileId");</code></pre>
 
 
 
@@ -1074,7 +1089,7 @@ utilsGDrive.getFileId("XXX_FILE_ID_XXX");</code></pre>
 
             
 
-            <td class="description last">File id</td>
+            <td class="description last">File/folder id</td>
         </tr>
 
     
@@ -1100,7 +1115,7 @@ utilsGDrive.getFileId("XXX_FILE_ID_XXX");</code></pre>
 
         
 <div class="param-desc">
-    File name
+    File/folder name
 </div>
 
 
@@ -1138,7 +1153,7 @@ utilsGDrive.getFileId("XXX_FILE_ID_XXX");</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line96">line 96</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -1185,10 +1200,8 @@ utilsGDrive.getFileId("XXX_FILE_ID_XXX");</code></pre>
 
 
 <div class="description usertext">
-    Makes a request to files resource using get method.
-The get method for the files resource can be used to get information 
-on files and/or download them. Files are accessed by id. As such,
-<code>fileId</code> is a required property of <code>params</code>.
+    Makes a request to the files resource using its get method,
+which can be used to get information on files and/or download them.
 </div>
 
 
@@ -1201,10 +1214,10 @@ on files and/or download them. Files are accessed by id. As such,
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// get a file's MIME type
+    <pre class="prettyprint"><code>// get MIME type of the file whose id is "fileId"
 utilsGDrive.getFiles({
- fileId: "XXX_FILE_ID_XXX",
- fields: "mimeType"
+  fileId: "fileId",
+  fields: "mimeType"
 });</code></pre>
 
 
@@ -1251,7 +1264,8 @@ utilsGDrive.getFiles({
 
             
 
-            <td class="description last">Method parameters. Should include <code>fileId</code></td>
+            <td class="description last">Method parameters. Files/folders are accessed by id
+for this API method, so <code>fileId</code> is a required property.</td>
         </tr>
 
     
@@ -1277,8 +1291,8 @@ utilsGDrive.getFiles({
 
     <div class="param-desc usertext">
     
-        Throws an error when file id isn't specified. More specifically,
-when <code>params.fileId</code> is falsy.
+        Throws an error when file/folder id isn't specified.
+More specifically, when <code>params.fileId</code> is falsy
     
     </div>
 
@@ -1316,7 +1330,7 @@ when <code>params.fileId</code> is falsy.
 
     
 
-    <h4 class="name" id="getMime"><span class="type-signature">(async) </span>getMime<span class="signature">(identifiers, parentParams<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="getMime"><span class="type-signature">(async) </span>getMime<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {String}</span></h4>
 
     
 
@@ -1328,7 +1342,7 @@ when <code>params.fileId</code> is falsy.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line247">line 247</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line265">line 265</a>
     </li></ul></dd>
     
 
@@ -1368,7 +1382,7 @@ when <code>params.fileId</code> is falsy.
 
 
 <div class="description usertext">
-    Gets a file's MIME type.
+    Gets a file or folder's MIME type.
 </div>
 
 
@@ -1381,9 +1395,12 @@ when <code>params.fileId</code> is falsy.
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// get MIME type of file whose id is "XXX_FILE_ID_XXX"
-// and that resides in folder whose id is "XXX_FOLDER_ID_XXX"
-utilsGDrive.getMime({fileId: "XXX_FILE_ID_XXX", parentId: "XXX_FOLDER_ID_XXX"});</code></pre>
+    <pre class="prettyprint"><code>// get MIME type of file whose id is "fileId"
+// and that resides in folder whose id is "folderId"
+utilsGDrive.getMime({
+  fileId: "fileId",
+  parentId: "folderId"
+});</code></pre>
 
 
 
@@ -1400,8 +1417,6 @@ utilsGDrive.getMime({fileId: "XXX_FILE_ID_XXX", parentId: "XXX_FOLDER_ID_XXX"});
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
         
 
         
@@ -1422,19 +1437,14 @@ utilsGDrive.getMime({fileId: "XXX_FILE_ID_XXX", parentId: "XXX_FOLDER_ID_XXX"});
             
                 
 <span class="param-type">Object</span>
+|
+
+<span class="param-type">String</span>
 
 
             
             </td>
 
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -1442,42 +1452,9 @@ utilsGDrive.getMime({fileId: "XXX_FILE_ID_XXX", parentId: "XXX_FOLDER_ID_XXX"});
             <td class="description last">An object identifying the file/folder
 with either <code>fileId</code>/<code>folderId</code>
 or <code>fileName</code>/<code>folderName</code>.
-<code>parentId</code> and <code>parentName</code> properties may
-also be included</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentParams</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">An object identifying
-the parent with either <code>parentId</code> or <code>parentName</code></td>
+<code>parentId</code> and <code>parentName</code>
+properties may also be included.
+This parameter can also be a string containing the file/folder id.</td>
         </tr>
 
     
@@ -1541,7 +1518,7 @@ the parent with either <code>parentId</code> or <code>parentName</code></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line278">line 278</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line295">line 295</a>
     </li></ul></dd>
     
 
@@ -1594,16 +1571,8 @@ the parent with either <code>parentId</code> or <code>parentName</code></td>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// check if folder has any subfolders
-utilsGDrive.listChildren({folderName: "Folder Name"}, 'files(mimeType)')
-.then(data => {
- for (const d of data) {
-   if (d.mimeType === "application/vnd.google-apps.folder") {
-     console.log("Folder has subfolders");
-     break;
-   }
- }
-});</code></pre>
+    <pre class="prettyprint"><code>// get names of files in the folder whose name is "folderName"
+utilsGDrive.listChildren({folderName: "folderName"}, "files(name)");</code></pre>
 
 
 
@@ -1644,6 +1613,9 @@ utilsGDrive.listChildren({folderName: "Folder Name"}, 'files(mimeType)')
             
                 
 <span class="param-type">Object</span>
+|
+
+<span class="param-type">String</span>
 
 
             
@@ -1668,7 +1640,8 @@ utilsGDrive.listChildren({folderName: "Folder Name"}, 'files(mimeType)')
             <td class="description last">An object identifying the folder
 with either <code>folderId</code> or <code>folderName</code>.
 <code>parentId</code> and <code>parentName</code> properties may
-also be included</td>
+also be included.
+This parameter can also be a string containing the folder id.</td>
         </tr>
 
     
@@ -1734,7 +1707,8 @@ follow the pattern <code>'files(field1, field2,...)'</code></td>
 
         
 <div class="param-desc">
-    Each entry in the array returned is an object containing data on a file 
+    Each entry in the array returned
+is an object containing data on a file
 that resides in the folder specified
 </div>
 
@@ -1761,7 +1735,7 @@ that resides in the folder specified
 
     
 
-    <h4 class="name" id="listFiles"><span class="type-signature"></span>listFiles<span class="signature">(params)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="listFiles"><span class="type-signature"></span>listFiles<span class="signature">(params, ignoreTrash<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
 
@@ -1773,7 +1747,7 @@ that resides in the folder specified
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line74">line 74</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -1820,12 +1794,9 @@ that resides in the folder specified
 
 
 <div class="description usertext">
-    Makes a request to API's files resource using 
-list method. The list method
-for the files resource is primarily used to search for files using the
-method's <code>q</code> parameter. Default for the list method's
-<code>fields</code> parameter is 
-<code>"files(name, id, mimeType)"</code>.
+    Makes a request to the API's files resource using
+its list method, which is primarily used to search for files/folders
+using the <code>q</code> method parameter.
 </div>
 
 
@@ -1838,10 +1809,10 @@ method's <code>q</code> parameter. Default for the list method's
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// search for files with the name "File Name" and get their ids
+    <pre class="prettyprint"><code>// search for files with the name "fileName" and get their ids
 utilsGDrive.listFiles({
- q: "name = 'File Name'",
- fields: "files(id)"
+  q: "name = 'fileName'",
+  fields: "files(id)"
 });</code></pre>
 
 
@@ -1860,7 +1831,11 @@ utilsGDrive.listFiles({
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1885,10 +1860,64 @@ utilsGDrive.listFiles({
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last">Method parameters</td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Method parameters.
+Default for the <code>fields</code> method
+parameter is <code>"files(name, id, mimeType)"</code></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ignoreTrash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>true</code>
+                
+                </td>
+            
+
+            <td class="description last">Whether to include trash
+as a search location</td>
         </tr>
 
     
@@ -1952,7 +1981,7 @@ utilsGDrive.listFiles({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line71">line 71</a>
+        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -1993,7 +2022,6 @@ utilsGDrive.listFiles({
 
 <div class="description usertext">
     Makes a folder in Google Drive.
-Default location is <code>'root'</code> if parent not specified.
 </div>
 
 
@@ -2006,8 +2034,8 @@ Default location is <code>'root'</code> if parent not specified.
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// make a new folder named "New Folder" in the folder "Parent Folder"
-utilsGDrive.mkDir("New Folder", {parentName: "Parent Folder"});</code></pre>
+    <pre class="prettyprint"><code>// make a new folder named "newFolder" in the folder "parentFolder"
+utilsGDrive.mkDir("newFolder", {parentName: "parentFolder"});</code></pre>
 
 
 
@@ -2077,6 +2105,9 @@ utilsGDrive.mkDir("New Folder", {parentName: "Parent Folder"});</code></pre>
             
                 
 <span class="param-type">Object</span>
+|
+
+<span class="param-type">String</span>
 
 
             
@@ -2098,7 +2129,9 @@ utilsGDrive.mkDir("New Folder", {parentName: "Parent Folder"});</code></pre>
 
             <td class="description last">An object identifying where the
 folder should be created with either
-<code>parentId</code> or <code>parentName</code></td>
+<code>parentId</code> or <code>parentName</code>.
+Can also be a string containing the parent id.
+Folder will be created in the root folder if this parameter isn't specified.</td>
         </tr>
 
     
@@ -2124,7 +2157,7 @@ folder should be created with either
 
         
 <div class="param-desc">
-    - Id of the folder created
+    Id of the folder created
 </div>
 
 
@@ -2162,7 +2195,7 @@ folder should be created with either
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line47">line 47</a>
+        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line50">line 50</a>
     </li></ul></dd>
     
 
@@ -2215,7 +2248,8 @@ folder should be created with either
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// move the file "File Name" to the folder "Folder Name"utilsGDrive.mv({fileName: "File Name"}, {newParentName: "Folder Name"})</code></pre>
+    <pre class="prettyprint"><code>// move the file "fileName" to the folder "folderName"
+utilsGDrive.mv({fileName: "fileName"}, {newParentName: "folderName"})</code></pre>
 
 
 
@@ -2254,6 +2288,9 @@ folder should be created with either
             
                 
 <span class="param-type">Object</span>
+|
+
+<span class="param-type">String</span>
 
 
             
@@ -2271,7 +2308,12 @@ folder should be created with either
 
             
 
-            <td class="description last">An object identifying the file/folderwith either <code>fileId</code>/<code>folderId</code>or <code>fileName</code>/<code>folderName</code><code>parentId</code> and <code>parentName</code> properties mayalso be included</td>
+            <td class="description last">An object identifying the file/folder
+with either <code>fileId</code>/<code>folderId</code>
+or <code>fileName</code>/<code>folderName</code>
+<code>parentId</code> and <code>parentName</code> properties may
+also be included.
+This parameter can also be a string containing the file/folder id.</td>
         </tr>
 
     
@@ -2285,6 +2327,9 @@ folder should be created with either
             
                 
 <span class="param-type">Object</span>
+|
+
+<span class="param-type">String</span>
 
 
             
@@ -2304,7 +2349,10 @@ folder should be created with either
 
             
 
-            <td class="description last">An object identifyingthe new parent with either <code>parentId</code> or <code>parentName</code></td>
+            <td class="description last">An object identifying
+the new parent with either <code>parentId</code> or <code>parentName</code>.
+Can also be a string containing the parent id.
+File will be moved to root folder if this parameter isn't specified.</td>
         </tr>
 
     
@@ -2368,7 +2416,7 @@ folder should be created with either
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line24">line 24</a>
+        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -2421,7 +2469,8 @@ folder should be created with either
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// rename file "File Name" to "New File Name"utilsGDrive.renmae({fileName: "File Name"}, "New File Name")</code></pre>
+    <pre class="prettyprint"><code>// rename file "fileName" to "newFileName"
+utilsGDrive.rename({fileName: "fileName"}, "newFileName")</code></pre>
 
 
 
@@ -2458,6 +2507,9 @@ folder should be created with either
             
                 
 <span class="param-type">Object</span>
+|
+
+<span class="param-type">String</span>
 
 
             
@@ -2467,7 +2519,12 @@ folder should be created with either
 
             
 
-            <td class="description last">An object identifying the file/folderwith either <code>fileId</code>/<code>folderId</code>or <code>fileName</code>/<code>folderName</code><code>parentId</code> and <code>parentName</code> properties mayalso be included</td>
+            <td class="description last">An object identifying the file/folder
+with either <code>fileId</code>/<code>folderId</code>
+or <code>fileName</code>/<code>folderName</code>
+<code>parentId</code> and <code>parentName</code> properties may
+also be included.
+This parameter can also be a string containing the file/folder id.</td>
         </tr>
 
     
@@ -2554,7 +2611,7 @@ folder should be created with either
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line119">line 119</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line120">line 120</a>
     </li></ul></dd>
     
 
@@ -2601,11 +2658,10 @@ folder should be created with either
 
 
 <div class="description usertext">
-    Makes a request to API's files resource using 
-update method. The update method
-can be used to change a file's name or to move a file to a different location
-within Google Drive. Files are accessed by id. As such,
-<code>fileId</code> is a required property of <code>params</code>.
+    Makes a request to the API's files resource using
+its update method, which can be used
+to change a file or folders's name or to move a file to a different location
+within Google Drive.
 </div>
 
 
@@ -2618,11 +2674,10 @@ within Google Drive. Files are accessed by id. As such,
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// change the name of a file whose id is "XXX_FILE_ID_XXX"
-// to "New File Name"
+    <pre class="prettyprint"><code>// change the name of a file whose id is "fileId" to "newFileName"
 utilsGDrive.updateFiles({
- fileId: "XXX_FILE_ID_XXX"
- resource: {name: "New File Name"}
+  fileId: "fileId"
+  resource: {name: "newFileName"}
 });</code></pre>
 
 
@@ -2669,7 +2724,9 @@ utilsGDrive.updateFiles({
 
             
 
-            <td class="description last">Method parameters</td>
+            <td class="description last">Method parameters.
+Files/folders are accessed by id for this API method, so
+<code>fileId</code> is a required property.</td>
         </tr>
 
     
@@ -2689,6 +2746,19 @@ utilsGDrive.updateFiles({
 
 
 
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc usertext">
+    
+        Throws an error when file/folder id isn't specified.
+More specifically, when <code>params.fileId</code> is falsy
+    
+    </div>
+
+
+    
 
 
 <h5>Returns:</h5>
@@ -2733,7 +2803,7 @@ utilsGDrive.updateFiles({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line104">line 104</a>
+        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line113">line 113</a>
     </li></ul></dd>
     
 
@@ -2774,7 +2844,6 @@ utilsGDrive.updateFiles({
 
 <div class="description usertext">
     Uploads a file or folder to Google Drive.
-Default location is <code>'root'</code> if parent not specified.
 </div>
 
 
@@ -2787,8 +2856,8 @@ Default location is <code>'root'</code> if parent not specified.
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// upload folder "foo" to the folder "bar" in Google Drive
-utilsGDrive.upload("./lorem/foo", {parentName: "bar"});</code></pre>
+    <pre class="prettyprint"><code>// upload folder "folderName" to the folder "parentName" in Google Drive
+utilsGDrive.upload("path/to/folderName", {parentName: "parentName"});</code></pre>
 
 
 
@@ -2858,6 +2927,9 @@ utilsGDrive.upload("./lorem/foo", {parentName: "bar"});</code></pre>
             
                 
 <span class="param-type">Object</span>
+|
+
+<span class="param-type">String</span>
 
 
             
@@ -2877,9 +2949,12 @@ utilsGDrive.upload("./lorem/foo", {parentName: "bar"});</code></pre>
 
             
 
-            <td class="description last">An object identifying where the
-file or folder should be uploaded with either
-<code>parentId</code> or <code>parentName</code></td>
+            <td class="description last">An object identifying
+where the file or folder should be uploaded with either
+<code>parentId</code> or <code>parentName</code>.
+Can also be a string containing the parent id.
+File/folder will be uploaded to the root folder
+if this parameter isn't specified.</td>
         </tr>
 
     
@@ -2946,7 +3021,7 @@ file or folder should be uploaded with either
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Tue Jul 21 2020 13:36:21 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Fri Jul 24 2020 19:07:23 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

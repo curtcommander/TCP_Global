@@ -46,11 +46,6 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
-const drive = require('./drive');
-const config = require('../config');
-
-api = drive._addDrive(api);
-
 module.exports = {
   api,
   listFiles,
@@ -61,39 +56,33 @@ module.exports = {
   getMime,
   listChildren,
   _resolveParamsId,
-  _resolveFId
+  _resolveFId,
 };
 
 /**
  * Base function for making requests to the Google Drive API.
  * @see Consult
  * [Google Drive API reference]{@link https://developers.google.com/drive/api/v3/reference}
- * for information on the resources and methods available 
- * and on the parameters that methods accept.
- * @param {String} resource - An API resource
+ * for information on the resources and methods available
+ * and on the parameters that API methods accept.
+ * @param {String} resource - Name of API resource
  * @param {String} method - One of the API resource's methods
  * @param {Object} params - Method parameters
- * @return {Object} Data from response object
+ * @return {Object} Data from response
  * @example
- * // Use the files resource and list method to get IDs of files with the name "File Name"
+ * // Use the files resource and list method to
+ * // get ids of files with the name "fileName"
  * utilsGDrive.api("files", "list", {
- *  q: "name = 'File Name'",
- *  fields: "files(id)"
+ *   q: "name = 'fileName'",
+ *   fields: "files(id)"
  * });
  */
 function api(resource, method, params) {
-  if (config.LOG) {
-    console.log('Resource:  ', resource);
-    console.log('Method:    ', method);
-    console.log('Parameters:\n', params);
-  }
   return new Promise((resolve, reject) => {
-    this.drive[resource][method](params, (error, response) => {
-      if (error) reject(error);
-      if (config.LOG) {
-        console.log('Response Data:');
-        console.log(response.data);
-        console.log();
+    this.drive[resource][method](params, (err, response) => {
+      if (err) {
+        reject(err);
+        return;
       }
       resolve(response.data);
     });
@@ -101,84 +90,98 @@ function api(resource, method, params) {
 }
 
 /**
- * Makes a request to API's files resource using 
- * list method. The list method
- * for the files resource is primarily used to search for files using the
- * method's &lt;code>q&lt;/code> parameter. Default for the list method's
- * &lt;code>fields&lt;/code> parameter is 
- * &lt;code>"files(name, id, mimeType)"&lt;/code>.
+ * Makes a request to the API's files resource using
+ * its list method, which is primarily used to search for files/folders
+ * using the &lt;code>q&lt;/code> method parameter.
  * @see Wraps {@link api}
- * @param {Object} params - Method parameters
+ * @param {Object} params - Method parameters.
+ * Default for the &lt;code>fields&lt;/code> method
+ * parameter is &lt;code>"files(name, id, mimeType)"&lt;/code>
+ * @param {Boolean} [ignoreTrash] - Whether to include trash
+ * as a search location
  * @return {Object} Data from response
  * @example
- * // search for files with the name "File Name" and get their ids
+ * // search for files with the name "fileName" and get their ids
  * utilsGDrive.listFiles({
- *  q: "name = 'File Name'",
- *  fields: "files(id)"
+ *   q: "name = 'fileName'",
+ *   fields: "files(id)"
  * });
  */
-function listFiles(params) {
+function listFiles(params, ignoreTrash=true) {
   if (!params.fields) params.fields = 'files(name, id, mimeType)';
-  return api('files', 'list', params);
+  if (params.q) {
+    const regEx = new RegExp('(and)? trashed ?= ?(true|false)');
+    const matches = regEx.exec(params.q);
+    if (matches) params.q = params.q.replace(matches[0], '');
+    params.q += ' and trashed=' + !ignoreTrash;
+  }
+  return this.api('files', 'list', params).catch((err) => console.error(err));
 }
 
 /**
- * Makes a request to files resource using get method.
- * The get method for the files resource can be used to get information 
- * on files and/or download them. Files are accessed by id. As such,
- * &lt;code>fileId&lt;/code> is a required property of &lt;code>params&lt;/code>.
+ * Makes a request to the files resource using its get method,
+ * which can be used to get information on files and/or download them.
  * @see Wraps {@link api}
- * @param {Object} params - Method parameters. Should include &lt;code>fileId&lt;/code>
+ * @param {Object} params - Method parameters. Files/folders are accessed by id
+ * for this API method, so &lt;code>fileId&lt;/code> is a required property.
  * @return {Object} Data from response
- * @throws Throws an error when file id isn't specified. More specifically,
- * when &lt;code>params.fileId&lt;/code> is falsy.
+ * @throws Throws an error when file/folder id isn't specified.
+ * More specifically, when &lt;code>params.fileId&lt;/code> is falsy
  * @example
- * // get a file's MIME type
+ * // get MIME type of the file whose id is "fileId"
  * utilsGDrive.getFiles({
- *  fileId: "XXX_FILE_ID_XXX",
- *  fields: "mimeType"
+ *   fileId: "fileId",
+ *   fields: "mimeType"
  * });
  */
 function getFiles(params) {
-  if (!params.fileId) throw new Error('File id not specified.')
+  if (!params.fileId) {
+    const err = new this.Error('File id not specified.');
+    // wrapping in Promise.resolve ensures chainability
+    return Promise.resolve(console.error(err));
+  }
   if (!params.fields) params.fields = 'name, id, mimeType';
-  return api('files', 'get', params);
+  return this.api('files', 'get', params).catch((err) => console.error(err));
 }
 
 /**
- * Makes a request to API's files resource using 
- * update method. The update method
- * can be used to change a file's name or to move a file to a different location
- * within Google Drive. Files are accessed by id. As such,
- * &lt;code>fileId&lt;/code> is a required property of &lt;code>params&lt;/code>.
+ * Makes a request to the API's files resource using
+ * its update method, which can be used
+ * to change a file or folders's name or to move a file to a different location
+ * within Google Drive.
  * @see Wraps {@link api}
- * @param {Object} params - Method parameters
+ * @param {Object} params - Method parameters.
+ * Files/folders are accessed by id for this API method, so
+ * &lt;code>fileId&lt;/code> is a required property.
  * @return {Object} Data from response
+ * @throws Throws an error when file/folder id isn't specified.
+ * More specifically, when &lt;code>params.fileId&lt;/code> is falsy
  * @example
- * // change the name of a file whose id is "XXX_FILE_ID_XXX"
- * // to "New File Name"
+ * // change the name of a file whose id is "fileId" to "newFileName"
  * utilsGDrive.updateFiles({
- *  fileId: "XXX_FILE_ID_XXX"
- *  resource: {name: "New File Name"}
+ *   fileId: "fileId"
+ *   resource: {name: "newFileName"}
  * });
  */
 function updateFiles(params) {
-  return api('files', 'update', params);
+  if (!params.fileId) {
+    const err = new this.Error('File id not specified.');
+    // wrapping in Promise.resolve ensures chainability
+    return Promise.resolve(console.error(err));
+  }
+  return this.api('files', 'update', params).catch((err) => console.error(err));
 }
 
 /**
  * Resolves id of file/folder using &lt;code>params&lt;/code>.
- * @param {Object} params - An object with a property whose name
- * ends in either "Name" or "Id"
+ * @param {Object|String} params - An object with a property whose name
+ * ends in either "Name" or "Id". Can also be a string containing the
+ * the file/folder id
  * @return {String} File/folder id
- * @example
- * // resolve file id for a file's parent
- * _resolveParamsId({
- *  parentName: "Parent Name"
- * });
  * @access private
  */
 async function _resolveParamsId(params) {
+  if (typeof params === 'string') return params;
   let propPrefix;
   for (const key in params) {
     if (key.indexOf('Name') + key.indexOf('Id') > -2) {
@@ -187,148 +190,167 @@ async function _resolveParamsId(params) {
     }
   }
   // id given
-  if (params[propPrefix+'Id']) {
-    return params[propPrefix+'Id'];
-  // name given
-  } else if (params[propPrefix+'Name']) {
-    return await getFileId(params[propPrefix+'Name']);
-  // default to root if neither id nor name given
+  if (params[propPrefix + 'Id']) {
+    return params[propPrefix + 'Id'];
+    // name given
+  } else if (params[propPrefix + 'Name']) {
+    return this.getFileId(params[propPrefix + 'Name']);
+    // default to root if neither id nor name given
   } else {
     return 'root';
   }
 }
 
 /**
- * Gets file id given file name.
- * @param {String} fileName - File name
- * @param {Object} [paramsParent] - An object identifying 
- * the parent with either &lt;code>parentId&lt;/code>
- * or &lt;code>parentName&lt;/code>
- * @return {String} File id
- * @throws Throws an error if exactly one file isn't found
- * given itendifiers specified.
+ * Gets file/folder id given name.
+ * @param {String} fileName - File/folder name
+ * @param {Object|String} [paramsParent] - An object identifying
+ * the parent with either &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>.
+ * Can also be a string containing the parent id.
+ * @return {String} File/folder id
+ * @throws Throws an error if exactly one file/folder isn't found
+ * given itendifiers specified
  * @example
- * // get id of file whose name is "File Name"
- * utilsGDrive.getFileId("File Name");
+ * // get id of file whose name is "fileName"
+ * utilsGDrive.getFileId("fileName");
  */
 async function getFileId(fileName, paramsParent = {}) {
-  let q = 'name="'+fileName+'" and trashed=false';
+  let q = 'name="' + fileName + '"';
   if (Object.keys(paramsParent).length) {
-    const parentId = await _resolveParamsId(paramsParent);
-    q += ' and "'+parentId+'" in parents';
+    const parentId = await this._resolveParamsId(paramsParent);
+    q += ' and "' + parentId + '" in parents';
   }
-  const responseData = await listFiles({q: q, fields: 'files(id)'});
-  const nFiles = responseData.files.length; 
-  if (nFiles > 1) {
-    throw new Error('Multiple files found. Consider specifying parent.');
-  } else if (nFiles === 0) {
-    throw new Error('No files found matching identifiers specified.');
+
+  const responseData = await this.listFiles({q, fields: 'files(id)'});
+  if (responseData) {
+    let e;
+    const nFiles = responseData.files.length;
+    if (nFiles > 1) {
+      e = new this.Error('Multiple files found. Consider specifying parent.');
+    } else if (nFiles === 0) {
+      e = new this.Error('No files found matching identifiers specified.');
+    }
+    if (e) return console.error(e);
+    return responseData.files[0].id;
   }
-  return responseData.files[0].id;
 }
 
 /**
- * Gets file name given file id.
- * @param {String} fileId - File id
- * @return {String} File name
+ * Gets file/folder name given id.
+ * @param {String} fileId - File/folder id
+ * @return {String} File/folder name
  * @example
- * // get name of file whose id is "XXX_FILE_ID_XXX"
- * utilsGDrive.getFileId("XXX_FILE_ID_XXX");
+ * // get name of file whose id is "fileId"
+ * utilsGDrive.getFileId("fileId");
  */
 async function getFileName(fileId) {
-  const responseData = await getFiles({fileId, fields: 'name'});
-  return responseData.name;
+  const responseData = await this.getFiles({fileId, fields: 'name'});
+  if (responseData) return responseData.name;
 }
 
 /**
- * Resolves file id given object with data
- * identifying the file.
- * @param {Object} identifiers - An object identifying the file/folder
- * with either &lt;code>fileId&lt;/code>/&lt;code>folderId&lt;/code>
- * or &lt;code>fileName&lt;/code>/&lt;code>folderName&lt;/code>
- * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code> properties may
- * also be included
- * @return {String} File id 
+ * Resolves file/folder id given object with data
+ * identifying the file/folder.
+ * @param {Object|String} identifiers - An object identifying
+ * the file/folder with either &lt;code>fileId&lt;/code>/&lt;code>folderId&lt;/code>
+ * or &lt;code>fileName&lt;/code>/&lt;code>folderName&lt;/code>.
+ * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code>
+ * properties may also be included.
+ * Can also be a string containing the file/folder id.
+ * @throws Throws an error if invalid property name given.
+ * Valid property names are the ones above.
+ * @return {String} File/folder id
  * @access private
  */
 async function _resolveFId(identifiers) {
+  if (typeof identifiers === 'string') return identifiers;
   if (identifiers.fileId) return identifiers.fileId;
   if (identifiers.folderId) return identifiers.folderId;
+
   const fIdentifiers = ['fileId', 'fileName', 'folderId', 'folderName'];
   const pIdentifiers = ['parentId', 'parentName'];
-  let fParams = {};
-  let pParams = {};
+  const fParams = {};
+  const pParams = {};
   for (const key in identifiers) {
     if (fIdentifiers.includes(key)) {
       fParams[key] = identifiers[key];
     } else if (pIdentifiers.includes(key)) {
       pParams[key] = identifiers[key];
     } else {
-      throw new Error('Invalid property name: '+key);
+      throw new this.Error('Invalid property name: ' + key);
     }
   }
+
   let fName;
-  (fParams.fileName) ? fName = fParams.fileName : fName = fParams.folderName;
+  fParams.fileName ? (fName = fParams.fileName) : (fName = fParams.folderName);
   let parentId;
-  if (Object.keys(pParams).length) parentId = await _resolveParamsId(pParams);
-  if (!parentId) return await getFileId(fName);
-  return await getFileId(fName, {parentId});
+  if (Object.keys(pParams).length) {
+    parentId = await this._resolveParamsId(pParams);
+  }
+  if (!parentId) return this.getFileId(fName);
+  return this.getFileId(fName, {parentId});
 }
 
 /**
- * Gets a file's MIME type.
- * @param {Object} identifiers - An object identifying the file/folder
+ * Gets a file or folder's MIME type.
+ * @param {Object|String} identifiers - An object identifying the file/folder
  * with either &lt;code>fileId&lt;/code>/&lt;code>folderId&lt;/code>
  * or &lt;code>fileName&lt;/code>/&lt;code>folderName&lt;/code>.
- * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code> properties may
- * also be included
- * @param {Object} [parentParams] - An object identifying
- * the parent with either &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>
+ * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code>
+ * properties may also be included.
+ * This parameter can also be a string containing the file/folder id.
  * @return {String} MIME type
  * @example
- * // get MIME type of file whose id is "XXX_FILE_ID_XXX"
- * // and that resides in folder whose id is "XXX_FOLDER_ID_XXX"
- * utilsGDrive.getMime({fileId: "XXX_FILE_ID_XXX", parentId: "XXX_FOLDER_ID_XXX"});
+ * // get MIME type of file whose id is "fileId"
+ * // and that resides in folder whose id is "folderId"
+ * utilsGDrive.getMime({
+ *   fileId: "fileId",
+ *   parentId: "folderId"
+ * });
  */
 async function getMime(identifiers) {
-  const fileId = await _resolveFId(identifiers);
-  const responseData = await getFiles({
+  let fileId;
+  try {
+    fileId = await this._resolveFId(identifiers);
+  } catch (err) {
+    return console.error(err);
+  }
+  const responseData = await this.getFiles({
     fileId,
     fields: 'mimeType',
   });
-  return responseData.mimeType;
+  if (responseData) return responseData.mimeType;
 }
 
 /**
  * Gets data on files in a folder.
- * @param {Object} identifiers - An object identifying the folder
+ * @param {Object|String} identifiers - An object identifying the folder
  * with either &lt;code>folderId&lt;/code> or &lt;code>folderName&lt;/code>.
  * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code> properties may
- * also be included
+ * also be included.
+ * This parameter can also be a string containing the folder id.
  * @param {String} [fields] - The data fields to request. Format should
  * follow the pattern &lt;code>'files(field1, field2,...)'&lt;/code>
- * @return {Array} Each entry in the array returned is an object containing data on a file 
+ * @return {Array} Each entry in the array returned
+ * is an object containing data on a file
  * that resides in the folder specified
  * @example
- * // check if folder has any subfolders
- * utilsGDrive.listChildren({folderName: "Folder Name"}, 'files(mimeType)')
- * .then(data => {
- *  for (const d of data) {
- *    if (d.mimeType === "application/vnd.google-apps.folder") {
- *      console.log("Folder has subfolders");
- *      break;
- *    }
- *  }
- * });
+ * // get names of files in the folder whose name is "folderName"
+ * utilsGDrive.listChildren({folderName: "folderName"}, "files(name)");
  */
 async function listChildren(identifiers, fields = 'files(name, id, mimeType)') {
-  const folderId = await _resolveFId(identifiers);
+  let folderId;
+  try {
+    folderId = await this._resolveFId(identifiers);
+  } catch (err) {
+    return console.error(err);
+  }
   const listFilesParams = {
-    q       : '\''+folderId+'\' in parents and trashed=false',
-    fields  : fields 
+    q: '"' + folderId + '" in parents',
+    fields: fields,
   };
-  const responseData = await listFiles(listFilesParams);
-  return responseData.files;
+  const responseData = await this.listFiles(listFilesParams);
+  if (responseData) return responseData.files;
 }
 </code></pre>
         </article>
@@ -344,7 +366,7 @@ async function listChildren(identifiers, fields = 'files(name, id, mimeType)') {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Tue Jul 21 2020 13:36:21 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Fri Jul 24 2020 19:07:23 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

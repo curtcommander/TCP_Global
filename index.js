@@ -9,11 +9,11 @@ const update = require('./lib/update');
 const drive = require('./lib/drive');
 
 class UtilsGDriveError extends Error {
-    constructor(args){
-        super(args);
-        this.name = "UtilsGDriveError"
-    }
-}
+  constructor(args) {
+    super(args);
+    this.name = "UtilsGDriveError"
+  }
+};
 
 /**
  * Base class whose methods are utils-google-drive functions.
@@ -30,20 +30,16 @@ class utilsGDrive {
     getFileName        = utils.getFileName;
     getMime            = utils.getMime;
     listChildren       = utils.listChildren;
-
     download           = drive._addDrive(download.download, this);
     _downloadFile      = download._downloadFile;
     _checkExistsDrive  = upload._checkExistsDrive;
     mkDir              = upload.mkDir;
     upload             = upload.upload;
     _uploadFile        = upload._uploadFile;
-
     del                = del.del;
-
     rename             = update.rename;
     mv                 = update.mv;
-
     Error              = UtilsGDriveError;
-}
+};
 
 module.exports = new utilsGDrive();

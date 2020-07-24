@@ -47,80 +47,84 @@
             <pre class="prettyprint source linenums"><code>'use strict';
 
 const fs = require('fs');
-const drive = require('./drive');
-const utils = require('./utils');
-
-download = drive._addDrive(download);
+const path = require('path');
 
 module.exports = {
   download,
+  _downloadFile,
 };
 
 /**
  * Downloads a file or folder from Google Drive.
- * @param {Object} identifiers - An object identifying the file/folder
+ * @param {Object|String} identifiers - An object identifying the file/folder
  * with either &lt;code>fileId&lt;/code>/&lt;code>folderId&lt;/code>
  * or &lt;code>fileName&lt;/code>/&lt;code>folderName&lt;/code>.
  * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code> properties may
- * also be included
+ * also be included.
+ * This parameter can also be a string containing the file/folder id.
  * @param {String} [out] - Path to download location
- * @return {void} None
+ * @return {undefined} None
  * @example
- * // download the folder "Folder Name" to the local directory "Local Dir"  
- * utilsGDrive.Download({folderName: "Folder Name"}, "Local Dir");
+ * // download the folder "folderName" to the local directory "localDir"
+ * utilsGDrive.download({folderName: "folderName"}, "path/to/localDir");
  */
-async function download(identifiers, out = './') {
+async function download(identifiers, out = '.') {
   // file id
   let fileId;
   if (identifiers.fileId) {
     fileId = identifiers.fileId;
   } else {
-    fileId = await utils._resolveFId(identifiers);
+    try {
+      fileId = await this._resolveFId(identifiers);
+    } catch (err) {
+      return console.error(err);
+    }
   }
 
   // file name and MIME type
-  let fileName, mimeType;
+  let fileName;
+  let mimeType;
   if (identifiers.fileName &amp;&amp; identifiers.mimeType) {
     fileName = identifiers.fileName;
     mimeType = identifiers.mimeType;
   } else {
-    const metadata = await utils.getFiles({
+    const metadata = await this.getFiles({
       fileId,
       fields: 'name, mimeType',
-    })
+    });
+    if (!metadata) return;
     fileName = metadata.name;
     mimeType = metadata.mimeType;
   }
   // write location
   if (!out) out = '.';
 
-  // pass utilsGDrive through resursive function calls
-  if (!identifiers.drive) {
-    identifiers.utilsGDrive = this;
-  }
-
   // handle folder
   if (mimeType === 'application/vnd.google-apps.folder') {
-    out += '/'+fileName;
+    out = path.join(out, fileName);
     try {
       fs.mkdirSync(out);
-    } catch (e) {
+    } catch (err) {
       const d = new Date();
-      if (e.code === 'EEXIST') fs.utimesSync(out, d, d);
-      else throw e;
+      if (err.code === 'EEXIST') fs.utimesSync(out, d, d);
+      else return console.error(err);
     }
-    const children = await utils.listChildren({fileId});
-    for (const child of children) {
-      await download({
-        fileId: child.id,
-        fileName: child.name,
-        mimeType: child.mimeType,
-        utilsGDrive: identifiers.utilsGDrive,
-      }, out);
+    const children = await this.listChildren({fileId});
+    if (children) {
+      for (const child of children) {
+        await this.download(
+            {
+              fileId: child.id,
+              fileName: child.name,
+              mimeType: child.mimeType,
+            },
+            out,
+        );
+      }
     }
-  // handle file
+    // handle file
   } else {
-    await _downloadFile(fileId, fileName, out, identifiers.utilsGDrive);
+    await this._downloadFile(fileId, fileName, out);
   }
 }
 
@@ -128,26 +132,24 @@ async function download(identifiers, out = './') {
  * Downloads a file from Google Drive.
  * @param {String} fileId - File id
  * @param {String} fileName - File name
- * @param {String} [out] - Path to download location
- * @param {utilsGDrive} utilsGDrive - An instance of &lt;code>
- * utilsGDrive&lt;/code>
+ * @param {String} out - Path to download location
+ * @return {undefined} None
  * @access private
  */
-async function _downloadFile(fileId, fileName, out, utilsGDrive) {
-  const dest = fs.createWriteStream(out+'/'+fileName);
-  utilsGDrive.drive.files.get({fileId, alt: 'media'}, {responseType: 'stream'},
-  (error, response) => {
-    if (error) return console.error(error);
-    response.data
-      .on('end', () => {
-        console.log('Downloaded', fileName);
-      })
-      .on('error', (error) => {
-        console.log('Error while downloading', fileName+':', error);
-      })
-      .pipe(dest);
-    }
-  )
+async function _downloadFile(fileId, fileName, out) {
+  const dest = fs.createWriteStream(path.join(out, fileName));
+  this.drive.files.get(
+      {fileId, alt: 'media'},
+      {responseType: 'stream'},
+      (err, response) => {
+        if (err) return console.error(err);
+        response.data
+            .on('error', (err) => {
+              console.error('Error while downloading', fileName + ':', err);
+            })
+            .pipe(dest);
+      },
+  );
 }
 </code></pre>
         </article>
@@ -163,7 +165,7 @@ async function _downloadFile(fileId, fileName, out, utilsGDrive) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Tue Jul 21 2020 13:36:21 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Fri Jul 24 2020 19:07:23 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

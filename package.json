@@ -4,7 +4,9 @@
   "description": "Package for interfacing with the Google Drive API",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint lib test",
+    "docs": "jsdoc index.js lib -d docs -c jsdoc.json"
   },
   "repository": {
     "type": "git",
