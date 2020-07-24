@@ -3,6 +3,8 @@
 const assert = require('assert').strict;
 const utilsGDrive = require('utils-google-drive');
 const fs = require('fs-extra');
+const { RSA_NO_PADDING } = require('constants');
+const utils = require('../lib/utils');
 
 const fileNameTest = 'TEST_TESTSITE';
 const fileIdTest = '1f0o9p3pPwaCkZ9Y-P8IxY6jBpT68GjlB';
@@ -104,6 +106,8 @@ describe('resolve identifiers', function() {
 });
 
 describe('utils', function() {
+  this.timeout(5000);
+
   it('listFiles()', async function() {
     const files = await utilsGDrive.listFiles({fileId: fileIdTest});
     assert(files);
@@ -145,7 +149,7 @@ describe('utils', function() {
 
 describe('other modules', function() {
   this.timeout(8000);
-  
+
   let mkDirPassed;
   it('mkDir()', async function() {
     const fileId = await utilsGDrive.mkDir('testMkDir');
@@ -204,7 +208,7 @@ describe('other modules', function() {
     else {
       const fileName = 'testUploadFile.xlsx';
       await utilsGDrive.download({fileName}, 'test');
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         setTimeout(function() {
           if (fs.readdirSync('test').indexOf(fileName)+1) {
             if (fs.statSync('test/'+fileName).size) {
@@ -219,6 +223,7 @@ describe('other modules', function() {
 
   let downloadFolderPassed;
   it('download(), download folder', async function() {
+    this.retries(2);
     if (!downloadFilePassed) this.skip();
     else {
       const folderName = 'testMkDir';
@@ -253,3 +258,47 @@ describe('other modules', function() {
     assert(!files.length);
   });
 });
+
+describe('utilsGDriveError', function() {
+  const consoleError = console.error;
+  let output;
+  beforeEach(function(done) {
+    output = '';
+    console.error = (msg) => {
+      output += msg + '\n';
+    };
+    done();
+  });
+
+  afterEach(function() {
+    console.error = consoleError;
+    if (this.currentTest.state === 'failed') {
+      console.error(output);
+    }
+   });
+
+  it('getFiles(), file id not specified', function() {
+    assert.rejects(
+      function() {
+        utilsGDrive.getFiles({shouldBeFileId: 'foo'})
+      }, utilsGDrive.Error)
+  });
+
+  it('_resolveFId(), invalid property name', function() {
+    assert.rejects(
+      function () {
+        utilsGDrive._resolveFId({f: fileNameTest})
+      }, utilsGDrive.Error)
+  });
+
+  it('_checkExistsDrive(), file/folder already exists', async function () {
+    const fileMetadata = {
+      name: 'Daily Logs',
+      mimeType: 'application/vnd.google-apps.folder',
+      parents: ['19FWsjMbtZzfVnbUdDvGLdHKc3E3zXk0k'],
+    }
+    assert.rejects(async () => {
+        await utilsGDrive._checkExistsDrive(fileMetadata);
+      }, utilsGDrive.Error)
+  })
+})

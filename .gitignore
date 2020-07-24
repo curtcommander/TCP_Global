@@ -2,6 +2,7 @@ notes.txt
 credentials.json
 token.json
 lib/permissions.js
+config.js
 
 # Logs
 logs
