@@ -48,35 +48,34 @@
 
 const fs = require('fs');
 const path = require('path');
-const drive = require('./drive');
-const utils = require('./utils');
 
 const mimeTypesByExt = {
-  'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'xlsm': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'xls': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'txt': 'text/plain',
-  'html': 'text/html',
-  'htm': 'text/html',
-  'csv': 'text/csv',
-  'pdf': 'application/pdf',
-  'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'json': 'application/vnd.google-apps.script+json',
-  'jpeg': 'image/jpeg',
-  'jpg': 'image/jpeg',
-  'png': 'image/png',
-  'svg': 'image/svg+xml',
-  'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  'pptm': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  'ppt': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  /* eslint-disable -- custom object format */
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  xlsm: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  xls:  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  txt:  'text/plain',
+  html: 'text/html',
+  htm:  'text/html',
+  csv:  'text/csv',
+  pdf:  'application/pdf',
+  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  json: 'application/vnd.google-apps.script+json',
+  jpeg: 'image/jpeg',
+  jpg:  'image/jpeg',
+  png:  'image/png',
+  svg:  'image/svg+xml',
+  pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  pptm: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  ppt:  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  /* eslint-enable */
 };
 
-upload = drive._addDrive(upload);
-mkDir = drive._addDrive(mkDir);
-
 module.exports = {
+  _checkExistsDrive,
   mkDir,
   upload,
+  _uploadFile,
 };
 
 /**
@@ -92,95 +91,124 @@ module.exports = {
  * @access private
  */
 async function _checkExistsDrive(fileMetadata) {
-  const q = 'name="'+fileMetadata.name+
-    '" and mimeType="'+fileMetadata.mimeType+
-    '" and "'+fileMetadata.parents[0]+'" in parents and trashed=false';
-  const data = await utils.listFiles({q: q});
-  if (data.files.length) {
-    throw new Error('File/folder already exists in drive.');
+  const q =
+    'name="' +
+    fileMetadata.name +
+    '" and mimeType="' +
+    fileMetadata.mimeType +
+    '" and "' +
+    fileMetadata.parents[0] +
+    '" in parents and trashed=false';
+  const data = await this.listFiles({q: q});
+  if (data) {
+    if (data.files.length > 0) {
+      throw new this.Error('File/folder already exists in drive.');
+    }
   }
-  return;
 }
 
 /**
  * Makes a folder in Google Drive.
- * Default location is &lt;code>'root'&lt;/code> if parent not specified.
  * @param {String} dirName - Name of folder to be created
- * @param {Object} [parentParams] - An object identifying where the
+ * @param {Object|String} [parentParams] - An object identifying where the
  * folder should be created with either
- * &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>
- * @return {String} - Id of the folder created
+ * &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>.
+ * Can also be a string containing the parent id.
+ * Folder will be created in the root folder if this parameter isn't specified.
+ * @return {String} Id of the folder created
  * @example
- * // make a new folder named "New Folder" in the folder "Parent Folder"
- * utilsGDrive.mkDir("New Folder", {parentName: "Parent Folder"});
+ * // make a new folder named "newFolder" in the folder "parentFolder"
+ * utilsGDrive.mkDir("newFolder", {parentName: "parentFolder"});
  */
 async function mkDir(dirName, parentParams = {}) {
   const fileMetadata = {
-    'name': dirName,
-    'mimeType': 'application/vnd.google-apps.folder',
+    name: dirName,
+    mimeType: 'application/vnd.google-apps.folder',
   };
-  
+
   if (parentParams === {}) parentParams.parentId = 'root';
-  const parentId = await utils._resolveParamsId(parentParams);
-  fileMetadata.parents = [parentId];
-  await _checkExistsDrive(fileMetadata);
-  return new Promise((resolve, reject) => {
-    this.drive.files.create({
+  let responseData;
+  try {
+    const parentId = await this._resolveParamsId(parentParams);
+    fileMetadata.parents = [parentId];
+    await this._checkExistsDrive(fileMetadata);
+    responseData = await this.api('files', 'create', {
       resource: fileMetadata,
       fields: 'id',
-    }, (error, responseData) => {
-      if (error) reject(new Error(error));
-      resolve(responseData.data.id);
     });
-  });
+  } catch (err) {
+    return console.error(err);
+  }
+  return responseData.id;
 }
 
 /**
  * Uploads a file or folder to Google Drive.
- * Default location is &lt;code>'root'&lt;/code> if parent not specified.
  * @param {String} localPath - Path to file or folder on disk
- * @param {Object} [parentParams] - An object identifying where the
- * file or folder should be uploaded with either
- * &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>
+ * @param {Object|String} [parentParams] - An object identifying
+ * where the file or folder should be uploaded with either
+ * &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>.
+ * Can also be a string containing the parent id.
+ * File/folder will be uploaded to the root folder
+ * if this parameter isn't specified.
  * @return {undefined} None
  * @example
- * // upload folder "foo" to the folder "bar" in Google Drive
- * utilsGDrive.upload("./lorem/foo", {parentName: "bar"});
+ * // upload folder "folderName" to the folder "parentName" in Google Drive
+ * utilsGDrive.upload("path/to/folderName", {parentName: "parentName"});
  */
 async function upload(localPath, parentParams = {}) {
-  if (!parentParams.utilsGDrive) parentParams.utilsGDrive = this;
-
-  // check if file/folder exists in drive
-  const fileName = path.basename(localPath)
-  const parentId = await utils._resolveParamsId(parentParams);
+  const fileName = path.basename(localPath);
+  let parentId;
+  try {
+    parentId = await this._resolveParamsId(parentParams);
+  } catch (err) {
+    return console.error(err);
+  }
   const isDir = fs.lstatSync(localPath).isDirectory();
+
   let mimeType;
   if (isDir) {
     mimeType = 'application/vnd.google-apps.folder';
   } else {
     mimeType = mimeTypesByExt[path.extname(localPath).slice(1)];
   }
+
   const fileMetadata = {
     name: fileName,
     mimeType,
-    parents: [parentId]
+    parents: [parentId],
+  };
+
+  try {
+    await this._checkExistsDrive(fileMetadata);
+  } catch (err) {
+    return console.error(err);
   }
-  
-  await _checkExistsDrive(fileMetadata);
+
+  let fileId;
   // handle directories
   if (fs.lstatSync(localPath).isDirectory()) {
-    const parentIdChildren = await mkDir(path.basename(localPath), {parentId});
+    let parentIdChildren;
+    try {
+      parentIdChildren = await this.mkDir(path.basename(localPath), {
+        parentId,
+      });
+    } catch (err) {
+      return console.error(err);
+    }
+    fileId = parentIdChildren;
     const children = fs.readdirSync(localPath);
     for (const child of children) {
-      const localPathChild = localPath+'/'+child;
-      await upload(localPathChild, {
+      const localPathChild = path.join(localPath, child);
+      await this.upload(localPathChild, {
         parentId: parentIdChildren,
-        utilsGDrive: parentParams.utilsGDrive});
+      });
     }
-  // handle files
+    // handle files
   } else {
-    await _uploadFile(localPath, fileMetadata, parentParams.utilsGDrive)
+    fileId = await this._uploadFile(localPath, fileMetadata);
   }
+  return fileId;
 }
 
 /**
@@ -190,26 +218,25 @@ async function upload(localPath, parentParams = {}) {
  * &lt;code>name&lt;/code>, &lt;code>mimeType&lt;/code>, and &lt;code>parents&lt;/code>.
  * &lt;code>parents&lt;/code> is a list with a single string corresponding
  * to the parent id.
- * @param {utilsGDrive} utilsGDrive - An instance of &lt;code>utilsGDrive&lt;/code>
  * @return {undefined} None
  * @access private
  */
-async function _uploadFile(localPath, fileMetadata, utilsGDrive) {
+async function _uploadFile(localPath, fileMetadata) {
   const media = {
     mimeType: fileMetadata.mimeType,
     body: fs.createReadStream(localPath),
   };
-  return new Promise((resolve, reject) => {
-    utilsGDrive.drive.files.create({
+  let responseData;
+  try {
+    responseData = await this.api('files', 'create', {
       resource: fileMetadata,
       media: media,
       fields: 'id',
-    }, (error, responseData) => {
-      if (error) reject(new Error(error));
-      console.log(fileMetadata.name, 'created');
-      resolve(responseData.data.id);
     });
-  });
+  } catch (err) {
+    return console.error(err);
+  }
+  return responseData.id;
 }
 </code></pre>
         </article>
@@ -225,7 +252,7 @@ async function _uploadFile(localPath, fileMetadata, utilsGDrive) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Tue Jul 21 2020 13:36:21 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Fri Jul 24 2020 19:07:23 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

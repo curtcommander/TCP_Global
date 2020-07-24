@@ -3,8 +3,6 @@
 const assert = require('assert').strict;
 const utilsGDrive = require('utils-google-drive');
 const fs = require('fs-extra');
-const { RSA_NO_PADDING } = require('constants');
-const utils = require('../lib/utils');
 
 const fileNameTest = 'TEST_TESTSITE';
 const fileIdTest = '1f0o9p3pPwaCkZ9Y-P8IxY6jBpT68GjlB';
@@ -27,7 +25,8 @@ describe('setup', function() {
     let clientId;
     let clientSecret;
     try {
-      accessToken = utilsGDrive.drive.context._options.auth.credentials.access_token;
+      accessToken =
+        utilsGDrive.drive.context._options.auth.credentials.access_token;
       clientId = utilsGDrive.drive.context._options.auth._clientId;
       clientSecret = utilsGDrive.drive.context._options.auth._clientSecret;
     } finally {
@@ -37,13 +36,14 @@ describe('setup', function() {
 
   it('can make requests to api', async function() {
     this.retries = 2;
-    const responseData = await utilsGDrive.api('files', 'get', {fileId: fileIdTest});
+    const responseData = await utilsGDrive.api('files', 'get', {
+      fileId: fileIdTest,
+    });
     assert(responseData);
   });
 });
 
 describe('resolve identifiers', function() {
-
   it('_resolveParamsId(), string given', async function() {
     const fileId = await utilsGDrive._resolveParamsId('testId');
     assert(fileId === 'testId');
@@ -58,7 +58,9 @@ describe('resolve identifiers', function() {
   });
 
   it('_resolveParamsId(), name property given', async function() {
-    const fileId = await utilsGDrive._resolveParamsId({testName: fileNameTest});
+    const fileId = await utilsGDrive._resolveParamsId({
+      testName: fileNameTest,
+    });
     assert(fileId === fileIdTest);
   });
 
@@ -114,7 +116,10 @@ describe('utils', function() {
   });
 
   it('getFiles()', async function() {
-    const responseData = await utilsGDrive.getFiles({fileId: fileIdTest, fields: 'name'});
+    const responseData = await utilsGDrive.getFiles({
+      fileId: fileIdTest,
+      fields: 'name',
+    });
     assert(responseData.name);
   });
 
@@ -177,7 +182,9 @@ describe('other modules', function() {
   it('upload(), upload folder', async function() {
     if (!uploadFilePassed) this.skip();
     else {
-      await utilsGDrive.upload('test/testUploadFolder', {parentName: 'testMkDir'});
+      await utilsGDrive.upload('test/testUploadFolder', {
+        parentName: 'testMkDir',
+      });
       const children = await utilsGDrive.listChildren({
         fileName: 'testUploadFolder',
         parentName: 'testMkDir',
@@ -191,8 +198,10 @@ describe('other modules', function() {
   it('mv()', async function() {
     if (!uploadFolderPassed) this.skip();
     else {
-      await utilsGDrive.mv({fileName: 'testUploadFile.xlsx'},
-       {parentName: 'testUploadFolder'});
+      await utilsGDrive.mv(
+          {fileName: 'testUploadFile.xlsx'},
+          {parentName: 'testUploadFolder'},
+      );
       const fileId = await utilsGDrive._resolveFId({
         fileName: 'testUploadFile.xlsx',
         parentName: 'testUploadFolder',
@@ -210,14 +219,14 @@ describe('other modules', function() {
       await utilsGDrive.download({fileName}, 'test');
       return new Promise((resolve) => {
         setTimeout(function() {
-          if (fs.readdirSync('test').indexOf(fileName)+1) {
-            if (fs.statSync('test/'+fileName).size) {
+          if (fs.readdirSync('test').indexOf(fileName) + 1) {
+            if (fs.statSync('test/' + fileName).size) {
               downloadFilePassed = true;
             }
           }
           resolve(downloadFilePassed);
         }, 2000);
-      })
+      });
     }
   });
 
@@ -228,11 +237,11 @@ describe('other modules', function() {
     else {
       const folderName = 'testMkDir';
       await utilsGDrive.download({folderName}, 'test');
-      if (fs.readdirSync('test').indexOf(folderName)+1) {
-        if (fs.readdirSync('test/'+folderName).length) {
+      if (fs.readdirSync('test').indexOf(folderName) + 1) {
+        if (fs.readdirSync('test/' + folderName).length) {
           downloadFolderPassed = true;
         }
-        fs.remove('test/'+folderName, (error) => {
+        fs.remove('test/' + folderName, (error) => {
           if (error) return console.error(error);
         });
       }
@@ -244,7 +253,10 @@ describe('other modules', function() {
     if (!uploadFilePassed) this.skip();
     else {
       const fileId = await utilsGDrive.getFileId('testUploadFile.xlsx');
-      await utilsGDrive.rename({fileName: 'testUploadFile.xlsx'}, 'testUploadFile2.xlsx');
+      await utilsGDrive.rename(
+          {fileName: 'testUploadFile.xlsx'},
+          'testUploadFile2.xlsx',
+      );
       const fileIdRenamed = await utilsGDrive.getFileId('testUploadFile2.xlsx');
       assert(fileId === fileIdRenamed);
     }
@@ -275,30 +287,28 @@ describe('utilsGDriveError', function() {
     if (this.currentTest.state === 'failed') {
       console.error(output);
     }
-   });
+  });
 
   it('getFiles(), file id not specified', function() {
-    assert.rejects(
-      function() {
-        utilsGDrive.getFiles({shouldBeFileId: 'foo'})
-      }, utilsGDrive.Error)
+    assert.rejects(function() {
+      utilsGDrive.getFiles({shouldBeFileId: 'foo'});
+    }, utilsGDrive.Error);
   });
 
   it('_resolveFId(), invalid property name', function() {
-    assert.rejects(
-      function () {
-        utilsGDrive._resolveFId({f: fileNameTest})
-      }, utilsGDrive.Error)
+    assert.rejects(function() {
+      utilsGDrive._resolveFId({f: fileNameTest});
+    }, utilsGDrive.Error);
   });
 
-  it('_checkExistsDrive(), file/folder already exists', async function () {
+  it('_checkExistsDrive(), file/folder already exists', async function() {
     const fileMetadata = {
       name: 'Daily Logs',
       mimeType: 'application/vnd.google-apps.folder',
       parents: ['19FWsjMbtZzfVnbUdDvGLdHKc3E3zXk0k'],
-    }
+    };
     assert.rejects(async () => {
-        await utilsGDrive._checkExistsDrive(fileMetadata);
-      }, utilsGDrive.Error)
-  })
-})
+      await utilsGDrive._checkExistsDrive(fileMetadata);
+    }, utilsGDrive.Error);
+  });
+});
