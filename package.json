@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "lint": "eslint lib test",
-    "docs": "jsdoc index.js lib -d docs -c jsdoc.json"
+    "docs": "./generateDocs.sh"
   },
   "repository": {
     "type": "git",
