@@ -28,18 +28,24 @@ Objects with the properties `fileId`/`folderId`, `fileName`/`folderName`, `paren
  
 // get id of folder in Google Drive whose name is "mainFolder"
 // and whose parent folder is named "parentFolder"
-utilsGDrive.getFileId({fileName: "mainFolder", parentName: "parentFolder"});
+utilsGDrive.getFileId({
+  fileName: "mainFolder",
+  parentName: "parentFolder"
+});
 
 // change name of folder from "beforeName" to "afterName"
-utilsGDrive.rename({fileName: "beforeName"}, "afterName");
+utilsGDrive.rename({folderName: "beforeName"}, "afterName");
 
 // download file "excelFile.xlsx" in the folder "dataFolder"
 // to the local folder "driveDownloads"
-utilsGDrive.download({fileName: "excelFile.xlsx", parentName: "dataFolder"}, "path/to/driveDownloads");
+utilsGDrive.download({
+  fileName: "excelFile.xlsx",
+  parentName: "dataFolder"
+}, "path/to/driveDownloads");
 
 // upload file "report.pdf" to the folder in Google Drive
 // with the id "folderId"
-utilsGDrive.upload('path/to/report.pdf', "folderId");
+utilsGDrive.upload("path/to/report.pdf", "folderId");
 
 // move folder "reports" in Google Drive to root folder
 // "root" is special API keyword
