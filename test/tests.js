@@ -200,7 +200,7 @@ describe('other modules', function() {
     else {
       await utilsGDrive.mv(
           {fileName: 'testUploadFile.xlsx'},
-          {parentName: 'testUploadFolder'},
+          {newParentName: 'testUploadFolder'},
       );
       const fileId = await utilsGDrive._resolveFId({
         fileName: 'testUploadFile.xlsx',
