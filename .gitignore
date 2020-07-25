@@ -1,6 +1,6 @@
 notes.txt
-credentials.json
-token.json
+credentialsGDrive.json
+tokenGDrive.json
 lib/permissions.js
 config.js
 
