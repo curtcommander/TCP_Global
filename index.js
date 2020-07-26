@@ -32,13 +32,16 @@ class utilsGDrive {
     listChildren       = utils.listChildren;
     download           = drive._addDrive(download.download, this);
     _downloadFile      = download._downloadFile;
-    _checkExistsDrive  = upload._checkExistsDrive;
+    _overwrite         = upload._overwrite;
+
+    makeFolder         = upload.makeFolder;
     makeFolder         = upload.makeFolder;
     upload             = upload.upload;
     _uploadFile        = upload._uploadFile;
+
     del                = del.del;
     rename             = update.rename;
-    mv                 = update.mv;
+    move               = update.move;
     Error              = UtilsGDriveError;
 };
 

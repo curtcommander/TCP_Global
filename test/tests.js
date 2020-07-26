@@ -129,7 +129,10 @@ describe('utils', function() {
   });
 
   it('getFileId()', async function() {
-    const fileId = await utilsGDrive.getFileId(fileNameTest, parentIdTest);
+    const fileId = await utilsGDrive.getFileId({
+      fileName: fileNameTest,
+      parentId: parentIdTest,
+    });
     assert(fileId === fileIdTest);
   });
 
@@ -196,11 +199,11 @@ describe('other modules', function() {
     }
   });
 
-  let mvPassed;
-  it('mv()', async function() {
+  let movePassed;
+  it('move()', async function() {
     if (!uploadFolderPassed) this.skip();
     else {
-      await utilsGDrive.mv(
+      await utilsGDrive.move(
           {fileName: 'testUploadFile.xlsx'},
           {newParentName: 'testUploadFolder'},
       );
@@ -208,8 +211,8 @@ describe('other modules', function() {
         fileName: 'testUploadFile.xlsx',
         parentName: 'testUploadFolder',
       });
-      mvPassed = !!fileId;
-      assert(mvPassed);
+      movePassed = !!fileId;
+      assert(movePassed);
     }
   });
 
@@ -237,13 +240,13 @@ describe('other modules', function() {
     this.retries(2);
     if (!downloadFilePassed) this.skip();
     else {
-      const folderName = 'testMakeFolder';
-      await utilsGDrive.download({folderName}, 'test');
-      if (fs.readdirSync('test').indexOf(folderName) + 1) {
-        if (fs.readdirSync('test/' + folderName).length) {
+      const fileName = 'testMakeFolder';
+      await utilsGDrive.download({fileName}, 'test');
+      if (fs.readdirSync('test').indexOf(fileName) + 1) {
+        if (fs.readdirSync('test/' + fileName).length) {
           downloadFolderPassed = true;
         }
-        fs.remove('test/' + folderName, (error) => {
+        fs.remove('test/' + fileName, (error) => {
           if (error) return console.error(error);
         });
       }

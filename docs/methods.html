@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#mv">mv</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#move">move</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
 </nav>
 
 <div id="main">
@@ -175,7 +175,7 @@
             <li>Consult
 <a href="https://developers.google.com/drive/api/v3/reference">Google Drive API reference</a>
 for information on the resources and methods available
-and on the parameters that API methods accept.</li>
+as well as the API methods' parameters.</li>
         </ul>
     </dd>
     
@@ -242,7 +242,7 @@ utilsGDrive.api("files", "list", {
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -265,7 +265,7 @@ utilsGDrive.api("files", "list", {
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -362,7 +362,7 @@ utilsGDrive.api("files", "list", {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_delete.js.html">lib/delete.js</a>, <a href="lib_delete.js.html#line23">line 23</a>
+        <a href="lib_delete.js.html">lib/delete.js</a>, <a href="lib_delete.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -419,7 +419,10 @@ utilsGDrive.api("files", "list", {
 utilsGDrive.del({
   fileName: "fileName",
   parentName: "folderName"
-});</code></pre>
+});
+
+// delete file whose id is "fileId"
+utilsGDrive.del("fileId");</code></pre>
 
 
 
@@ -458,7 +461,7 @@ utilsGDrive.del({
 <span class="param-type">Object</span>
 |
 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -468,12 +471,166 @@ utilsGDrive.del({
 
             
 
-            <td class="description last">An object identifying the file/folder
-with either <code>fileId</code>/<code>folderId</code>
-or <code>fileName</code>/<code>folderName</code>.
-<code>parentId</code> and <code>parentName</code> properties may
-also be included.
-This parameter can also be a string containing the file/folder id.</td>
+            <td class="description last">An object
+used to identify a file or folder. Must have either
+<code>fileId</code> or <code>fileName</code>.
+This parameter also accepts a string containing the file/folder id.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">File/folder id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">File/folder name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parent id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parent name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -537,7 +694,7 @@ This parameter can also be a string containing the file/folder id.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line25">line 25</a>
+        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -591,7 +748,10 @@ This parameter can also be a string containing the file/folder id.</td>
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>// download the folder "folderName" to the local directory "localDir"
-utilsGDrive.download({folderName: "folderName"}, "path/to/localDir");</code></pre>
+utilsGDrive.download({folderName: "folderName"}, "path/to/localDir");
+
+// download the file with id "fileId" to the current working directory
+utilsGDrive.download("fileId");</code></pre>
 
 
 
@@ -634,7 +794,7 @@ utilsGDrive.download({folderName: "folderName"}, "path/to/localDir");</code></pr
 <span class="param-type">Object</span>
 |
 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -656,12 +816,166 @@ utilsGDrive.download({folderName: "folderName"}, "path/to/localDir");</code></pr
                 </td>
             
 
-            <td class="description last">An object identifying the file/folder
-with either <code>fileId</code>/<code>folderId</code>
-or <code>fileName</code>/<code>folderName</code>.
-<code>parentId</code> and <code>parentName</code> properties may
-also be included.
-This parameter can also be a string containing the file/folder id.</td>
+            <td class="description last">An object
+used to identify a file or folder. Must have either
+<code>fileId</code> or <code>fileName</code>.
+This parameter also accepts a string containing the file/folder id.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">File/folder id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">File/folder name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parent id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parent name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -674,7 +988,7 @@ This parameter can also be a string containing the file/folder id.</td>
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -695,7 +1009,7 @@ This parameter can also be a string containing the file/folder id.</td>
             
                 <td class="default">
                 
-                    <code>.</code>
+                    <code>"."</code>
                 
                 </td>
             
@@ -752,7 +1066,7 @@ This parameter can also be a string containing the file/folder id.</td>
 
     
 
-    <h4 class="name" id="getFileId"><span class="type-signature">(async) </span>getFileId<span class="signature">(fileName, paramsParent<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="getFileId"><span class="type-signature">(async) </span>getFileId<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
@@ -764,7 +1078,7 @@ This parameter can also be a string containing the file/folder id.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line171">line 171</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line185">line 185</a>
     </li></ul></dd>
     
 
@@ -818,6 +1132,15 @@ This parameter can also be a string containing the file/folder id.</td>
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>// get id of file whose name is "fileName"
+// and whose parent is named "folderName"
+utilsGDrive.getFileId({
+  fileName: "fileName",
+  parentName: "folderName"
+})
+
+// get id of file whose name is "fileName"
+// assuming no other files/folders in Google Drive
+// are also named "fileName"
 utilsGDrive.getFileId("fileName");</code></pre>
 
 
@@ -825,6 +1148,52 @@ utilsGDrive.getFileId("fileName");</code></pre>
 
     <h5>Parameters:</h5>
     
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>identifiers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Function parameters.
+A string containing the file/folder name may be passed instead.
+                <h6>Properties</h6>
+                
 
 <table class="params">
     <thead>
@@ -856,7 +1225,7 @@ utilsGDrive.getFileId("fileName");</code></pre>
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -881,16 +1250,13 @@ utilsGDrive.getFileId("fileName");</code></pre>
 
         <tr>
             
-                <td class="name"><code>paramsParent</code></td>
+                <td class="name"><code>parentId</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
-|
-
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -910,9 +1276,47 @@ utilsGDrive.getFileId("fileName");</code></pre>
 
             
 
-            <td class="description last">An object identifying
-the parent with either <code>parentId</code> or <code>parentName</code>.
-Can also be a string containing the parent id.</td>
+            <td class="description last">Parent id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parent name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -939,7 +1343,7 @@ Can also be a string containing the parent id.</td>
     <div class="param-desc usertext">
     
         Throws an error if exactly one file/folder isn't found
-given itendifiers specified
+given identifiers specified
     
     </div>
 
@@ -962,7 +1366,7 @@ given itendifiers specified
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
     </dd>
@@ -977,7 +1381,7 @@ given itendifiers specified
 
     
 
-    <h4 class="name" id="getFileName"><span class="type-signature">(async) </span>getFileName<span class="signature">(fileId)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="getFileName"><span class="type-signature">(async) </span>getFileName<span class="signature">(fileId)</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
@@ -989,7 +1393,7 @@ given itendifiers specified
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line202">line 202</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line220">line 220</a>
     </li></ul></dd>
     
 
@@ -1043,7 +1447,7 @@ given itendifiers specified
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>// get name of file whose id is "fileId"
-utilsGDrive.getFileId("fileId");</code></pre>
+utilsGDrive.getFileName("fileId");</code></pre>
 
 
 
@@ -1079,7 +1483,7 @@ utilsGDrive.getFileId("fileId");</code></pre>
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -1126,7 +1530,7 @@ utilsGDrive.getFileId("fileId");</code></pre>
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
     </dd>
@@ -1153,7 +1557,7 @@ utilsGDrive.getFileId("fileId");</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line91">line 91</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line95">line 95</a>
     </li></ul></dd>
     
 
@@ -1264,8 +1668,57 @@ utilsGDrive.getFiles({
 
             
 
-            <td class="description last">Method parameters. Files/folders are accessed by id
-for this API method, so <code>fileId</code> is a required property.</td>
+            <td class="description last">Method parameters.
+<code>fileId</code> is a required property.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">File/folder id</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1330,7 +1783,7 @@ More specifically, when <code>params.fileId</code> is falsy
 
     
 
-    <h4 class="name" id="getMime"><span class="type-signature">(async) </span>getMime<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="getMime"><span class="type-signature">(async) </span>getMime<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
@@ -1342,7 +1795,7 @@ More specifically, when <code>params.fileId</code> is falsy
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line267">line 267</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line291">line 291</a>
     </li></ul></dd>
     
 
@@ -1396,6 +1849,9 @@ More specifically, when <code>params.fileId</code> is falsy
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>// get MIME type of file whose id is "fileId"
+utilsGDrive.getMime("fileId")
+
+// get MIME type of file whose id is "fileId"
 // and that resides in folder whose id is "folderId"
 utilsGDrive.getMime({
   fileId: "fileId",
@@ -1439,7 +1895,7 @@ utilsGDrive.getMime({
 <span class="param-type">Object</span>
 |
 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -1449,12 +1905,166 @@ utilsGDrive.getMime({
 
             
 
-            <td class="description last">An object identifying the file/folder
-with either <code>fileId</code>/<code>folderId</code>
-or <code>fileName</code>/<code>folderName</code>.
-<code>parentId</code> and <code>parentName</code>
-properties may also be included.
-This parameter can also be a string containing the file/folder id.</td>
+            <td class="description last">An object
+used to identify a file or folder. Must have either
+<code>fileId</code> or <code>fileName</code>.
+This parameter also accepts a string containing the file/folder id.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">File/folder id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">File/folder name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parent id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parent name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1491,7 +2101,7 @@ This parameter can also be a string containing the file/folder id.</td>
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
     </dd>
@@ -1518,7 +2128,7 @@ This parameter can also be a string containing the file/folder id.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line297">line 297</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line333">line 333</a>
     </li></ul></dd>
     
 
@@ -1571,8 +2181,15 @@ This parameter can also be a string containing the file/folder id.</td>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// get names of files in the folder whose name is "folderName"
-utilsGDrive.listChildren({folderName: "folderName"}, "files(name)");</code></pre>
+    <pre class="prettyprint"><code>// get names of files in the folder whose id is "folderId"
+utilsGDrive.listChildren("folderId", "files(name)");
+
+// get ids of files in the folder whose name is "folderName"
+// and whose parent has the id "parentId"
+utilsGDrive.listChildren({
+  fileName: "folderName",
+  parentId: "parentId"
+}, "files(id)");</code></pre>
 
 
 
@@ -1594,8 +2211,6 @@ utilsGDrive.listChildren({folderName: "folderName"}, "files(name)");</code></pre
         
 
         
-        <th>Default</th>
-        
 
         <th class="last">Description</th>
     </tr>
@@ -1615,7 +2230,7 @@ utilsGDrive.listChildren({folderName: "folderName"}, "files(name)");</code></pre
 <span class="param-type">Object</span>
 |
 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -1632,29 +2247,107 @@ utilsGDrive.listChildren({folderName: "folderName"}, "files(name)");</code></pre
             
 
             
-                <td class="default">
+
+            <td class="description last">An object
+used to identify a file or folder. Must have either
+<code>fileId</code> or <code>fileName</code>.
+This parameter also accepts a string containing the file/folder id.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
                 
                 </td>
             
 
-            <td class="description last">An object identifying the folder
-with either <code>folderId</code> or <code>folderName</code>.
-<code>parentId</code> and <code>parentName</code> properties may
-also be included.
-This parameter can also be a string containing the folder id.</td>
+            
+
+            <td class="description last">File/folder id</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>fields</code></td>
+                <td class="name"><code>fileName</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">File/folder name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
 
 
             
@@ -1673,15 +2366,83 @@ This parameter can also be a string containing the folder id.</td>
             
 
             
-                <td class="default">
+
+            <td class="description last">Parent id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentName</code></td>
+            
+
+            <td class="type">
+            
                 
-                    <code>files(name, id, mimeType)</code>
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
                 
                 </td>
             
 
-            <td class="description last">The data fields to request. Format should
-follow the pattern <code>'files(field1, field2,...)'</code></td>
+            
+
+            <td class="description last">Parent name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fields</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Data fields to request.
+Should follow the pattern <code>"files(fiel1, field2,...)"</code>.
+Default value is <code>"files(name, id, mimeType)"</code></td>
         </tr>
 
     
@@ -1747,7 +2508,7 @@ that resides in the folder specified
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line64">line 64</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -1875,9 +2636,104 @@ utilsGDrive.listFiles({
                 </td>
             
 
-            <td class="description last">Method parameters.
-Default for the <code>fields</code> method
-parameter is <code>"files(name, id, mimeType)"</code></td>
+            <td class="description last">Method parameters,
+two of which are highlighted below.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>q</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Query string used to search for files/folders</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fields</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Data fields to request.
+Should follow the pattern <code>"files(fiel1, field2,...)"</code>.
+Default value is <code>"files(name, id, mimeType)"</code></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1890,7 +2746,7 @@ parameter is <code>"files(name, id, mimeType)"</code></td>
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -1969,7 +2825,7 @@ as a search location</td>
 
     
 
-    <h4 class="name" id="makeFolder"><span class="type-signature">(async) </span>makeFolder<span class="signature">(params)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="makeFolder"><span class="type-signature">(async) </span>makeFolder<span class="signature">(params)</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
@@ -1981,7 +2837,7 @@ as a search location</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line81">line 81</a>
+        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -2040,7 +2896,10 @@ aren't specified, the folder will be created in the root folder.
 utilsGDrive.makeFolder({
   folderName: "newFolder",
   parentName: "parentFolder"
-});</code></pre>
+});
+
+// make a new folder name "newFolder" in the root folder
+utilsGDrive.makeFolder("newFolder");</code></pre>
 
 
 
@@ -2079,7 +2938,7 @@ utilsGDrive.makeFolder({
 <span class="param-type">Object</span>
 |
 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -2125,7 +2984,7 @@ instead. In this case, the folder will be created at the root folder.
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -2156,7 +3015,7 @@ instead. In this case, the folder will be created at the root folder.
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -2190,7 +3049,7 @@ where the folder should be created</td>
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -2224,7 +3083,7 @@ where the folder should be created</td>
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -2245,7 +3104,7 @@ where the folder should be created</td>
             
 
             <td class="description last">Whether to overwrite
-an existing folder. Default is <code>false</code></td>
+an existing folder. Default value is <code>false</code></td>
         </tr>
 
     
@@ -2289,7 +3148,7 @@ an existing folder. Default is <code>false</code></td>
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
     </dd>
@@ -2304,7 +3163,7 @@ an existing folder. Default is <code>false</code></td>
 
     
 
-    <h4 class="name" id="mv"><span class="type-signature">(async) </span>mv<span class="signature">(identifiers, newParentParams<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+    <h4 class="name" id="move"><span class="type-signature">(async) </span>move<span class="signature">(identifiers, newParentParams<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
 
     
 
@@ -2316,7 +3175,7 @@ an existing folder. Default is <code>false</code></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line50">line 50</a>
+        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line58">line 58</a>
     </li></ul></dd>
     
 
@@ -2370,7 +3229,10 @@ an existing folder. Default is <code>false</code></td>
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>// move the file "fileName" to the folder "folderName"
-utilsGDrive.mv({fileName: "fileName"}, {newParentName: "folderName"})</code></pre>
+utilsGDrive.move({fileName: "fileName"}, {newParentName: "folderName"})
+
+// move the file with id "fileId" to the folder with id "folderId"
+utilsGDrive.move("fileId", "folderId");</code></pre>
 
 
 
@@ -2411,7 +3273,7 @@ utilsGDrive.mv({fileName: "fileName"}, {newParentName: "folderName"})</code></pr
 <span class="param-type">Object</span>
 |
 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -2429,12 +3291,166 @@ utilsGDrive.mv({fileName: "fileName"}, {newParentName: "folderName"})</code></pr
 
             
 
-            <td class="description last">An object identifying the file/folder
-with either <code>fileId</code>/<code>folderId</code>
-or <code>fileName</code>/<code>folderName</code>
-<code>parentId</code> and <code>parentName</code> properties may
-also be included.
-This parameter can also be a string containing the file/folder id.</td>
+            <td class="description last">An object
+used to identify a file or folder. Must have either
+<code>fileId</code> or <code>fileName</code>.
+This parameter also accepts a string containing the file/folder id.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">File/folder id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">File/folder name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parent id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parent name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -2450,7 +3466,7 @@ This parameter can also be a string containing the file/folder id.</td>
 <span class="param-type">Object</span>
 |
 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -2471,9 +3487,102 @@ This parameter can also be a string containing the file/folder id.</td>
             
 
             <td class="description last">An object identifying
-the new parent with either <code>parentId</code> or <code>parentName</code>.
-Can also be a string containing the parent id.
-File will be moved to root folder if this parameter isn't specified.</td>
+the new parent. Can also be a string containing the parent id.
+File will be moved to root folder if this parameter isn't specified.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>newParentId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Id of new parent</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newParentName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Name of new parent</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -2537,7 +3646,7 @@ File will be moved to root folder if this parameter isn't specified.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line22">line 22</a>
+        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -2630,7 +3739,7 @@ utilsGDrive.rename({fileName: "fileName"}, "newFileName")</code></pre>
 <span class="param-type">Object</span>
 |
 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -2640,12 +3749,166 @@ utilsGDrive.rename({fileName: "fileName"}, "newFileName")</code></pre>
 
             
 
-            <td class="description last">An object identifying the file/folder
-with either <code>fileId</code>/<code>folderId</code>
-or <code>fileName</code>/<code>folderName</code>
-<code>parentId</code> and <code>parentName</code> properties may
-also be included.
-This parameter can also be a string containing the file/folder id.</td>
+            <td class="description last">An object
+used to identify a file or folder. Must have either
+<code>fileId</code> or <code>fileName</code>.
+This parameter also accepts a string containing the file/folder id.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">File/folder id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">File/folder name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parent id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parent name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -2658,7 +3921,7 @@ This parameter can also be a string containing the file/folder id.</td>
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -2732,7 +3995,7 @@ This parameter can also be a string containing the file/folder id.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line120">line 120</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line124">line 124</a>
     </li></ul></dd>
     
 
@@ -2845,9 +4108,57 @@ utilsGDrive.updateFiles({
 
             
 
-            <td class="description last">Method parameters.
-Files/folders are accessed by id for this API method, so
-<code>fileId</code> is a required property.</td>
+            <td class="description last">Method parameters
+<code>fileId</code> is a required property.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">File/folder id</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -2924,7 +4235,7 @@ More specifically, when <code>params.fileId</code> is falsy
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line129">line 129</a>
+        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line135">line 135</a>
     </li></ul></dd>
     
 
@@ -2983,7 +4294,10 @@ aren't specified, the file/folder will be uploaded at the root folder.
 utilsGDrive.upload({
   localPath: "path/to/folderName",
   parentName: "parentName"
-});</code></pre>
+});
+
+// upload folder "folderName" to the root folder
+utilsGDrive.upload("path/to/folderName");</code></pre>
 
 
 
@@ -3022,7 +4336,7 @@ utilsGDrive.upload({
 <span class="param-type">Object</span>
 |
 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -3068,7 +4382,7 @@ instead. In this case, the file/folder will be uploaded at the root folder.
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -3099,7 +4413,7 @@ instead. In this case, the file/folder will be uploaded at the root folder.
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -3133,7 +4447,7 @@ where the file/folder should be uploaded</td>
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -3167,7 +4481,7 @@ where the file/folder should be uploaded</td>
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -3188,7 +4502,7 @@ where the file/folder should be uploaded</td>
             
 
             <td class="description last">Whether to overwrite
-existing files/folders. Default is <code>false</code></td>
+existing files/folders. Default value is <code>false</code></td>
         </tr>
 
     
@@ -3262,7 +4576,7 @@ existing files/folders. Default is <code>false</code></td>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat Jul 25 2020 20:49:01 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat Jul 25 2020 23:25:11 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

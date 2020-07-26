@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#mv">mv</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#move">move</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
 </nav>
 
 <div id="main">
@@ -106,23 +106,26 @@ async function _overwrite({name, mimeType, parents}) {
  * Makes a new folder in Google Drive.
  * If both &lt;code>params.parentId&lt;/code> and &lt;code>params.parentName&lt;/code>
  * aren't specified, the folder will be created in the root folder.
- * @param {Object|String} params - Function parameters.
+ * @param {Object|string} params - Function parameters.
  * A string containing the name of the folder to be created may be passed
  * instead. In this case, the folder will be created at the root folder.
- * @param {String} params.folderName - Name of folder to be created
- * @param {String} [params.parentId] - Id of parent folder
+ * @param {string} params.folderName - Name of folder to be created
+ * @param {string} [params.parentId] - Id of parent folder
  * where the folder should be created
- * @param {String} [params.parentName] - Name of parent folder
+ * @param {string} [params.parentName] - Name of parent folder
  * where the folder should be created
- * @param {Boolean} [params.overwrite] - Whether to overwrite
- * an existing folder. Default is &lt;code>false&lt;/code>
- * @return {String} Id of the folder created
+ * @param {boolean} [params.overwrite] - Whether to overwrite
+ * an existing folder. Default value is &lt;code>false&lt;/code>
+ * @return {string} Id of the folder created
  * @example
  * // make a new folder named "newFolder" in the folder "parentFolder"
  * utilsGDrive.makeFolder({
  *   folderName: "newFolder",
  *   parentName: "parentFolder"
  * });
+ *
+ * // make a new folder name "newFolder" in the root folder
+ * utilsGDrive.makeFolder("newFolder");
  */
 async function makeFolder({folderName, parentId, parentName, overwrite=false}) {
   if (typeof(arguments[0]) === 'string') {
@@ -154,16 +157,16 @@ async function makeFolder({folderName, parentId, parentName, overwrite=false}) {
  * Uploads a file or folder to Google Drive.
  * If both &lt;code>params.parentId&lt;/code> and &lt;code>params.parentName&lt;/code>
  * aren't specified, the file/folder will be uploaded at the root folder.
- * @param {Object|String} params - Function parameters.
+ * @param {Object|string} params - Function parameters.
  * A string containing the path to the file/folder to be uploaded may be passed
  * instead. In this case, the file/folder will be uploaded at the root folder.
- * @param {String} params.localPath - Path to file or folder on disk
- * @param {String} [params.parentId] - Id of parent folder
+ * @param {string} params.localPath - Path to file or folder on disk
+ * @param {string} [params.parentId] - Id of parent folder
  * where the file/folder should be uploaded
- * @param {String} [params.parentName] - Name of parent folder
+ * @param {string} [params.parentName] - Name of parent folder
  * where the file/folder should be uploaded
- * @param {Boolean} [params.overwrite] - Whether to overwrite
- * existing files/folders. Default is &lt;code>false&lt;/code>
+ * @param {boolean} [params.overwrite] - Whether to overwrite
+ * existing files/folders. Default value is &lt;code>false&lt;/code>
  * @return {undefined} None
  * @example
  * // upload folder "folderName" to the folder "parentName" in Google Drive
@@ -171,6 +174,9 @@ async function makeFolder({folderName, parentId, parentName, overwrite=false}) {
  *   localPath: "path/to/folderName",
  *   parentName: "parentName"
  * });
+ *
+ * // upload folder "folderName" to the root folder
+ * utilsGDrive.upload("path/to/folderName");
  */
 async function upload({localPath, parentId, parentName, overwrite=false}) {
   const fileName = path.basename(localPath);
@@ -226,7 +232,7 @@ async function upload({localPath, parentId, parentName, overwrite=false}) {
 
 /**
  * Uploads a file.
- * @param {String} localPath - Path to file or folder on disk
+ * @param {string} localPath - Path to file or folder on disk
  * @param {Object} fileMetadata - An object with the properties
  * &lt;code>name&lt;/code>, &lt;code>mimeType&lt;/code>, and &lt;code>parents&lt;/code>.
  * &lt;code>parents&lt;/code> is a list with a single string corresponding
@@ -265,7 +271,7 @@ async function _uploadFile(localPath, fileMetadata) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat Jul 25 2020 20:49:01 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat Jul 25 2020 23:25:11 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

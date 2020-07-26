@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#mv">mv</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#move">move</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
 </nav>
 
 <div id="main">
@@ -48,18 +48,20 @@
 
 module.exports = {
   rename,
-  mv,
+  move,
 };
 
 /**
  * Renames a file or folder in Google Drive.
- * @param {Object|String} identifiers - An object identifying the file/folder
- * with either &lt;code>fileId&lt;/code>/&lt;code>folderId&lt;/code>
- * or &lt;code>fileName&lt;/code>/&lt;code>folderName&lt;/code>
- * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code> properties may
- * also be included.
- * This parameter can also be a string containing the file/folder id.
- * @param {String} newName - New file/folder name
+* @param {Object|string} identifiers - An object
+ * used to identify a file or folder. Must have either
+ * &lt;code>fileId&lt;/code> or &lt;code>fileName&lt;/code>.
+ * This parameter also accepts a string containing the file/folder id.
+ * @param {string} identifiers.fileId - File/folder id
+ * @param {string} identifiers.fileName - File/folder name
+ * @param {string} [identifiers.parentId] - Parent id
+ * @param {string} [identifiers.parentName] - Parent name
+ * @param {string} newName - New file/folder name
  * @return {undefined} None
  * @example
  * // rename file "fileName" to "newFileName"
@@ -78,22 +80,28 @@ async function rename(identifiers, newName) {
 
 /**
  * Moves a file or folder in Google Drive.
- * @param {Object|String} identifiers - An object identifying the file/folder
- * with either &lt;code>fileId&lt;/code>/&lt;code>folderId&lt;/code>
- * or &lt;code>fileName&lt;/code>/&lt;code>folderName&lt;/code>
- * &lt;code>parentId&lt;/code> and &lt;code>parentName&lt;/code> properties may
- * also be included.
- * This parameter can also be a string containing the file/folder id.
- * @param {Object|String} [newParentParams] - An object identifying
- * the new parent with either &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>.
- * Can also be a string containing the parent id.
+* @param {Object|string} identifiers - An object
+ * used to identify a file or folder. Must have either
+ * &lt;code>fileId&lt;/code> or &lt;code>fileName&lt;/code>.
+ * This parameter also accepts a string containing the file/folder id.
+ * @param {string} identifiers.fileId - File/folder id
+ * @param {string} identifiers.fileName - File/folder name
+ * @param {string} [identifiers.parentId] - Parent id
+ * @param {string} [identifiers.parentName] - Parent name
+ * @param {Object|string} [newParentParams] - An object identifying
+ * the new parent. Can also be a string containing the parent id.
  * File will be moved to root folder if this parameter isn't specified.
+ * @param {string} [newParentParams.newParentId] - Id of new parent
+ * @param {string} [newParentParams.newParentName] - Name of new parent
  * @return {undefined} None
  * @example
  * // move the file "fileName" to the folder "folderName"
- * utilsGDrive.mv({fileName: "fileName"}, {newParentName: "folderName"})
+ * utilsGDrive.move({fileName: "fileName"}, {newParentName: "folderName"})
+ *
+ * // move the file with id "fileId" to the folder with id "folderId"
+ * utilsGDrive.move("fileId", "folderId");
  */
-async function mv(identifiers, newParentParams = {}) {
+async function move(identifiers, newParentParams = {}) {
   let fileId;
   let oldParentId;
   let newParentId;
@@ -126,7 +134,7 @@ async function mv(identifiers, newParentParams = {}) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat Jul 25 2020 20:49:01 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat Jul 25 2020 23:25:11 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
