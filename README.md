@@ -22,9 +22,9 @@ of trying to access a file or folder by name when there are multiple files/folde
 
 Objects with the properties `fileId`/`folderId`, `fileName`/`folderName`, `parentId`, and `parentName` are generally used to specify a file or folder and are passed as arguments to utils-google-drive methods. For convenience, a string containing the file/folder id may also be passed instead. Consult the [docs](https://curtcommander.github.io/utils-google-drive/) for details on the arguments that each method accepts.
  
- ## **Examples**
- ```javascript
- const utilsGDrive = require("utils-google-drive");
+## **Examples**
+```javascript
+const utilsGDrive = require("utils-google-drive");
  
 // get id of folder in Google Drive whose name is "mainFolder"
 // and whose parent folder is named "parentFolder"
