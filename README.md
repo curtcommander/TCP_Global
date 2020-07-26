@@ -45,17 +45,20 @@ utilsGDrive.download({
 
 // upload file "report.pdf" to the folder in Google Drive
 // with the id "folderId"
-utilsGDrive.upload("path/to/report.pdf", "folderId");
+utilsGDrive.upload({
+  localPath: "path/to/report.pdf",
+  parentId: "folderId" 
+});
 
 // move folder "reports" in Google Drive to root folder
 // "root" is special API keyword
-utilsGDrive.mv({fileName: "reports"}, {newParentId: "root"});
+utilsGDrive.move({fileName: "reports"}, {newParentId: "root"});
 
 // delete file with id "fileId"
 utilsGDrive.del("fileId");
 
 // make a new folder in the folder "parentFolder"
-utilsGDrive.mkDir("newFolder", {parentName: "parentFolder"});
+utilsGDrive.makeFolder("newFolder", {parentName: "parentFolder"});
 ```
 
 ## **Installation**
