@@ -11,6 +11,7 @@
         "ecmaVersion": 11
     },
     "rules": {
-        "no-invalid-this": "off"
+        "no-invalid-this": "off",
+        "prefer-rest-params": "off"
     }
 }

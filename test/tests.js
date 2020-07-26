@@ -155,22 +155,23 @@ describe('utils', function() {
 describe('other modules', function() {
   this.timeout(8000);
 
-  let mkDirPassed;
-  it('mkDir()', async function() {
-    const fileId = await utilsGDrive.mkDir('testMkDir');
+  let makeFolderPassed;
+  it('makeFolder()', async function() {
+    const fileId = await utilsGDrive.makeFolder('testMakeFolder');
     const fileName = await utilsGDrive.getFileName(fileId);
-    if (fileName === 'testMkDir') {
-      mkDirPassed = true;
-      assert(mkDirPassed);
+    if (fileName === 'testMakeFolder') {
+      makeFolderPassed = true;
+      assert(makeFolderPassed);
     }
   });
 
   let uploadFilePassed;
   it('upload(), upload file', async function() {
-    if (!mkDirPassed) this.skip();
+    if (!makeFolderPassed) this.skip();
     else {
-      const fileId = await utilsGDrive.upload('test/testUploadFile.xlsx', {
-        parentName: 'testMkDir',
+      const fileId = await utilsGDrive.upload({
+        localPath: 'test/testUploadFile.xlsx',
+        parentName: 'testMakeFolder',
       });
       const fileName = await utilsGDrive.getFileName(fileId);
       uploadFilePassed = fileName === 'testUploadFile.xlsx';
@@ -182,12 +183,13 @@ describe('other modules', function() {
   it('upload(), upload folder', async function() {
     if (!uploadFilePassed) this.skip();
     else {
-      await utilsGDrive.upload('test/testUploadFolder', {
-        parentName: 'testMkDir',
+      await utilsGDrive.upload({
+        localPath: 'test/testUploadFolder',
+        parentName: 'testMakeFolder',
       });
       const children = await utilsGDrive.listChildren({
         fileName: 'testUploadFolder',
-        parentName: 'testMkDir',
+        parentName: 'testMakeFolder',
       });
       uploadFolderPassed = !!children.length;
       assert(uploadFolderPassed);
@@ -235,7 +237,7 @@ describe('other modules', function() {
     this.retries(2);
     if (!downloadFilePassed) this.skip();
     else {
-      const folderName = 'testMkDir';
+      const folderName = 'testMakeFolder';
       await utilsGDrive.download({folderName}, 'test');
       if (fs.readdirSync('test').indexOf(folderName) + 1) {
         if (fs.readdirSync('test/' + folderName).length) {
@@ -263,9 +265,9 @@ describe('other modules', function() {
   });
 
   it('del()', async function() {
-    await utilsGDrive.del({fileName: 'testMkDir'});
+    await utilsGDrive.del({fileName: 'testMakeFolder'});
     const files = await utilsGDrive.listFiles({
-      q: 'name="testMkDir"',
+      q: 'name="testMakeFolder"',
     });
     assert(!files.length);
   });

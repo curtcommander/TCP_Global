@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#mkDir">mkDir</a></li><li><a href="methods.html#mv">mv</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="utilsGDrive.html">utilsGDrive</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#mv">mv</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
 </nav>
 
 <div id="main">
@@ -72,66 +72,74 @@ const mimeTypesByExt = {
 };
 
 module.exports = {
-  _checkExistsDrive,
-  mkDir,
+  _overwrite,
+  makeFolder,
   upload,
   _uploadFile,
 };
 
 /**
  * Checks if a file or folder exists in Google Drive
- * at the location specified.
+ * at the location specified and deletes it if found.
  * @param {Object} fileMetadata - An object with the properties
  * &lt;code>name&lt;/code>, &lt;code>mimeType&lt;/code>, and &lt;code>parents&lt;/code>.
  * &lt;code>parents&lt;/code> is a list with a single string corresponding
  * to the parent id.
- * @throws Throws an error if a file or folder with the same name, MIME
- * type, and parent is found.
  * @return {undefined} None
  * @access private
  */
-async function _checkExistsDrive(fileMetadata) {
+async function _overwrite({name, mimeType, parents}) {
   const q =
-    'name="' +
-    fileMetadata.name +
-    '" and mimeType="' +
-    fileMetadata.mimeType +
-    '" and "' +
-    fileMetadata.parents[0] +
+    'name="' + name +
+    '" and mimeType="' + mimeType +
+    '" and "' + parents[0] +
     '" in parents and trashed=false';
   const data = await this.listFiles({q: q});
   if (data) {
-    if (data.files.length > 0) {
-      throw new this.Error('File/folder already exists in drive.');
+    if (data.files.length > 0 &amp;&amp; overwrite) {
+      this.del(data.files[0].id);
     }
   }
 }
 
 /**
- * Makes a folder in Google Drive.
- * @param {String} dirName - Name of folder to be created
- * @param {Object|String} [parentParams] - An object identifying where the
- * folder should be created with either
- * &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>.
- * Can also be a string containing the parent id.
- * Folder will be created in the root folder if this parameter isn't specified.
+ * Makes a new folder in Google Drive.
+ * If both &lt;code>params.parentId&lt;/code> and &lt;code>params.parentName&lt;/code>
+ * aren't specified, the folder will be created in the root folder.
+ * @param {Object|String} params - Function parameters.
+ * A string containing the name of the folder to be created may be passed
+ * instead. In this case, the folder will be created at the root folder.
+ * @param {String} params.folderName - Name of folder to be created
+ * @param {String} [params.parentId] - Id of parent folder
+ * where the folder should be created
+ * @param {String} [params.parentName] - Name of parent folder
+ * where the folder should be created
+ * @param {Boolean} [params.overwrite] - Whether to overwrite
+ * an existing folder. Default is &lt;code>false&lt;/code>
  * @return {String} Id of the folder created
  * @example
  * // make a new folder named "newFolder" in the folder "parentFolder"
- * utilsGDrive.mkDir("newFolder", {parentName: "parentFolder"});
+ * utilsGDrive.makeFolder({
+ *   folderName: "newFolder",
+ *   parentName: "parentFolder"
+ * });
  */
-async function mkDir(dirName, parentParams = {}) {
+async function makeFolder({folderName, parentId, parentName, overwrite=false}) {
+  if (typeof(arguments[0]) === 'string') {
+    folderName = arguments[0];
+  }
+
   const fileMetadata = {
-    name: dirName,
+    name: folderName,
     mimeType: 'application/vnd.google-apps.folder',
   };
 
-  if (parentParams === {}) parentParams.parentId = 'root';
+
   let responseData;
   try {
-    const parentId = await this._resolveParamsId(parentParams);
+    parentId = await this._resolveParamsId({parentId, parentName});
     fileMetadata.parents = [parentId];
-    await this._checkExistsDrive(fileMetadata);
+    if (overwrite) this._overwrite(fileMetadata);
     responseData = await this.api('files', 'create', {
       resource: fileMetadata,
       fields: 'id',
@@ -144,27 +152,35 @@ async function mkDir(dirName, parentParams = {}) {
 
 /**
  * Uploads a file or folder to Google Drive.
- * @param {String} localPath - Path to file or folder on disk
- * @param {Object|String} [parentParams] - An object identifying
- * where the file or folder should be uploaded with either
- * &lt;code>parentId&lt;/code> or &lt;code>parentName&lt;/code>.
- * Can also be a string containing the parent id.
- * File/folder will be uploaded to the root folder
- * if this parameter isn't specified.
+ * If both &lt;code>params.parentId&lt;/code> and &lt;code>params.parentName&lt;/code>
+ * aren't specified, the file/folder will be uploaded at the root folder.
+ * @param {Object|String} params - Function parameters.
+ * A string containing the path to the file/folder to be uploaded may be passed
+ * instead. In this case, the file/folder will be uploaded at the root folder.
+ * @param {String} params.localPath - Path to file or folder on disk
+ * @param {String} [params.parentId] - Id of parent folder
+ * where the file/folder should be uploaded
+ * @param {String} [params.parentName] - Name of parent folder
+ * where the file/folder should be uploaded
+ * @param {Boolean} [params.overwrite] - Whether to overwrite
+ * existing files/folders. Default is &lt;code>false&lt;/code>
  * @return {undefined} None
  * @example
  * // upload folder "folderName" to the folder "parentName" in Google Drive
- * utilsGDrive.upload("path/to/folderName", {parentName: "parentName"});
+ * utilsGDrive.upload({
+ *   localPath: "path/to/folderName",
+ *   parentName: "parentName"
+ * });
  */
-async function upload(localPath, parentParams = {}) {
+async function upload({localPath, parentId, parentName, overwrite=false}) {
   const fileName = path.basename(localPath);
-  let parentId;
+  const isDir = fs.lstatSync(localPath).isDirectory();
+
   try {
-    parentId = await this._resolveParamsId(parentParams);
+    parentId = await this._resolveParamsId({parentId, parentName});
   } catch (err) {
     return console.error(err);
   }
-  const isDir = fs.lstatSync(localPath).isDirectory();
 
   let mimeType;
   if (isDir) {
@@ -179,18 +195,13 @@ async function upload(localPath, parentParams = {}) {
     parents: [parentId],
   };
 
-  try {
-    await this._checkExistsDrive(fileMetadata);
-  } catch (err) {
-    return console.error(err);
-  }
-
   let fileId;
   // handle directories
-  if (fs.lstatSync(localPath).isDirectory()) {
+  if (isDir) {
     let parentIdChildren;
     try {
-      parentIdChildren = await this.mkDir(path.basename(localPath), {
+      parentIdChildren = await this.makeFolder({
+        folderName: fileName,
         parentId,
       });
     } catch (err) {
@@ -200,12 +211,14 @@ async function upload(localPath, parentParams = {}) {
     const children = fs.readdirSync(localPath);
     for (const child of children) {
       const localPathChild = path.join(localPath, child);
-      await this.upload(localPathChild, {
+      await this.upload({
+        localPath: localPathChild,
         parentId: parentIdChildren,
       });
     }
     // handle files
   } else {
+    if (overwrite) this._overwrite(fileMetadata);
     fileId = await this._uploadFile(localPath, fileMetadata);
   }
   return fileId;
@@ -252,7 +265,7 @@ async function _uploadFile(localPath, fileMetadata) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Fri Jul 24 2020 21:45:31 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat Jul 25 2020 20:49:01 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
