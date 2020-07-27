@@ -4,11 +4,11 @@ const assert = require('assert').strict;
 const utilsGDrive = require('../../utils-google-drive');
 const fs = require('fs-extra');
 
-const fileNameTest = 'TEST_TESTSITE';
-const fileIdTest = '1f0o9p3pPwaCkZ9Y-P8IxY6jBpT68GjlB';
+const fileNameTest = 'Daily Logs';
+const fileIdTest = '1Xsvaf0S00x-Tcq-HtxvCuUHnEgVE6W4X';
 const mimeTypeTest = 'application/vnd.google-apps.folder';
-const parentNameTest = 'testCountry';
-const parentIdTest = '1l9Daem3u2dqBUPjq_SgKMNfx2Ti_zXFk';
+const parentNameTest = 'TCP Global';
+const parentIdTest = '19FWsjMbtZzfVnbUdDvGLdHKc3E3zXk0k';
 
 describe('setup', function() {
   it('add drive to instance of utilsGDrive', async function() {
@@ -59,9 +59,9 @@ describe('resolve identifiers', function() {
 
   it('_resolveParamsId(), name property given', async function() {
     const fileId = await utilsGDrive._resolveParamsId({
-      testName: fileNameTest,
+      testName: parentNameTest,
     });
-    assert(fileId === fileIdTest);
+    assert(fileId === parentIdTest);
   });
 
   it('_resolveParamsId(), default to root', async function() {
@@ -85,9 +85,9 @@ describe('resolve identifiers', function() {
 
   it('_resolveFid(), file name given', async function() {
     const fileId = await utilsGDrive._resolveFId({
-      fileName: fileNameTest,
+      fileName: parentNameTest,
     });
-    assert(fileId === fileIdTest);
+    assert(fileId === parentIdTest);
   });
 
   it('_resolveFid(), file name and parent id given', async function() {
