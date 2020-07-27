@@ -1,6 +1,6 @@
 {
   "name": "utils-google-drive",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple and flexible package for interacting with Google Drive",
   "main": "index.js",
   "files": [
@@ -9,6 +9,7 @@
   "scripts": {
     "test": "mocha",
     "lint": "eslint lib test",
+    "lint:fix": "eslint lib test --fix",
     "docs": "./generateDocs.sh"
   },
   "repository": {

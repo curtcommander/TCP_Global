@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const utilsGDrive = require('utils-google-drive');
+const utilsGDrive = require('../../utils-google-drive');
 const fs = require('fs-extra');
 
 const fileNameTest = 'TEST_TESTSITE';
