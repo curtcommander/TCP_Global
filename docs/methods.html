@@ -138,7 +138,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line34">line 34</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line37">line 37</a>
     </li></ul></dd>
     
 
@@ -362,7 +362,7 @@ utilsGDrive.api("files", "list", {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_delete.js.html">lib/delete.js</a>, <a href="lib_delete.js.html#line28">line 28</a>
+        <a href="lib_delete.js.html">lib/delete.js</a>, <a href="lib_delete.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -474,7 +474,8 @@ utilsGDrive.del("fileId");</code></pre>
             <td class="description last">An object
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
-This parameter also accepts a string containing the file/folder id.
+Also accepts a string containing the file/folder
+id or path (can be partial) to the file/folder in Google Drive.
                 <h6>Properties</h6>
                 
 
@@ -694,7 +695,7 @@ This parameter also accepts a string containing the file/folder id.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line30">line 30</a>
+        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -819,7 +820,8 @@ utilsGDrive.download("fileId");</code></pre>
             <td class="description last">An object
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
-This parameter also accepts a string containing the file/folder id.
+Also accepts a string containing the file/folder
+id or path (can be partial) to the file/folder in Google Drive.
                 <h6>Properties</h6>
                 
 
@@ -1078,7 +1080,7 @@ This parameter also accepts a string containing the file/folder id.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line185">line 185</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line228">line 228</a>
     </li></ul></dd>
     
 
@@ -1138,6 +1140,9 @@ utilsGDrive.getFileId({
   parentName: "folderName"
 })
 
+// code above is equivalent to the following
+utilsGDrve.getFileId("folderName/fileName");
+
 // get id of file whose name is "fileName"
 // assuming no other files/folders in Google Drive
 // are also named "fileName"
@@ -1190,8 +1195,11 @@ utilsGDrive.getFileId("fileName");</code></pre>
 
             
 
-            <td class="description last">Function parameters.
-A string containing the file/folder name may be passed instead.
+            <td class="description last">An object
+used to identify a file or folder. Must have
+<code>fileName</code>. Also accepts
+a string containing the file/folder name or path
+(can be partial) to the file/folder in Google Drive.
                 <h6>Properties</h6>
                 
 
@@ -1393,7 +1401,7 @@ given identifiers specified
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line220">line 220</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line144">line 144</a>
     </li></ul></dd>
     
 
@@ -1557,7 +1565,7 @@ utilsGDrive.getFileName("fileId");</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line95">line 95</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line98">line 98</a>
     </li></ul></dd>
     
 
@@ -1795,7 +1803,7 @@ More specifically, when <code>params.fileId</code> is falsy
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line291">line 291</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line330">line 330</a>
     </li></ul></dd>
     
 
@@ -1851,10 +1859,13 @@ More specifically, when <code>params.fileId</code> is falsy
     <pre class="prettyprint"><code>// get MIME type of file whose id is "fileId"
 utilsGDrive.getMime("fileId")
 
-// get MIME type of file whose id is "fileId"
+// get MIME type of file using path
+utilsGDrive.getMime("parentName1/parentName2/fileName");
+
+// get MIME type of file whose fileName is "fileName"
 // and that resides in folder whose id is "folderId"
 utilsGDrive.getMime({
-  fileId: "fileId",
+  fileName: "fileName",
   parentId: "folderId"
 });</code></pre>
 
@@ -1908,7 +1919,8 @@ utilsGDrive.getMime({
             <td class="description last">An object
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
-This parameter also accepts a string containing the file/folder id.
+Also accepts a string containing the file/folder
+id or path (can be partial) to the file/folder in Google Drive.
                 <h6>Properties</h6>
                 
 
@@ -2128,7 +2140,7 @@ This parameter also accepts a string containing the file/folder id.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line333">line 333</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line368">line 368</a>
     </li></ul></dd>
     
 
@@ -2184,12 +2196,8 @@ This parameter also accepts a string containing the file/folder id.
     <pre class="prettyprint"><code>// get names of files in the folder whose id is "folderId"
 utilsGDrive.listChildren("folderId", "files(name)");
 
-// get ids of files in the folder whose name is "folderName"
-// and whose parent has the id "parentId"
-utilsGDrive.listChildren({
-  fileName: "folderName",
-  parentId: "parentId"
-}, "files(id)");</code></pre>
+// get ids of files in "folderName" using path
+utilsGDrive.listChildren("parentName1/parentName2/folderName", "files(id)");</code></pre>
 
 
 
@@ -2251,7 +2259,8 @@ utilsGDrive.listChildren({
             <td class="description last">An object
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
-This parameter also accepts a string containing the file/folder id.
+Also accepts a string containing the file/folder
+id or path (can be partial) to the file/folder in Google Drive.
                 <h6>Properties</h6>
                 
 
@@ -2441,7 +2450,7 @@ This parameter also accepts a string containing the file/folder id.
             
 
             <td class="description last">Data fields to request.
-Should follow the pattern <code>"files(fiel1, field2,...)"</code>.
+Should follow the pattern <code>"files(field1, field2,...)"</code>.
 Default value is <code>"files(name, id, mimeType)"</code></td>
         </tr>
 
@@ -2508,7 +2517,7 @@ that resides in the folder specified
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line67">line 67</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -2898,7 +2907,7 @@ utilsGDrive.makeFolder({
   parentName: "parentFolder"
 });
 
-// make a new folder name "newFolder" in the root folder
+// make a new folder named "newFolder" in the root folder
 utilsGDrive.makeFolder("newFolder");</code></pre>
 
 
@@ -3163,7 +3172,7 @@ an existing folder. Default value is <code>false</code></td>
 
     
 
-    <h4 class="name" id="move"><span class="type-signature">(async) </span>move<span class="signature">(identifiers, newParentParams<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+    <h4 class="name" id="move"><span class="type-signature">(async) </span>move<span class="signature">(identifiers, newParentIdentifiers<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
 
     
 
@@ -3175,7 +3184,7 @@ an existing folder. Default value is <code>false</code></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line58">line 58</a>
+        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line61">line 61</a>
     </li></ul></dd>
     
 
@@ -3232,7 +3241,10 @@ an existing folder. Default value is <code>false</code></td>
 utilsGDrive.move({fileName: "fileName"}, {newParentName: "folderName"})
 
 // move the file with id "fileId" to the folder with id "folderId"
-utilsGDrive.move("fileId", "folderId");</code></pre>
+utilsGDrive.move("fileId", "folderId");
+
+// move a file using paths
+utilsGDrive.move("path/to/file", "path/to/newParent");</code></pre>
 
 
 
@@ -3294,7 +3306,8 @@ utilsGDrive.move("fileId", "folderId");</code></pre>
             <td class="description last">An object
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
-This parameter also accepts a string containing the file/folder id.
+Also accepts a string containing the file/folder
+id or path (can be partial) to the file/folder in Google Drive.
                 <h6>Properties</h6>
                 
 
@@ -3457,7 +3470,7 @@ This parameter also accepts a string containing the file/folder id.
 
         <tr>
             
-                <td class="name"><code>newParentParams</code></td>
+                <td class="name"><code>newParentIdentifiers</code></td>
             
 
             <td class="type">
@@ -3486,103 +3499,9 @@ This parameter also accepts a string containing the file/folder id.
 
             
 
-            <td class="description last">An object identifying
-the new parent. Can also be a string containing the parent id.
-File will be moved to root folder if this parameter isn't specified.
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>newParentId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Id of new parent</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>newParentName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Name of new parent</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
+            <td class="description last">The same as
+<code>identifiers</code> but for the new parent.
+File will be moved to root folder if this parameter isn't specified.</td>
         </tr>
 
     
@@ -3646,7 +3565,7 @@ File will be moved to root folder if this parameter isn't specified.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line24">line 24</a>
+        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -3752,7 +3671,8 @@ utilsGDrive.rename({fileName: "fileName"}, "newFileName")</code></pre>
             <td class="description last">An object
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
-This parameter also accepts a string containing the file/folder id.
+Also accepts a string containing the file/folder
+id or path (can be partial) to the file/folder in Google Drive.
                 <h6>Properties</h6>
                 
 
@@ -3995,7 +3915,7 @@ This parameter also accepts a string containing the file/folder id.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line124">line 124</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -4235,7 +4155,7 @@ More specifically, when <code>params.fileId</code> is falsy
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line135">line 135</a>
+        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -4576,7 +4496,7 @@ existing files/folders. Default value is <code>false</code></td>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat Jul 25 2020 23:37:11 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Jul 29 2020 13:54:31 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

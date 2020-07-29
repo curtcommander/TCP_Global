@@ -15,12 +15,13 @@ Perform the following actions on files and folders in Google Drive:
  - Make folders
  
 ## **Flexible file/folder specification**
-utils-google-drive allows files and folders in Google Drive to be specified by either name or id.
-Information on the parent folder can and many times should also be included.
-For example, specifying a parent will resolve the ambiguity 
-of trying to access a file or folder by name when there are multiple files/folders in Google Drive with that name.
+utils-google-drive allows files and folders in Google Drive to be specified by either name or id. Information on the parent folder can and many times should also be included. Specifying a parent will resolve the ambiguity of trying to access a file or folder by name when there are multiple files/folders in Google Drive with that name.
 
-Objects with the properties `fileId`/`folderId`, `fileName`/`folderName`, `parentId`, and `parentName` are generally used to specify a file or folder and are passed as arguments to utils-google-drive methods. For convenience, a string containing the file/folder id may also be passed instead. Consult the [docs](https://curtcommander.github.io/utils-google-drive/) for details on the arguments that each method accepts.
+Objects with the properties `fileId`, `fileName`, `parentId`, and `parentName` are generally used to specify a file or folder and are passed as arguments to utils-google-drive methods. For convenience, a string containing the file/folder id or path to the file or folder in Google Drive may be passed instead.
+
+If specifying a path, partial paths can be used and are encouraged. Ideally, you would specify a partial path that contains just enough information to uniquely identify the file in Google Drive. For example, suppose you wanted to download the file "annualReport.pdf" in the folder "reports2020". If there are multiple files named "annualReport.pdf" in Google Drive but no other folders with the name "reports2020", you could use the partial path `"reports2020/annualReport.pdf"` to identify the file of interest. This path is preferable to a longer one because it finds the file quicker, jumping in at the uniquely-named folder "reports2020" and not worrying itself with folders higher up the chain.
+
+There is some variation in how to specify a file or folder across utils-google-drive methods. Consult the [docs](https://curtcommander.github.io/utils-google-drive/) for details.
  
 ## **Examples**
 ```javascript
@@ -50,9 +51,8 @@ utilsGDrive.upload({
   parentId: "folderId" 
 });
 
-// move folder "reports" in Google Drive to root folder
-// "root" is special API keyword
-utilsGDrive.move({fileName: "reports"}, {newParentId: "root"});
+// move folder "reports2020" to the folder "reports"
+utilsGDrive.move("path/to/reports2020", "path/to/reports");
 
 // delete file with id "fileId"
 utilsGDrive.del("fileId");
