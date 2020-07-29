@@ -3,6 +3,7 @@
 const assert = require('assert').strict;
 const utilsGDrive = require('../../utils-google-drive');
 const fs = require('fs-extra');
+const path = require('path');
 
 const fileNameTest = 'Daily Logs';
 const fileIdTest = '1Xsvaf0S00x-Tcq-HtxvCuUHnEgVE6W4X';
@@ -44,38 +45,13 @@ describe('setup', function() {
 });
 
 describe('resolve identifiers', function() {
-  it('_resolveParamsId(), string given', async function() {
-    const fileId = await utilsGDrive._resolveParamsId('testId');
+  it('_resolveId(), file id given as string', async function() {
+    const fileId = await utilsGDrive._resolveId('testId');
     assert(fileId === 'testId');
   });
 
-  it('_resolveParamsId(), id property given', async function() {
-    const fileId = await utilsGDrive._resolveParamsId({
-      testId: 'testId',
-      testName: 'testName',
-    });
-    assert(fileId === 'testId');
-  });
-
-  it('_resolveParamsId(), name property given', async function() {
-    const fileId = await utilsGDrive._resolveParamsId({
-      testName: parentNameTest,
-    });
-    assert(fileId === parentIdTest);
-  });
-
-  it('_resolveParamsId(), default to root', async function() {
-    const fileId = await utilsGDrive._resolveParamsId({});
-    assert(fileId === 'root');
-  });
-
-  it('_resolveFId(), string', async function() {
-    const fileId = await utilsGDrive._resolveFId('testId');
-    assert(fileId === 'testId');
-  });
-
-  it('_resolveFId(), file id given', async function() {
-    const fileId = await utilsGDrive._resolveFId({
+  it('_resolveId(), file id given as object property', async function() {
+    const fileId = await utilsGDrive._resolveId({
       fileId: fileIdTest,
       fileName: 'testName',
       test: 'test',
@@ -83,23 +59,29 @@ describe('resolve identifiers', function() {
     assert(fileId === fileIdTest);
   });
 
-  it('_resolveFid(), file name given', async function() {
-    const fileId = await utilsGDrive._resolveFId({
+  it('_resolveId(), path given as string', async function() {
+    const p = [parentNameTest, fileNameTest].join(path.sep);
+    const fileId = await utilsGDrive._resolveId(p);
+    assert(fileId === fileIdTest);
+  });
+
+  it('_resolveId(), file name given', async function() {
+    const fileId = await utilsGDrive._resolveId({
       fileName: parentNameTest,
     });
     assert(fileId === parentIdTest);
   });
 
-  it('_resolveFid(), file name and parent id given', async function() {
-    const fileId = await utilsGDrive._resolveFId({
+  it('_resolveId(), file name and parent id given', async function() {
+    const fileId = await utilsGDrive._resolveId({
       fileName: fileNameTest,
       parentId: parentIdTest,
     });
     assert(fileId == fileIdTest);
   });
 
-  it('_resolveFid(), file name and parent name given', async function() {
-    const fileId = await utilsGDrive._resolveFId({
+  it('_resolveId(), file name and parent name given', async function() {
+    const fileId = await utilsGDrive._resolveId({
       fileName: fileNameTest,
       parentName: parentNameTest,
     });
@@ -128,11 +110,22 @@ describe('utils', function() {
     assert(responseData);
   });
 
-  it('getFileId()', async function() {
+  it('getFileId(), file id given as object property', async function() {
     const fileId = await utilsGDrive.getFileId({
       fileName: fileNameTest,
       parentId: parentIdTest,
     });
+    assert(fileId === fileIdTest);
+  });
+
+  it('getFileId(), file name given as string', async function() {
+    const fileId = await utilsGDrive.getFileId(fileNameTest);
+    assert(fileId === fileIdTest);
+  });
+
+  it('getFileId(), path given as string', async function() {
+    const p = [parentNameTest, fileNameTest].join(path.sep);
+    const fileId = await utilsGDrive.getFileId(p);
     assert(fileId === fileIdTest);
   });
 
@@ -205,9 +198,9 @@ describe('other modules', function() {
     else {
       await utilsGDrive.move(
           {fileName: 'testUploadFile.xlsx'},
-          {newParentName: 'testUploadFolder'},
+          {fileName: 'testUploadFolder'},
       );
-      const fileId = await utilsGDrive._resolveFId({
+      const fileId = await utilsGDrive._resolveId({
         fileName: 'testUploadFile.xlsx',
         parentName: 'testUploadFolder',
       });
@@ -222,22 +215,17 @@ describe('other modules', function() {
     else {
       const fileName = 'testUploadFile.xlsx';
       await utilsGDrive.download({fileName}, 'test');
-      return new Promise((resolve) => {
-        setTimeout(function() {
-          if (fs.readdirSync('test').indexOf(fileName) + 1) {
-            if (fs.statSync('test/' + fileName).size) {
-              downloadFilePassed = true;
-            }
-          }
-          resolve(downloadFilePassed);
-        }, 2000);
-      });
+      if (fs.readdirSync('test').indexOf(fileName) + 1) {
+        if (fs.statSync('test/' + fileName).size) {
+          downloadFilePassed = true;
+          assert(true);
+        }
+      }
     }
   });
 
   let downloadFolderPassed;
   it('download(), download folder', async function() {
-    this.retries(2);
     if (!downloadFilePassed) this.skip();
     else {
       const fileName = 'testMakeFolder';
@@ -300,9 +288,9 @@ describe('utilsGDriveError', function() {
     }, utilsGDrive.Error);
   });
 
-  it('_resolveFId(), invalid property name', function() {
+  it('_resolveId(), invalid property name', function() {
     assert.rejects(function() {
-      utilsGDrive._resolveFId({f: fileNameTest});
+      utilsGDrive._resolveId({f: fileNameTest});
     }, utilsGDrive.Error);
   });
 
@@ -315,5 +303,16 @@ describe('utilsGDriveError', function() {
     assert.rejects(async () => {
       await utilsGDrive._checkExistsDrive(fileMetadata);
     }, utilsGDrive.Error);
+  });
+
+  it('_handleListFilesResponse(), multiple files found', async function() {
+    const e = await utilsGDrive._handleListFilesResponse(
+        [1, 2], 'test message');
+    assert(e instanceof utilsGDrive.Error);
+  });
+
+  it('_handleListFilesResponse(), no files found', async function() {
+    const e = await utilsGDrive._handleListFilesResponse([], 'test message');
+    assert(e instanceof utilsGDrive.Error);
   });
 });
