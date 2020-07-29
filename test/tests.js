@@ -167,7 +167,9 @@ describe('other modules', function() {
     else {
       const fileId = await utilsGDrive.upload({
         localPath: 'test/testUploadFile.xlsx',
-        parentName: 'testMakeFolder',
+        parentIdentifiers: {
+          fileName: 'testMakeFolder',
+        },
       });
       const fileName = await utilsGDrive.getFileName(fileId);
       uploadFilePassed = fileName === 'testUploadFile.xlsx';
@@ -181,7 +183,9 @@ describe('other modules', function() {
     else {
       await utilsGDrive.upload({
         localPath: 'test/testUploadFolder',
-        parentName: 'testMakeFolder',
+        parentIdentifiers: {
+          fileName: 'testMakeFolder',
+        },
       });
       const children = await utilsGDrive.listChildren({
         fileName: 'testUploadFolder',

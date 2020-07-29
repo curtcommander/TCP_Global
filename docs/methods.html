@@ -1803,7 +1803,7 @@ More specifically, when <code>params.fileId</code> is falsy
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line330">line 330</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line333">line 333</a>
     </li></ul></dd>
     
 
@@ -2140,7 +2140,7 @@ id or path (can be partial) to the file/folder in Google Drive.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line368">line 368</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line371">line 371</a>
     </li></ul></dd>
     
 
@@ -2959,7 +2959,7 @@ utilsGDrive.makeFolder("newFolder");</code></pre>
 
             <td class="description last">Function parameters.
 A string containing the name of the folder to be created may be passed
-instead. In this case, the folder will be created at the root folder.
+instead. In this case, the folder will be created at the root folder
                 <h6>Properties</h6>
                 
 
@@ -3018,13 +3018,13 @@ instead. In this case, the folder will be created at the root folder.
 
         <tr>
             
-                <td class="name"><code>parentId</code></td>
+                <td class="name"><code>parentIdentifiers</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
@@ -3044,42 +3044,10 @@ instead. In this case, the folder will be created at the root folder.
 
             
 
-            <td class="description last">Id of parent folder
-where the folder should be created</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Name of parent folder
-where the folder should be created</td>
+            <td class="description last">Same as
+<code>identifiers</code> in other methods
+(e.g. <a href="methods.html#getMime">getMime</a>) but for the parent folder where the
+new folder will be created</td>
         </tr>
 
     
@@ -4155,7 +4123,7 @@ More specifically, when <code>params.fileId</code> is falsy
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line139">line 139</a>
+        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line138">line 138</a>
     </li></ul></dd>
     
 
@@ -4268,7 +4236,7 @@ utilsGDrive.upload("path/to/folderName");</code></pre>
 
             <td class="description last">Function parameters.
 A string containing the path to the file/folder to be uploaded may be passed
-instead. In this case, the file/folder will be uploaded at the root folder.
+instead. In this case, the file/folder will be uploaded at the root folder
                 <h6>Properties</h6>
                 
 
@@ -4327,13 +4295,13 @@ instead. In this case, the file/folder will be uploaded at the root folder.
 
         <tr>
             
-                <td class="name"><code>parentId</code></td>
+                <td class="name"><code>parentIdentifiers</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
@@ -4353,42 +4321,10 @@ instead. In this case, the file/folder will be uploaded at the root folder.
 
             
 
-            <td class="description last">Id of parent folder
-where the file/folder should be uploaded</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Name of parent folder
-where the file/folder should be uploaded</td>
+            <td class="description last">Same as
+<code>identifiers</code> in other methods
+(e.g. <a href="methods.html#getMime">getMime</a>) but for the parent folder
+where the file/folder is to be uploaded to</td>
         </tr>
 
     
@@ -4496,7 +4432,7 @@ existing files/folders. Default value is <code>false</code></td>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Jul 29 2020 13:54:31 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Jul 29 2020 15:45:09 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
