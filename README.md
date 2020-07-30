@@ -1,4 +1,5 @@
 # **utils-google-drive**
+[![Build Status](https://travis-ci.com/curtcommander/utils-google-drive.svg?branch=master)](https://travis-ci.com/curtcommander/utils-google-drive)
 [![npm version](https://badge.fury.io/js/utils-google-drive.svg)](https://www.npmjs.com/package/utils-google-drive)
 [![repo](https://img.shields.io/badge/repo-gray.svg)](https://github.com/curtcommander/utils-google-drive)
 [![docs](https://img.shields.io/badge/docs-gray.svg)](https://curtcommander.github.io/utils-google-drive/)
