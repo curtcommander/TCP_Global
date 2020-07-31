@@ -8,7 +8,12 @@ const del = require('./lib/delete');
 const update = require('./lib/update');
 const drive = require('./lib/drive');
 
+/**
+ * Base class for utils-google-drive errors
+ * which have the name UtilsGDriveError
+ */
 class UtilsGDriveError extends Error {
+  /* eslint-disable-next-line require-jsdoc */
   constructor(args) {
     super(args);
     this.name = 'UtilsGDriveError';
@@ -19,32 +24,37 @@ class UtilsGDriveError extends Error {
  * Base class whose methods are utils-google-drive functions.
  * An instance of this class is returned when requiring the package.
  */
-class utilsGDrive {    
-    api                 = drive._addDrive(utils.api, this);
-    _resolveId         = utils._resolveId;
-    _resolveIdFromString = utils._resolveIdFromString;
-    _handleListFilesResponse = utils._handleListFilesResponse;
-    listFiles           = utils.listFiles;
-    getFiles            = utils.getFiles;
-    updateFiles         = utils.updateFiles;
-    getFileId           = utils.getFileId;
-    getFileName         = utils.getFileName;
-    getMime             = utils.getMime;
-    listChildren        = utils.listChildren;
-    download            = drive._addDrive(download.download, this);
-    _downloadFile       = download._downloadFile;
-    _overwrite          = upload._overwrite;
+class UtilsGDrive {
+  /* eslint-disable-next-line require-jsdoc */
+  constructor() {
+    /* eslint-disable no-multi-spaces */
+    this.api                 = drive._addDrive(utils.api, this),
+    this.listFiles           = utils.listFiles;
+    this.getFiles            = utils.getFiles;
+    this.updateFiles         = utils.updateFiles;
+    this.getFileId           = utils.getFileId;
+    this.getFileName         = utils.getFileName;
+    this.getMime             = utils.getMime;
+    this.listChildren        = utils.listChildren;
+    this.download            = drive._addDrive(download.download, this);
+    this._downloadFile       = download._downloadFile;
+    this._overwrite          = upload._overwrite;
 
-    makeFolder          = upload.makeFolder;
-    makeFolder          = upload.makeFolder;
-    upload              = upload.upload;
-    _uploadFile         = upload._uploadFile;
+    this.makeFolder          = upload.makeFolder;
+    this.makeFolder          = upload.makeFolder;
+    this.upload              = upload.upload;
+    this._uploadFile         = upload._uploadFile;
 
-    del                 = del.del;
-    rename              = update.rename;
-    move                = update.move;
+    this.del                 = del.del;
+    this.rename              = update.rename;
+    this.move                = update.move;
 
-    Error               = UtilsGDriveError;
+    this.Error                     = UtilsGDriveError;
+    this._resolveId                = utils._resolveId;
+    this._resolveIdFromString      = utils._resolveIdFromString;
+    this._handleListFilesResponse  = utils._handleListFilesResponse;
+    /* eslint-enable no-multi-spaces */
+  };
 };
 
-module.exports = new utilsGDrive();
+module.exports = new UtilsGDrive();
