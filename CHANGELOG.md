@@ -1,3 +1,7 @@
+### v2.0.0 — *August 11, 2020*
+* Better parent specification in `makeFolder`, `upload`, and `move` 
+* Added ability to specify files with paths
+
 ### v1.0.3 — *July 27, 2020*
 * Fixed files in Google Drive being orphaned by `makeFolder` and `upload` 
 
