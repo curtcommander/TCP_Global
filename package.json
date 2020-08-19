@@ -29,14 +29,15 @@
   },
   "homepage": "https://curtcommander.github.io/utils-google-drive",
   "dependencies": {
-    "googleapis": "^39.2.0"
+    "googleapis": "^39.2.0",
+    "throttled-queue": "^1.0.7"
   },
   "devDependencies": {
     "docdash": "^1.2.0",
     "eslint": "^7.5.0",
     "eslint-config-google": "^0.14.0",
     "fs-extra": "^9.0.1",
-    "mocha": "^8.0.1",
+    "mocha": "^8.1.1",
     "nyc": "^15.1.0"
   }
 }

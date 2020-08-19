@@ -43,6 +43,28 @@ describe('spec', function() {
       });
       assert(responseData);
     });
+
+    it('throttles api requests', function() {
+      const startTimes = [];
+      for (let i = 1; i <= 10; ++i) {
+        utilsGDrive.throttle(() => {
+          startTimes.push(process.hrtime.bigint());
+        });
+      }
+      utilsGDrive.throttle(() => {
+        let testBool = startTimes.length === 10;
+        if (testBool) {
+          for (let i=2; i<=8; i+=2) {
+            const timeDiff = (startTimes[i] - startTimes[i-2]);
+            if (timeDiff < 200000000 || timeDiff > 205000000) {
+              testBool = false;
+              break;
+            }
+          }
+        }
+        assert(testBool);
+      });
+    });
   });
 
   describe('resolve identifiers', function() {

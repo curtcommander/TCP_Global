@@ -7,6 +7,12 @@ const upload = require('./lib/upload');
 const del = require('./lib/delete');
 const update = require('./lib/update');
 const drive = require('./lib/drive');
+const throttledQueue = require('throttled-queue');
+
+// rate-limit throttle
+const nRequests = 2;
+const interval = 200;
+const throttle = throttledQueue(nRequests, interval);
 
 /**
  * Base class for utils-google-drive errors
@@ -28,27 +34,25 @@ class UtilsGDrive {
   /* eslint-disable-next-line require-jsdoc */
   constructor() {
     /* eslint-disable no-multi-spaces */
-    this.api                 = drive._addDrive(utils.api, this),
-    this.listFiles           = utils.listFiles;
-    this.getFiles            = utils.getFiles;
-    this.updateFiles         = utils.updateFiles;
-    this.getFileId           = utils.getFileId;
-    this.getFileName         = utils.getFileName;
-    this.getMime             = utils.getMime;
-    this.listChildren        = utils.listChildren;
-    this.download            = drive._addDrive(download.download, this);
-    this._downloadFile       = download._downloadFile;
-    this._overwrite          = upload._overwrite;
-
-    this.makeFolder          = upload.makeFolder;
-    this.makeFolder          = upload.makeFolder;
-    this.upload              = upload.upload;
-    this._uploadFile         = upload._uploadFile;
-
-    this.del                 = del.del;
-    this.rename              = update.rename;
-    this.move                = update.move;
-
+    this.api            = drive._addDrive(utils.api, this),
+    this.listFiles      = utils.listFiles;
+    this.getFiles       = utils.getFiles;
+    this.updateFiles    = utils.updateFiles;
+    this.getFileId      = utils.getFileId;
+    this.getFileName    = utils.getFileName;
+    this.getMime        = utils.getMime;
+    this.listChildren   = utils.listChildren;
+    this.download       = drive._addDrive(download.download, this);
+    this._downloadFile  = download._downloadFile;
+    this.makeFolder     = upload.makeFolder;
+    this.upload         = upload.upload;
+    this._uploadFile    = upload._uploadFile;
+    this._overwrite     = upload._overwrite;
+    this.rename         = update.rename;
+    this.move           = update.move;
+    this.del            = del.del;
+    this.throttle       = throttle;
+    
     this.Error                     = UtilsGDriveError;
     this._resolveId                = utils._resolveId;
     this._resolveIdFromString      = utils._resolveIdFromString;
