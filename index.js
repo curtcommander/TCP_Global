@@ -15,8 +15,7 @@ const interval = 200;
 const throttle = throttledQueue(nRequests, interval);
 
 /**
- * Base class for utils-google-drive errors
- * which have the name UtilsGDriveError
+ * Base class for utils-google-drive errors.
  */
 class UtilsGDriveError extends Error {
   /* eslint-disable-next-line require-jsdoc */
