@@ -1,3 +1,6 @@
+### v2.1.0 — *August 19, 2020*
+* Added API request throttling
+
 ### v2.0.0 — *August 11, 2020*
 * Better parent specification in `makeFolder`, `upload`, and `move` 
 * Added ability to specify files with paths
