@@ -83,6 +83,7 @@ describe('spec', function() {
     });
 
     it('_resolveId(), path given as string', async function() {
+      this.timeout(4000);
       const p = [parentNameTest, fileNameTest].join(path.sep);
       const fileId = await utilsGDrive._resolveId(p);
       assert(fileId === fileIdTest);
