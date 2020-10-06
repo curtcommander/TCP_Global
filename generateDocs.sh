@@ -4,3 +4,4 @@ sed -i 's/global/methods/g' docs/*.html
 mv docs/utilsGDrive.html UtilsGDrive.html
 mv UtilsGDrive.html docs/
 mv docs/global.html docs/methods.html
+
