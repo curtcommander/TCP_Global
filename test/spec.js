@@ -173,7 +173,7 @@ describe('spec', function() {
   });
 
   describe('other modules', function() {
-    this.timeout(8000);
+    this.timeout(10000);
 
     let makeFolderPassed;
     it('makeFolder()', async function() {

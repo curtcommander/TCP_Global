@@ -55,7 +55,7 @@ class UtilsGDrive {
     this.Error                     = UtilsGDriveError;
     this._resolveId                = utils._resolveId;
     this._resolveIdFromString      = utils._resolveIdFromString;
-    this._handleListFilesResponse  = utils._handleListFilesResponse;
+    this._checkUniqueIdent  = utils._checkUniqueIdent;
     /* eslint-enable no-multi-spaces */
   };
 };

@@ -107,15 +107,23 @@ describe('errors', function() {
     }, utilsGDrive.Error);
   });
 
-  it('_handleListFilesResponse(), multiple files found', async function() {
-    const e = await utilsGDrive._handleListFilesResponse(
-        [1, 2], 'test message');
+  it('_checkUniqueIdent(), multiple files found', async function() {
+    let e;
+    try {
+      await utilsGDrive._checkUniqueIdent([1, 2], 'test message');
+    } catch (err) {
+      e = err;
+    }
     assert(e instanceof utilsGDrive.Error);
   });
 
-  it('_handleListFilesResponse(), no files found', async function() {
-    const e = await utilsGDrive._handleListFilesResponse([], 'test message');
-    assert(e instanceof utilsGDrive.Error);
+  it('_checkUniqueIdent(), no files found', async function() {
+    let e;
+    try {
+      await utilsGDrive._checkUniqueIdent([], 'test message');
+    } catch (err) {
+      e = err;
+    }assert(e instanceof utilsGDrive.Error);
   });
 });
 
