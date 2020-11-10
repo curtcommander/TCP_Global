@@ -256,7 +256,7 @@ describe('spec', function() {
       else {
         const fileName = 'testUploadFile.xlsx';
         await utilsGDrive.download({fileName}, 'test');
-        if (fs.readdirSync('test').indexOf(fileName) + 1) {
+        if (fs.readdirSync('test').indexOf(fileName) > -1) {
           if (fs.statSync('test/' + fileName).size) {
             downloadFilePassed = true;
             assert(true);
