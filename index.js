@@ -6,6 +6,7 @@ const download = require('./lib/download');
 const upload = require('./lib/upload');
 const del = require('./lib/delete');
 const update = require('./lib/update');
+const batch = require('./lib/batch');
 const drive = require('./lib/drive');
 const throttledQueue = require('throttled-queue');
 
@@ -50,12 +51,13 @@ class UtilsGDrive {
     this.rename         = update.rename;
     this.move           = update.move;
     this.del            = del.del;
+    this.batch          = batch.batch;
     this.throttle       = throttle;
     
-    this.Error                     = UtilsGDriveError;
-    this._resolveId                = utils._resolveId;
-    this._resolveIdFromString      = utils._resolveIdFromString;
-    this._checkUniqueIdent  = utils._checkUniqueIdent;
+    this.Error                 = UtilsGDriveError;
+    this._resolveId            = utils._resolveId;
+    this._resolveIdFromString  = utils._resolveIdFromString;
+    this._checkUniqueIdent     = utils._checkUniqueIdent;
     /* eslint-enable no-multi-spaces */
   };
 };

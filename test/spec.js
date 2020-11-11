@@ -12,6 +12,7 @@ const parentNameTest = 'TCP Global';
 const parentIdTest = '19FWsjMbtZzfVnbUdDvGLdHKc3E3zXk0k';
 
 describe('spec', function() {
+  this.timeout(10000);
   describe('setup', function() {
     it('add drive to instance of utilsGDrive', async function() {
       this.retries = 2;
@@ -83,7 +84,6 @@ describe('spec', function() {
     });
 
     it('_resolveId(), path given as string', async function() {
-      this.timeout(4000);
       const p = [parentNameTest, fileNameTest].join(path.sep);
       const fileId = await utilsGDrive._resolveId(p);
       assert(fileId === fileIdTest);
@@ -114,8 +114,6 @@ describe('spec', function() {
   });
 
   describe('utils', function() {
-    this.timeout(5000);
-
     it('listFiles()', async function() {
       const files = await utilsGDrive.listFiles({fileId: fileIdTest});
       assert(files);
@@ -173,8 +171,6 @@ describe('spec', function() {
   });
 
   describe('other modules', function() {
-    this.timeout(10000);
-
     let makeFolderPassed;
     it('makeFolder()', async function() {
       const fileId = await utilsGDrive.makeFolder('testMakeFolder');
@@ -303,6 +299,25 @@ describe('spec', function() {
         q: 'name="testMakeFolder"',
       });
       assert(!files.length);
+    });
+
+    it('batch()', async function() {
+      const requests = [
+        {
+          url: 'https://www.googleapis.com/drive/v3/files',
+          method: 'GET',
+        },
+        {
+          url: 'https://www.googleapis.com/drive/v3/files',
+          method: 'GET',
+        },
+      ];
+      const responses = await utilsGDrive.batch(requests);
+      const firstResponse = (responses[0].responseStatus === 200 &&
+        responses[0].responseData);
+      const secondResponse = (responses[1].responseStatus === 200 &&
+        responses[1].responseData);
+      assert(firstResponse && secondResponse);
     });
   });
 });
