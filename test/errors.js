@@ -4,7 +4,6 @@ const assert = require('assert').strict;
 const utilsGDrive = require('../../utils-google-drive');
 
 const fileIdTest = '1Xsvaf0S00x-Tcq-HtxvCuUHnEgVE6W4X';
-const parentIdTest = '19FWsjMbtZzfVnbUdDvGLdHKc3E3zXk0k';
 
 describe('errors', function() {
   const consoleError = console.error;
@@ -94,17 +93,6 @@ describe('errors', function() {
     assert.rejects(async () => {
       await utilsGDrive.del({f: fileIdTest});
     });
-  });
-
-  it('_checkExistsDrive(), file/folder already exists', async function() {
-    const fileMetadata = {
-      name: 'Daily Logs',
-      mimeType: 'application/vnd.google-apps.folder',
-      parents: [parentIdTest],
-    };
-    assert.rejects(async () => {
-      await utilsGDrive._checkExistsDrive(fileMetadata);
-    }, utilsGDrive.Error);
   });
 
   it('_checkUniqueIdent(), multiple files found', async function() {
