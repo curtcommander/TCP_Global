@@ -1,3 +1,9 @@
+### v3.0.0 — *November 11, 2020*
+* Added batch requests
+* Better error handling: Errors are logged for individual files in `download` and `upload`, thrown elsewhere
+* Fixed `listFiles` only searching in trash when ignoreTrash parameter set to false
+* Security update ([CVE-2020-7720](https://github.com/advisories/GHSA-92xj-mqp7-vmcj))
+
 ### v2.1.0 — *August 19, 2020*
 * Added API request throttling
 
