@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="UtilsGDrive.html">UtilsGDrive</a></li><li><a href="UtilsGDriveError.html">UtilsGDriveError</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#move">move</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="UtilsGDrive.html">UtilsGDrive</a></li><li><a href="UtilsGDriveError.html">UtilsGDriveError</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#batch">batch</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#move">move</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
 </nav>
 
 <div id="main">
@@ -201,10 +201,10 @@ as well as the API methods' parameters.</li>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// Use the files resource and list method to
+    <pre class="prettyprint"><code>// use the files resource and list method to
 // get ids of files with the name "fileName"
 utilsGDrive.api("files", "list", {
-  q: "name = 'fileName'",
+  q: "name = 'fileName',
   fields: "files(id)"
 });</code></pre>
 
@@ -324,7 +324,7 @@ utilsGDrive.api("files", "list", {
 
         
 <div class="param-desc">
-    Data from response
+    Response data
 </div>
 
 
@@ -336,6 +336,189 @@ utilsGDrive.api("files", "list", {
     <dd>
         
 <span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="batch"><span class="type-signature">(async) </span>batch<span class="signature">(requests)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_batch.js.html">lib/batch.js</a>, <a href="lib_batch.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Makes a batch request.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// requests array
+const requests = [
+ {
+   url: 'https://www.googleapis.com/drive/v3/files?q=name%20%3D%20%22Daily%20Logs%22',
+   method: 'GET',
+ },
+ {
+  url: 'https://www.googleapis.com/drive/v3/files?q=name%20%3D%20%22Reports%22',
+   method: 'GET',
+ }
+];
+
+// make batch request
+utilsGDrive.batch(requests)</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>requests</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Array of objects with
+each object representing a request. Objects should have
+<code>url</code> and <code>method</code> properties specifying
+the endpoint and http method of the request, respectively.
+Object can also have a <code>data</code> property
+for the request body</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The same as <code>requests</code> but each
+object in the array has the additional properties
+<code>responseStatus</code> and <code>responseData</code>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
 
 
     </dd>
@@ -475,7 +658,7 @@ utilsGDrive.del("fileId");</code></pre>
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
 Also accepts a string containing the file/folder
-id or path (can be partial) to the file/folder in Google Drive.
+id or path (can be partial) to the file/folder in Google Drive
                 <h6>Properties</h6>
                 
 
@@ -821,7 +1004,7 @@ utilsGDrive.download("fileId");</code></pre>
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
 Also accepts a string containing the file/folder
-id or path (can be partial) to the file/folder in Google Drive.
+id or path (can be partial) to the file/folder in Google Drive
                 <h6>Properties</h6>
                 
 
@@ -1080,7 +1263,7 @@ id or path (can be partial) to the file/folder in Google Drive.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line233">line 233</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line224">line 224</a>
     </li></ul></dd>
     
 
@@ -1401,7 +1584,7 @@ given identifiers specified
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line149">line 149</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line141">line 141</a>
     </li></ul></dd>
     
 
@@ -1565,7 +1748,7 @@ utilsGDrive.getFileName("fileId");</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line101">line 101</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line102">line 102</a>
     </li></ul></dd>
     
 
@@ -1677,7 +1860,7 @@ utilsGDrive.getFiles({
             
 
             <td class="description last">Method parameters.
-<code>fileId</code> is a required property.
+<code>fileId</code> is a required property
                 <h6>Properties</h6>
                 
 
@@ -1765,7 +1948,7 @@ More specifically, when <code>params.fileId</code> is falsy
 
         
 <div class="param-desc">
-    Data from response
+    Response data
 </div>
 
 
@@ -1803,7 +1986,7 @@ More specifically, when <code>params.fileId</code> is falsy
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line338">line 338</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line319">line 319</a>
     </li></ul></dd>
     
 
@@ -1857,7 +2040,7 @@ More specifically, when <code>params.fileId</code> is falsy
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>// get MIME type of file whose id is "fileId"
-utilsGDrive.getMime("fileId")
+utilsGDrive.getMime("fileId");
 
 // get MIME type of file using path
 utilsGDrive.getMime("parentName1/parentName2/fileName");
@@ -1920,7 +2103,7 @@ utilsGDrive.getMime({
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
 Also accepts a string containing the file/folder
-id or path (can be partial) to the file/folder in Google Drive.
+id or path (can be partial) to the file/folder in Google Drive
                 <h6>Properties</h6>
                 
 
@@ -2140,7 +2323,7 @@ id or path (can be partial) to the file/folder in Google Drive.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line376">line 376</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line351">line 351</a>
     </li></ul></dd>
     
 
@@ -2260,7 +2443,7 @@ utilsGDrive.listChildren("parentName1/parentName2/folderName", "files(id)");</co
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
 Also accepts a string containing the file/folder
-id or path (can be partial) to the file/folder in Google Drive.
+id or path (can be partial) to the file/folder in Google Drive
                 <h6>Properties</h6>
                 
 
@@ -2646,7 +2829,7 @@ utilsGDrive.listFiles({
             
 
             <td class="description last">Method parameters,
-two of which are highlighted below.
+two of which are highlighted below
                 <h6>Properties</h6>
                 
 
@@ -2734,7 +2917,7 @@ two of which are highlighted below.
             
 
             <td class="description last">Data fields to request.
-Should follow the pattern <code>"files(fiel1, field2,...)"</code>.
+Should follow the pattern <code>"files(field1, field2,...)"</code>.
 Default value is <code>"files(name, id, mimeType)"</code></td>
         </tr>
 
@@ -2808,7 +2991,7 @@ as a search location</td>
 
         
 <div class="param-desc">
-    Data from response
+    Response data
 </div>
 
 
@@ -3152,7 +3335,7 @@ an existing folder. Default value is <code>false</code></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line61">line 61</a>
+        <a href="lib_update.js.html">lib/update.js</a>, <a href="lib_update.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -3275,7 +3458,7 @@ utilsGDrive.move("path/to/file", "path/to/newParent");</code></pre>
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
 Also accepts a string containing the file/folder
-id or path (can be partial) to the file/folder in Google Drive.
+id or path (can be partial) to the file/folder in Google Drive
                 <h6>Properties</h6>
                 
 
@@ -3469,7 +3652,7 @@ id or path (can be partial) to the file/folder in Google Drive.
 
             <td class="description last">The same as
 <code>identifiers</code> but for the new parent.
-File will be moved to root folder if this parameter isn't specified.</td>
+File will be moved to root folder if this parameter isn't specified</td>
         </tr>
 
     
@@ -3640,7 +3823,7 @@ utilsGDrive.rename({fileName: "fileName"}, "newFileName")</code></pre>
 used to identify a file or folder. Must have either
 <code>fileId</code> or <code>fileName</code>.
 Also accepts a string containing the file/folder
-id or path (can be partial) to the file/folder in Google Drive.
+id or path (can be partial) to the file/folder in Google Drive
                 <h6>Properties</h6>
                 
 
@@ -3883,7 +4066,7 @@ id or path (can be partial) to the file/folder in Google Drive.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line131">line 131</a>
+        <a href="lib_utils.js.html">lib/utils.js</a>, <a href="lib_utils.js.html#line128">line 128</a>
     </li></ul></dd>
     
 
@@ -3931,9 +4114,9 @@ id or path (can be partial) to the file/folder in Google Drive.
 
 <div class="description usertext">
     Makes a request to the API's files resource using
-its update method, which can be used
-to change a file or folders's name or to move a file to a different location
-within Google Drive.
+its update method, which can be used to change a
+file or folder's name or to move a file to a
+different location within Google Drive.
 </div>
 
 
@@ -3946,7 +4129,8 @@ within Google Drive.
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// change the name of a file whose id is "fileId" to "newFileName"
+    <pre class="prettyprint"><code>// change the name of a file
+// whose id is "fileId" to "newFileName"
 utilsGDrive.updateFiles({
   fileId: "fileId"
   resource: {name: "newFileName"}
@@ -3996,8 +4180,8 @@ utilsGDrive.updateFiles({
 
             
 
-            <td class="description last">Method parameters
-<code>fileId</code> is a required property.
+            <td class="description last">Method parameters.
+<code>fileId</code> is a required property
                 <h6>Properties</h6>
                 
 
@@ -4085,7 +4269,7 @@ More specifically, when <code>params.fileId</code> is falsy
 
         
 <div class="param-desc">
-    Data from response
+    Response data
 </div>
 
 
@@ -4123,7 +4307,7 @@ More specifically, when <code>params.fileId</code> is falsy
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line135">line 135</a>
+        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -4432,7 +4616,7 @@ existing files/folders. Default value is <code>false</code></td>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Wed Oct 21 2020 13:27:58 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Wed Nov 11 2020 21:05:42 GMT-0500 (Eastern Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

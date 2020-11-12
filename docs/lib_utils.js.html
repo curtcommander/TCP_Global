@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="UtilsGDrive.html">UtilsGDrive</a></li><li><a href="UtilsGDriveError.html">UtilsGDriveError</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#move">move</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="UtilsGDrive.html">UtilsGDrive</a></li><li><a href="UtilsGDriveError.html">UtilsGDriveError</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#batch">batch</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#move">move</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
 </nav>
 
 <div id="main">
@@ -57,7 +57,7 @@ module.exports = {
   getFileId,
   _resolveIdFromString,
   _resolveId,
-  _handleListFilesResponse,
+  _checkUniqueIdent,
   getMime,
   listChildren,
 };
@@ -71,24 +71,24 @@ module.exports = {
  * @param {string} resource - Name of API resource
  * @param {string} method - One of the API resource's methods
  * @param {Object} params - Method parameters
- * @return {Object} Data from response
+ * @return {Object} Response data
  * @example
- * // Use the files resource and list method to
+ * // use the files resource and list method to
  * // get ids of files with the name "fileName"
  * utilsGDrive.api("files", "list", {
- *   q: "name = 'fileName'",
+ *   q: "name = 'fileName',
  *   fields: "files(id)"
  * });
  */
 function api(resource, method, params) {
   return new Promise((resolve, reject) => {
     this.throttle(() => {
-      this.drive[resource][method](params, (err, response) => {
+      this.drive[resource][method](params, (err, resp) => {
         if (err) {
           reject(err);
           return;
         }
-        resolve(response.data);
+        resolve(resp.data);
       });
     });
   });
@@ -100,14 +100,14 @@ function api(resource, method, params) {
  * using the &lt;code>q&lt;/code> method parameter.
  * @see Wraps {@link api}
  * @param {Object} params - Method parameters,
- * two of which are highlighted below.
+ * two of which are highlighted below
  * @param {string} [params.q] - Query string used to search for files/folders
  * @param {string} [params.fields] - Data fields to request.
- * Should follow the pattern &lt;code>"files(fiel1, field2,...)"&lt;/code>.
+ * Should follow the pattern &lt;code>"files(field1, field2,...)"&lt;/code>.
  * Default value is &lt;code>"files(name, id, mimeType)"&lt;/code>
  * @param {boolean} [ignoreTrash=true] - Whether to include trash
  * as a search location
- * @return {Object} Data from response
+ * @return {Object} Response data
  * @example
  * // search for files with the name "fileName" and get their ids
  * utilsGDrive.listFiles({
@@ -117,14 +117,15 @@ function api(resource, method, params) {
  */
 function listFiles(params, ignoreTrash=true) {
   if (!params.fields) params.fields = 'files(name, id, mimeType)';
-  if (params.q) {
+
+  if (params.q &amp;&amp; ignoreTrash) {
     const regEx = new RegExp('(and)? trashed ?= ?(true|false)');
     const matches = regEx.exec(params.q);
     if (matches) params.q = params.q.replace(matches[0], '');
-    params.q += ' and trashed=' + !ignoreTrash;
+    params.q += ' and trashed=false';
   }
-  return this.api('files', 'list', params)
-      .catch((err) => console.error(err));
+
+  return this.api('files', 'list', params);
 }
 
 /**
@@ -132,9 +133,9 @@ function listFiles(params, ignoreTrash=true) {
  * which can be used to get information on files and/or download them.
  * @see Wraps {@link api}
  * @param {Object} params - Method parameters.
- * &lt;code>fileId&lt;/code> is a required property.
+ * &lt;code>fileId&lt;/code> is a required property
  * @param {string} params.fileId - File/folder id
- * @return {Object} Data from response
+ * @return {Object} Response data
  * @throws Throws an error when file/folder id isn't specified.
  * More specifically, when &lt;code>params.fileId&lt;/code> is falsy
  * @example
@@ -145,43 +146,34 @@ function listFiles(params, ignoreTrash=true) {
  * });
  */
 function getFiles(params) {
-  if (!params.fileId) {
-    const err = new this.Error('File id not specified.');
-    // wrapping in Promise.resolve ensures chainability
-    return Promise.resolve(console.error(err));
-  }
+  if (!params.fileId) throw new this.Error('File id not specified.');
   if (!params.fields) params.fields = 'name, id, mimeType';
-  return this.api('files', 'get', params)
-      .catch((err) => console.error(err));
+  return this.api('files', 'get', params);
 }
 
 /**
  * Makes a request to the API's files resource using
- * its update method, which can be used
- * to change a file or folders's name or to move a file to a different location
- * within Google Drive.
+ * its update method, which can be used to change a
+ * file or folder's name or to move a file to a
+ * different location within Google Drive.
  * @see Wraps {@link api}
- * @param {Object} params - Method parameters
- * &lt;code>fileId&lt;/code> is a required property.
+ * @param {Object} params - Method parameters.
+ * &lt;code>fileId&lt;/code> is a required property
  * @param {string} params.fileId - File/folder id
- * @return {Object} Data from response
+ * @return {Object} Response data
  * @throws Throws an error when file/folder id isn't specified.
  * More specifically, when &lt;code>params.fileId&lt;/code> is falsy
  * @example
- * // change the name of a file whose id is "fileId" to "newFileName"
+ * // change the name of a file
+ * // whose id is "fileId" to "newFileName"
  * utilsGDrive.updateFiles({
  *   fileId: "fileId"
  *   resource: {name: "newFileName"}
  * });
  */
 function updateFiles(params) {
-  if (!params.fileId) {
-    const err = new this.Error('File id not specified.');
-    // wrapping in Promise.resolve ensures chainability
-    return Promise.resolve(console.error(err));
-  }
-  return this.api('files', 'update', params)
-      .catch((err) => console.error(err));
+  if (!params.fileId) throw new this.Error('File id not specified.');
+  return this.api('files', 'update', params);
 }
 
 /**
@@ -194,32 +186,31 @@ function updateFiles(params) {
  */
 async function getFileName(fileId) {
   const responseData = await this.getFiles({fileId, fields: 'name'});
-  if (responseData) return responseData.name;
+  return responseData.name;
 }
 
 /**
  * Verifies that exactly one file was found
  * in Google Drive matching the identifiers.
  * @see Called by &lt;code>getFileId&lt;/code>
- * @param {Object} responseData - Response data from
+ * @param {Object} filesData - Response data from
  * &lt;code>listFiles&lt;/code>
  * @param {string} fileName - &lt;code>fileName&lt;/code>
  * from &lt;code>getFileId&lt;/code>
- * @return {undefined|UtilsGDriveError} &lt;code>undefined&lt;/code>
- * if only 1 file found. &lt;code>UtilsGDriveError&lt;/code>
- * if 0 or more than 1 file found
+ * @return {undefined} None
+ * @throws {UtilsGDriveError} Throws an error when
+ * 0 or more than 1 file found given identifiers.
  * @access private
  */
-function _handleListFilesResponse(responseData, fileName) {
-  const nFiles = responseData.length;
-  let e;
+function _checkUniqueIdent(filesData, fileName) {
+  const nFiles = filesData.length;
   if (nFiles === 0) {
-    e = new this.Error('No files found matching identifiers specified.');
+    throw new this.Error(
+        `No files found matching identifiers specified: ${fileName}.`);
   } else if (nFiles > 1) {
-    e = new this.Error(
+    throw new this.Error(
         `Multiple files found: ${fileName}. Consider specifying parent.`);
   }
-  return e;
 }
 
 /**
@@ -279,8 +270,10 @@ async function _resolveIdFromString(str) {
 async function getFileId({fileName, parentId, parentName}) {
   // handle string
   if (typeof(arguments[0]) === 'string') {
-    if (arguments[0].indexOf(path.sep) + 1) {
+    // path given
+    if (arguments[0].indexOf(path.sep) > -1) {
       return this._resolveIdFromString(arguments[0]);
+    // file name given
     } else {
       fileName = arguments[0];
     }
@@ -293,27 +286,15 @@ async function getFileId({fileName, parentId, parentName}) {
     if (parentId) {
       p = parentId;
     } else if (parentName) {
-      const responseData = await this.listFiles({
-        q: 'name="' + parentName + '"',
-        fields: 'files(id)',
-      });
-      if (responseData) {
-        const files = responseData.files;
-        const e = this._handleListFilesResponse(files, fileName);
-        if (e) return console.error(e);
-        p = files[0].id;
-      }
+      p = await this.getFileId(parentName);
     }
     q += ' and "' + p + '" in parents';
   }
 
   const responseData = await this.listFiles({q, fields: 'files(id)'});
-  if (responseData) {
-    const files = responseData.files;
-    const e = this._handleListFilesResponse(files, fileName);
-    if (e) return console.error(e);
-    return files[0].id;
-  }
+  const filesData = responseData.files;
+  this._checkUniqueIdent(filesData, fileName);
+  return filesData[0].id;
 }
 
 /**
@@ -334,13 +315,13 @@ async function getFileId({fileName, parentId, parentName}) {
  * @access private
  */
 async function _resolveId(identifiers) {
+  // pass fileId through if already specified
+  if (identifiers.fileId) return identifiers.fileId;
+
   // handle string
   if (typeof(identifiers) === 'string') {
     return this._resolveIdFromString(identifiers);
   }
-
-  // pass fileId through if already specified
-  if (identifiers.fileId) return identifiers.fileId;
 
   // default to root if empty object
   if (!Object.keys(identifiers).length) return 'root';
@@ -361,7 +342,7 @@ async function _resolveId(identifiers) {
  * used to identify a file or folder. Must have either
  * &lt;code>fileId&lt;/code> or &lt;code>fileName&lt;/code>.
  * Also accepts a string containing the file/folder
- * id or path (can be partial) to the file/folder in Google Drive.
+ * id or path (can be partial) to the file/folder in Google Drive
  * @param {string} identifiers.fileId - File/folder id
  * @param {string} identifiers.fileName - File/folder name
  * @param {string} [identifiers.parentId] - Parent id
@@ -369,7 +350,7 @@ async function _resolveId(identifiers) {
  * @return {string} MIME type
  * @example
  * // get MIME type of file whose id is "fileId"
- * utilsGDrive.getMime("fileId")
+ * utilsGDrive.getMime("fileId");
  *
  * // get MIME type of file using path
  * utilsGDrive.getMime("parentName1/parentName2/fileName");
@@ -382,17 +363,11 @@ async function _resolveId(identifiers) {
  * });
  */
 async function getMime(identifiers) {
-  let fileId;
-  try {
-    fileId = await this._resolveId(identifiers);
-  } catch (err) {
-    return console.error(err);
-  }
+  const fileId = await this._resolveId(identifiers);
   const responseData = await this.getFiles({
-    fileId,
-    fields: 'mimeType',
+    fileId, fields: 'mimeType',
   });
-  if (responseData) return responseData.mimeType;
+  return responseData.mimeType;
 }
 
 /**
@@ -401,7 +376,7 @@ async function getMime(identifiers) {
  * used to identify a file or folder. Must have either
  * &lt;code>fileId&lt;/code> or &lt;code>fileName&lt;/code>.
  * Also accepts a string containing the file/folder
- * id or path (can be partial) to the file/folder in Google Drive.
+ * id or path (can be partial) to the file/folder in Google Drive
  * @param {string} identifiers.fileId - File/folder id
  * @param {string} identifiers.fileName - File/folder name
  * @param {string} [identifiers.parentId] - Parent id
@@ -420,19 +395,12 @@ async function getMime(identifiers) {
  * utilsGDrive.listChildren("parentName1/parentName2/folderName", "files(id)");
  */
 async function listChildren(identifiers, fields = 'files(name, id, mimeType)') {
-  let folderId;
-  try {
-    folderId = await this._resolveId(identifiers);
-  } catch (err) {
-    return console.error(err);
-  }
-
+  const folderId = await this._resolveId(identifiers);
   const listFilesParams = {
-    q: '"' + folderId + '" in parents',
-    fields: fields,
+    q: '"' + folderId + '" in parents', fields,
   };
   const responseData = await this.listFiles(listFilesParams);
-  if (responseData) return responseData.files;
+  return responseData.files;
 }
 </code></pre>
         </article>
@@ -448,7 +416,7 @@ async function listChildren(identifiers, fields = 'files(name, id, mimeType)') {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Wed Oct 21 2020 13:27:58 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Wed Nov 11 2020 21:05:41 GMT-0500 (Eastern Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

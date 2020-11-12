@@ -29,7 +29,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="UtilsGDrive.html">UtilsGDrive</a></li><li><a href="UtilsGDriveError.html">UtilsGDriveError</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#move">move</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="UtilsGDrive.html">UtilsGDrive</a></li><li><a href="UtilsGDriveError.html">UtilsGDriveError</a></li></ul><h3>Methods</h3><ul><li><a href="methods.html#api">api</a></li><li><a href="methods.html#batch">batch</a></li><li><a href="methods.html#del">del</a></li><li><a href="methods.html#download">download</a></li><li><a href="methods.html#getFileId">getFileId</a></li><li><a href="methods.html#getFileName">getFileName</a></li><li><a href="methods.html#getFiles">getFiles</a></li><li><a href="methods.html#getMime">getMime</a></li><li><a href="methods.html#listChildren">listChildren</a></li><li><a href="methods.html#listFiles">listFiles</a></li><li><a href="methods.html#makeFolder">makeFolder</a></li><li><a href="methods.html#move">move</a></li><li><a href="methods.html#rename">rename</a></li><li><a href="methods.html#updateFiles">updateFiles</a></li><li><a href="methods.html#upload">upload</a></li></ul>
 </nav>
 
 <div id="main">
@@ -68,56 +68,90 @@
 <p>Perform the following actions on files and folders in Google Drive:</p>
 <ul>
 <li>Get metadata</li>
-<li>Change name</li>
 <li>Download</li>
 <li>Upload</li>
 <li>Move</li>
+<li>Rename</li>
 <li>Delete</li>
 <li>Make folders</li>
+</ul>
+<p>Also features:</p>
+<ul>
+<li>Flexible file/folder specification</li>
+<li>Request throttling</li>
+<li>Batch requests</li>
 </ul>
 <h2><strong>Flexible file/folder specification</strong></h2>
 <p>utils-google-drive allows files and folders in Google Drive to be specified by either name or id. Information on the parent folder can and many times should also be included. Specifying a parent will resolve the ambiguity of trying to access a file or folder by name when there are multiple files/folders in Google Drive with that name.</p>
 <p>Objects with the properties <code>fileId</code>, <code>fileName</code>, <code>parentId</code>, and <code>parentName</code> are generally used to specify a file or folder and are passed as arguments to utils-google-drive methods. For convenience, a string containing the file/folder id or path to the file or folder in Google Drive may be passed instead.</p>
-<p>If specifying a path, partial paths can be used and are encouraged. Ideally, you would specify a partial path that contains just enough information to uniquely identify the file in Google Drive. For example, suppose you wanted to download the file &quot;annualReport.pdf&quot; in the folder &quot;reports2020&quot;. If there are multiple files named &quot;annualReport.pdf&quot; in Google Drive but no other folders with the name &quot;reports2020&quot;, you could use the partial path <code>&quot;reports2020/annualReport.pdf&quot;</code> to identify the file of interest. This path is preferable to a longer one because it finds the file quicker, jumping in at the uniquely-named folder &quot;reports2020&quot; and not worrying itself with folders higher up the chain.</p>
+<p>If specifying a path, partial paths can be used and are encouraged. Ideally, you would specify a partial path that contains just enough information to uniquely identify the file in Google Drive. For example, suppose you wanted to download the file 'annualReport.pdf' in the folder 'reports2020'. If there are multiple files named 'annualReport.pdf' in Google Drive but no other folders with the name 'reports2020', you could use the partial path <code>'reports2020/annualReport.pdf'</code> to identify the file of interest. This path is preferable to a longer one because it finds the file quicker, jumping in at the uniquely-named folder 'reports2020' and not worrying itself with folders that are higher up in the hierarchy.</p>
 <p>There is some variation in how to specify a file or folder across utils-google-drive methods. Consult the <a href="https://curtcommander.github.io/utils-google-drive/">docs</a> for details.</p>
+<h2><strong>Request Throttling</strong></h2>
+<p>utils-google-drive uses <a href="https://www.npmjs.com/package/throttled-queue">throttled-queue</a> to throttle API requests. The default rate is 2 requests per 200 ms which complies with the Google Drive API's default rate limit of 1,000 requests per 100 seconds per user. You can adjust the throttle rate using the <code>nRequests</code> and <code>interval</code> variables in this package's index.js file. Note that setting an interval of less than 200 ms can cause performance issues.</p>
 <h2><strong>Examples</strong></h2>
-<pre class="prettyprint source lang-javascript"><code>const utilsGDrive = require(&quot;utils-google-drive&quot;);
+<pre class="prettyprint source lang-javascript"><code>const utilsGDrive = require('utils-google-drive');
  
-// get id of folder in Google Drive whose name is &quot;mainFolder&quot;
-// and whose parent folder is named &quot;parentFolder&quot;
+/* get metadata */
+// get id of file in Google Drive whose name is 'fileName'
+// and whose parent folder is named 'parentName'
 utilsGDrive.getFileId({
-  fileName: &quot;mainFolder&quot;,
-  parentName: &quot;parentFolder&quot;
-});
+  fileName: 'fileName',
+  parentName: 'parentName'
+}).then(fileId => {console.log(fileId)});
 
-// change name of folder from &quot;beforeName&quot; to &quot;afterName&quot;
-utilsGDrive.rename({folderName: &quot;beforeName&quot;}, &quot;afterName&quot;);
-
-// download file &quot;excelFile.xlsx&quot; in the folder &quot;dataFolder&quot;
-// to the local folder &quot;driveDownloads&quot;
+/* download */
+// download file 'excelFile.xlsx' in the folder 'dataFolder'
+// to the local folder 'driveDownloads'
 utilsGDrive.download({
-  fileName: &quot;excelFile.xlsx&quot;,
-  parentName: &quot;dataFolder&quot;
-}, &quot;path/to/driveDownloads&quot;);
+  fileName: 'excelFile.xlsx',
+  parentName: 'dataFolder'
+}, 'path/to/driveDownloads');
 
-// upload file &quot;report.pdf&quot; to the folder in Google Drive
-// with the id &quot;folderId&quot;
+/* upload */
+// upload file 'report.pdf' to the folder in Google Drive
+// with the id 'folderId'
 utilsGDrive.upload({
-  localPath: &quot;path/to/report.pdf&quot;,
-  parentId: &quot;folderId&quot; 
+  localPath: 'path/to/report.pdf',
+  parentId: 'folderId' 
 });
 
-// move folder &quot;reports2020&quot; to the folder &quot;reports&quot;
-utilsGDrive.move(&quot;path/to/reports2020&quot;, &quot;path/to/reports&quot;);
+/* move */
+// move folder 'reports2020' to the folder 'reports'
+utilsGDrive.move('path/to/reports2020', 'path/to/reports');
 
-// delete file with id &quot;fileId&quot;
-utilsGDrive.del(&quot;fileId&quot;);
+/* rename */
+// change name of folder from 'beforeName' to 'afterName'
+utilsGDrive.rename({folderName: 'beforeName'}, 'afterName');
 
-// make a new folder in the folder &quot;parentFolder&quot;
-utilsGDrive.makeFolder(&quot;newFolder&quot;, {parentName: &quot;parentFolder&quot;});
+/* delete */
+// delete file with id 'fileId'
+utilsGDrive.del('fileId');
+
+/* make folder */
+// make a new folder named 'newFolder' in the folder 'parentFolder'
+utilsGDrive.makeFolder('newFolder', {parentName: 'parentFolder'});
+
+/* batch request */
+// create array of objects
+// each object in the array represents a request
+const requests = [
+ {
+    url: 'https://www.googleapis.com/drive/v3/files?q=name%20%3D%20%22Daily%20Logs%22',
+    method: 'GET',
+ },
+ {
+    url: 'https://www.googleapis.com/drive/v3/files?q=name%20%3D%20%22Reports%22',
+    method: 'GET'
+ }
+];
+
+// make batch request
+utilsGDrive.batch(requests)
+.then(responses => {console.log(responses)});
+
 </code></pre>
 <h2><strong>Installation</strong></h2>
-<pre class="prettyprint source"><code>npm install utils-google-drive
+<pre class="prettyprint source"><code>npm i utils-google-drive
 </code></pre>
 <h2><strong>Setup</strong></h2>
 <p>You'll need to set up a Google Cloud project to access your user account's Google Drive. Follow step 1 at this <a href="https://developers.google.com/drive/api/v3/quickstart/nodejs">link</a> to start a such a project, enable the Google Drive API, and download credentials all in one step.
@@ -127,7 +161,9 @@ in the <a href="https://console.developers.google.com/">Google Cloud Console</a>
 The OAuth credentials you'll need can be created and downloaded in the Credentials section under APIs and Services.</p>
 <p>Once you've downloaded the credentials file, place it in your working directory and ensure it is named credentialsGDrive.json.</p>
 <p>The first time a method from utils-google-drive is executed, you'll be prompted in the console to authorize the app.
-Follow the link and enter the code. A file named tokenGDrive.json containing an authorization token will be created in your working directory and setup will then be complete.</p></article>
+Follow the link and enter the code. A file named tokenGDrive.json containing an authorization token will be created in your working directory and setup will then be complete.</p>
+<h2><strong>Contributions</strong></h2>
+<p>Contributions are welcome. There are many features of the Google Drive API that utils-google-drive doesn't currently address. Feel free to submit issues and enhancement requests as well.</p></article>
     </section>
 
 
@@ -142,7 +178,7 @@ Follow the link and enter the code. A file named tokenGDrive.json containing an 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Wed Oct 21 2020 13:27:58 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Wed Nov 11 2020 21:05:42 GMT-0500 (Eastern Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
