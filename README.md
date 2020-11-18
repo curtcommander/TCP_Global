@@ -58,7 +58,7 @@ utilsGDrive.download({
 // with the id 'folderId'
 utilsGDrive.upload({
   localPath: 'path/to/report.pdf',
-  parentId: 'folderId' 
+  parentIdentifiers: 'folderId' 
 });
 
 /* move */
@@ -75,7 +75,10 @@ utilsGDrive.del('fileId');
 
 /* make folder */
 // make a new folder named 'newFolder' in the folder 'parentFolder'
-utilsGDrive.makeFolder('newFolder', {parentName: 'parentFolder'});
+utilsGDrive.makeFolder({
+  folderName: 'newFolder',
+  parentIdentifiers: {fileName: 'parentFolder'}
+});
 
 /* batch request */
 // create array of objects
