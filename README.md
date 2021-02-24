@@ -25,7 +25,7 @@ utils-google-drive allows files and folders in Google Drive to be specified by e
 
 Objects with the properties `fileId`, `fileName`, `parentId`, and `parentName` are generally used to specify a file or folder and are passed as arguments to utils-google-drive methods. For convenience, a string containing the file/folder id or path to the file or folder in Google Drive may be passed instead.
 
-If specifying a path, partial paths can be used and are encouraged. Ideally, you would specify a partial path that contains just enough information to uniquely identify the file in Google Drive. For example, suppose you wanted to download the file 'annualReport.pdf' in the folder 'reports2020'. If there are multiple files named 'annualReport.pdf' in Google Drive but no other folders with the name 'reports2020', you could use the partial path `'reports2020/annualReport.pdf'` to identify the file of interest. This path is preferable to a longer one because it finds the file quicker, jumping in at the uniquely-named folder 'reports2020' and not worrying itself with folders that are higher up in the hierarchy.
+If specifying a path, partial paths can be used and are encouraged. Ideally, you would specify a partial path that contains just enough information to uniquely identify the file in Google Drive. For example, suppose you wanted to download the file 'annualReport.pdf' in the folder 'reports2020'. If there are multiple files named 'annualReport.pdf' in Google Drive but no other folders with the name 'reports2020', you could use the partial path `'reports2020/annualReport.pdf'` to identify the file of interest. This path is preferable to a longer one because it finds the file quicker, jumping in at the uniquely-named folder 'reports2020' and not worrying itself with folders that are higher up in the file path.
 
 There is some variation in how to specify a file or folder across utils-google-drive methods. Consult the [docs](https://curtcommander.github.io/utils-google-drive/) for details.
 
@@ -117,6 +117,3 @@ Once you've downloaded the credentials file, place it in your working directory 
 
 The first time a method from utils-google-drive is executed, you'll be prompted in the console to authorize the app.
 Follow the link and enter the code. A file named tokenGDrive.json containing an authorization token will be created in your working directory and setup will then be complete.
-
-## **Contributions**
-Contributions are welcome. There are many features of the Google Drive API that utils-google-drive doesn't currently address. Feel free to submit issues and enhancement requests as well.
