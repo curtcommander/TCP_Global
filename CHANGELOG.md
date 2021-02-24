@@ -1,3 +1,9 @@
+### v3.0.2 — *February 24, 2021*
+* Fixed del returning before overwrite complete
+
+### v3.0.1 — *November 18, 2020*
+* Fixed examples for makeFolder and upload methods
+
 ### v3.0.0 — *November 11, 2020*
 * Added batch requests
 * Better error handling: Errors are logged for individual files in `download` and `upload`, thrown elsewhere
