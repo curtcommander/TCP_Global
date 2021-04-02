@@ -5,11 +5,11 @@ const utilsGDrive = require('../../utils-google-drive');
 const fs = require('fs-extra');
 const path = require('path');
 
-const fileNameTest = 'Daily Logs';
-const fileIdTest = '1Xsvaf0S00x-Tcq-HtxvCuUHnEgVE6W4X';
+const fileNameTest = 'Child';
+const fileIdTest = '1qxeFRV2pPbAj4cYWZM7xpWzmVevKKmWS';
 const mimeTypeTest = 'application/vnd.google-apps.folder';
-const parentNameTest = 'TCP Global';
-const parentIdTest = '19FWsjMbtZzfVnbUdDvGLdHKc3E3zXk0k';
+const parentNameTest = 'Parent';
+const parentIdTest = '1iQO7ed6SXQQkxjRvZX11trQsQruXml7x';
 
 describe('spec', function() {
   this.timeout(10000);
