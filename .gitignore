@@ -1,6 +1,7 @@
 notes.txt
 credentialsGDrive.json
 tokenGDrive.json
+test.js
 
 # Coverage directory used by tools like istanbul
 coverage

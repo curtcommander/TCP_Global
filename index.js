@@ -51,7 +51,7 @@ class UtilsGDrive {
     this.rename         = update.rename;
     this.move           = update.move;
     this.del            = del.del;
-    this.batch          = batch.batch;
+    this.batch          = drive._addDrive(batch, this);
     this.throttle       = throttle;
     
     this.Error                 = UtilsGDriveError;
