@@ -20,19 +20,6 @@ Also features:
  - Request throttling
  - Batch requests
  
-## **Flexible file/folder specification**
-utils-google-drive allows files and folders in Google Drive to be specified by either name or id. Information on the parent folder can and many times should also be included. Specifying a parent will resolve the ambiguity of trying to access a file or folder by name when there are multiple files/folders in Google Drive with that name.
-
-Objects with the properties `fileId`, `fileName`, `parentId`, and `parentName` are generally used to specify a file or folder and are passed as arguments to utils-google-drive methods. For convenience, a string containing the file/folder id or path to the file or folder in Google Drive may be passed instead.
-
-If specifying a path, partial paths can be used and are encouraged. Ideally, you would specify a partial path that contains just enough information to uniquely identify the file in Google Drive. For example, suppose you wanted to download the file 'annualReport.pdf' in the folder 'reports2020'. If there are multiple files named 'annualReport.pdf' in Google Drive but no other folders with the name 'reports2020', you could use the partial path `'reports2020/annualReport.pdf'` to identify the file of interest. This path is preferable to a longer one because it finds the file quicker, jumping in at the uniquely-named folder 'reports2020' and not worrying itself with folders that are higher up in the file path.
-
-There is some variation in how to specify a file or folder across utils-google-drive methods. Consult the [docs](https://curtcommander.github.io/utils-google-drive/) for details.
-
-## **Request Throttling**
-
-utils-google-drive uses [throttled-queue](https://www.npmjs.com/package/throttled-queue) to throttle API requests. The default rate is 2 requests per 200 ms which complies with the Google Drive API's default rate limit of 1,000 requests per 100 seconds per user. You can adjust the throttle rate using the `nRequests` and `interval` variables in this package's index.js file. Note that setting an interval of less than 200 ms can cause performance issues.
-
 ## **Examples**
 ```javascript
 const utilsGDrive = require('utils-google-drive');
@@ -89,8 +76,13 @@ const requests = [
     method: 'GET',
  },
  {
-    url: 'https://www.googleapis.com/drive/v3/files?q=name%20%3D%20%22Reports%22',
-    method: 'GET'
+    url: 'https://www.googleapis.com/drive/v3/files/fileId/watch',
+    method: 'POST',
+    data: {
+      "kind": "api#channel",
+      "id": "channelId"
+       ...
+    }
  }
 ];
 
@@ -106,14 +98,21 @@ npm i utils-google-drive
 ```
  
 ## **Setup**
-You'll need to set up a Google Cloud project to access your user account's Google Drive. Follow step 1 at this [link](https://developers.google.com/drive/api/v3/quickstart/nodejs) to start a such a project, enable the Google Drive API, and download credentials all in one step.
-Be sure you're logged in to the correct Google account when doing so.
+You'll need to set up a Google Cloud project to access your user account's Google Drive. You'll also
+need to enable the Google Drive API and create desktop application credentials in the Google Cloud Console.
+Consult this [quickstart](https://developers.google.com/drive/api/v3/quickstart/nodejs) for steps for completing these prerequisites. Be sure you're logged in to the correct Google account when completing these tasks.
 
-For existing Google Cloud projects, you'll have to enable the API and download the credentials
-in the [Google Cloud Console](https://console.developers.google.com/). Simply search for the Google Drive API at the top and click enable.
-The OAuth credentials you'll need can be created and downloaded in the Credentials section under APIs and Services.
+Once you've downloaded the credentials file, place it in your working directory and ensure it is named credentialsGDrive.json. The first time a method from utils-google-drive is executed, you'll be prompted in the console to authorize the app. Follow the link and enter the code. A file named tokenGDrive.json containing an authorization token will be created in your working directory and setup will then be complete.
 
-Once you've downloaded the credentials file, place it in your working directory and ensure it is named credentialsGDrive.json. 
+## **Flexible file/folder specification**
+utils-google-drive allows files and folders in Google Drive to be specified by either name or id. Information on the parent folder can and many times should also be included. Specifying a parent will resolve the ambiguity of trying to access a file or folder by name when there are multiple files/folders in Google Drive with that name.
 
-The first time a method from utils-google-drive is executed, you'll be prompted in the console to authorize the app.
-Follow the link and enter the code. A file named tokenGDrive.json containing an authorization token will be created in your working directory and setup will then be complete.
+Objects with the properties `fileId`, `fileName`, `parentId`, and `parentName` are generally used to specify a file or folder and are passed as arguments to utils-google-drive methods. For convenience, a string containing the file/folder id or path to the file or folder in Google Drive may be passed instead.
+
+If specifying a path, partial paths can be used and are encouraged. Ideally, you would specify a partial path that contains just enough information to uniquely identify the file in Google Drive. For example, suppose you wanted to download the file 'annualReport.pdf' in the folder 'reports2020'. If there are multiple files named 'annualReport.pdf' in Google Drive but no other folders with the name 'reports2020', you could use the partial path `'reports2020/annualReport.pdf'` to identify the file of interest. This path is preferable to a longer one because it finds the file quicker, jumping in at the uniquely-named folder 'reports2020' and not worrying itself with folders that are higher up in the file path.
+
+There is some variation in how to specify a file or folder across utils-google-drive methods. Consult the [docs](https://curtcommander.github.io/utils-google-drive/) for details.
+
+## **Request Throttling**
+
+utils-google-drive uses [throttled-queue](https://www.npmjs.com/package/throttled-queue) to throttle API requests. The default rate is 2 requests per 200 ms which complies with the Google Drive API's default rate limit of 1,000 requests per 100 seconds per user. You can adjust the throttle rate using the `nRequests` and `interval` variables in this package's index.js file. Note that setting an interval of less than 200 ms can cause performance issues.

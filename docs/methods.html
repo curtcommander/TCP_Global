@@ -126,7 +126,7 @@
 
     
 
-    <h4 class="name" id="api"><span class="type-signature"></span>api<span class="signature">(resource, method, params)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="api"><span class="type-signature"></span>api<span class="signature">(resource, method, params)</span><span class="type-signature"> &rarr; {Promise&lt;Object>}</span></h4>
 
     
 
@@ -335,7 +335,7 @@ utilsGDrive.api("files", "list", {
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
+<span class="param-type">Promise&lt;Object></span>
 
 
     </dd>
@@ -350,7 +350,7 @@ utilsGDrive.api("files", "list", {
 
     
 
-    <h4 class="name" id="batch"><span class="type-signature">(async) </span>batch<span class="signature">(requests)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    <h4 class="name" id="batch"><span class="type-signature">(async) </span>batch<span class="signature">(requests)</span><span class="type-signature"> &rarr; {Promise&lt;Array>}</span></h4>
 
     
 
@@ -422,8 +422,13 @@ const requests = [
    method: 'GET',
  },
  {
-  url: 'https://www.googleapis.com/drive/v3/files?q=name%20%3D%20%22Reports%22',
-   method: 'GET',
+   url: 'https://www.googleapis.com/drive/v3/files/fileId/watch',
+   method: 'POST',
+   data: {
+     "kind": "api#channel",
+     "id": "channelId"
+      ...
+   }
  }
 ];
 
@@ -518,7 +523,7 @@ object in the array has the additional properties
     </dt>
     <dd>
         
-<span class="param-type">Array</span>
+<span class="param-type">Promise&lt;Array></span>
 
 
     </dd>
@@ -533,7 +538,7 @@ object in the array has the additional properties
 
     
 
-    <h4 class="name" id="del"><span class="type-signature">(async) </span>del<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+    <h4 class="name" id="del"><span class="type-signature">(async) </span>del<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {Promise&lt;undefined>}</span></h4>
 
     
 
@@ -851,7 +856,7 @@ id or path (can be partial) to the file/folder in Google Drive
     </dt>
     <dd>
         
-<span class="param-type">undefined</span>
+<span class="param-type">Promise&lt;undefined></span>
 
 
     </dd>
@@ -866,7 +871,7 @@ id or path (can be partial) to the file/folder in Google Drive
 
     
 
-    <h4 class="name" id="download"><span class="type-signature">(async) </span>download<span class="signature">(identifiers, out<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+    <h4 class="name" id="download"><span class="type-signature">(async) </span>download<span class="signature">(identifiers, out<span class="signature-attributes">opt</span>, errors<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise&lt;undefined>}</span></h4>
 
     
 
@@ -878,7 +883,7 @@ id or path (can be partial) to the file/folder in Google Drive
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line31">line 31</a>
+        <a href="lib_download.js.html">lib/download.js</a>, <a href="lib_download.js.html#line35">line 35</a>
     </li></ul></dd>
     
 
@@ -919,6 +924,9 @@ id or path (can be partial) to the file/folder in Google Drive
 
 <div class="description usertext">
     Downloads a file or folder from Google Drive.
+When downloading a folder, errors for individual files/folders
+don't stop execution. They are listed under a single error
+that is thrown at the end of execution if any errors did occur.
 </div>
 
 
@@ -1203,6 +1211,43 @@ id or path (can be partial) to the file/folder in Google Drive
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>errors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Internal parameter</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1236,7 +1281,7 @@ id or path (can be partial) to the file/folder in Google Drive
     </dt>
     <dd>
         
-<span class="param-type">undefined</span>
+<span class="param-type">Promise&lt;undefined></span>
 
 
     </dd>
@@ -1251,7 +1296,7 @@ id or path (can be partial) to the file/folder in Google Drive
 
     
 
-    <h4 class="name" id="getFileId"><span class="type-signature">(async) </span>getFileId<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="getFileId"><span class="type-signature">(async) </span>getFileId<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {Promise&lt;string>}</span></h4>
 
     
 
@@ -1557,7 +1602,7 @@ given identifiers specified
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">Promise&lt;string></span>
 
 
     </dd>
@@ -1572,7 +1617,7 @@ given identifiers specified
 
     
 
-    <h4 class="name" id="getFileName"><span class="type-signature">(async) </span>getFileName<span class="signature">(fileId)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="getFileName"><span class="type-signature">(async) </span>getFileName<span class="signature">(fileId)</span><span class="type-signature"> &rarr; {Promise&lt;string>}</span></h4>
 
     
 
@@ -1721,7 +1766,7 @@ utilsGDrive.getFileName("fileId");</code></pre>
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">Promise&lt;string></span>
 
 
     </dd>
@@ -1736,7 +1781,7 @@ utilsGDrive.getFileName("fileId");</code></pre>
 
     
 
-    <h4 class="name" id="getFiles"><span class="type-signature"></span>getFiles<span class="signature">(params)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="getFiles"><span class="type-signature"></span>getFiles<span class="signature">(params)</span><span class="type-signature"> &rarr; {Promise&lt;Object>}</span></h4>
 
     
 
@@ -1959,7 +2004,7 @@ More specifically, when <code>params.fileId</code> is falsy
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
+<span class="param-type">Promise&lt;Object></span>
 
 
     </dd>
@@ -1974,7 +2019,7 @@ More specifically, when <code>params.fileId</code> is falsy
 
     
 
-    <h4 class="name" id="getMime"><span class="type-signature">(async) </span>getMime<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="getMime"><span class="type-signature">(async) </span>getMime<span class="signature">(identifiers)</span><span class="type-signature"> &rarr; {Promise&lt;string>}</span></h4>
 
     
 
@@ -2296,7 +2341,7 @@ id or path (can be partial) to the file/folder in Google Drive
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">Promise&lt;string></span>
 
 
     </dd>
@@ -2311,7 +2356,7 @@ id or path (can be partial) to the file/folder in Google Drive
 
     
 
-    <h4 class="name" id="listChildren"><span class="type-signature">(async) </span>listChildren<span class="signature">(identifiers, fields<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    <h4 class="name" id="listChildren"><span class="type-signature">(async) </span>listChildren<span class="signature">(identifiers, fields<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise&lt;Array>}</span></h4>
 
     
 
@@ -2673,7 +2718,7 @@ that resides in the folder specified
     </dt>
     <dd>
         
-<span class="param-type">Array</span>
+<span class="param-type">Promise&lt;Array></span>
 
 
     </dd>
@@ -2688,7 +2733,7 @@ that resides in the folder specified
 
     
 
-    <h4 class="name" id="listFiles"><span class="type-signature"></span>listFiles<span class="signature">(params, ignoreTrash<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="listFiles"><span class="type-signature"></span>listFiles<span class="signature">(params, ignoreTrash<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise&lt;Object>}</span></h4>
 
     
 
@@ -3002,7 +3047,7 @@ as a search location</td>
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
+<span class="param-type">Promise&lt;Object></span>
 
 
     </dd>
@@ -3017,7 +3062,7 @@ as a search location</td>
 
     
 
-    <h4 class="name" id="makeFolder"><span class="type-signature">(async) </span>makeFolder<span class="signature">(params)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="makeFolder"><span class="type-signature">(async) </span>makeFolder<span class="signature">(params)</span><span class="type-signature"> &rarr; {Promise&lt;string>}</span></h4>
 
     
 
@@ -3308,7 +3353,7 @@ an existing folder. Default value is <code>false</code></td>
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">Promise&lt;string></span>
 
 
     </dd>
@@ -3323,7 +3368,7 @@ an existing folder. Default value is <code>false</code></td>
 
     
 
-    <h4 class="name" id="move"><span class="type-signature">(async) </span>move<span class="signature">(identifiers, newParentIdentifiers<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+    <h4 class="name" id="move"><span class="type-signature">(async) </span>move<span class="signature">(identifiers, newParentIdentifiers<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise&lt;undefined>}</span></h4>
 
     
 
@@ -3689,7 +3734,7 @@ File will be moved to root folder if this parameter isn't specified</td>
     </dt>
     <dd>
         
-<span class="param-type">undefined</span>
+<span class="param-type">Promise&lt;undefined></span>
 
 
     </dd>
@@ -3704,7 +3749,7 @@ File will be moved to root folder if this parameter isn't specified</td>
 
     
 
-    <h4 class="name" id="rename"><span class="type-signature">(async) </span>rename<span class="signature">(identifiers, newName)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+    <h4 class="name" id="rename"><span class="type-signature">(async) </span>rename<span class="signature">(identifiers, newName)</span><span class="type-signature"> &rarr; {Promise&lt;undefined>}</span></h4>
 
     
 
@@ -4039,7 +4084,7 @@ id or path (can be partial) to the file/folder in Google Drive
     </dt>
     <dd>
         
-<span class="param-type">undefined</span>
+<span class="param-type">Promise&lt;undefined></span>
 
 
     </dd>
@@ -4054,7 +4099,7 @@ id or path (can be partial) to the file/folder in Google Drive
 
     
 
-    <h4 class="name" id="updateFiles"><span class="type-signature"></span>updateFiles<span class="signature">(params)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="updateFiles"><span class="type-signature"></span>updateFiles<span class="signature">(params)</span><span class="type-signature"> &rarr; {Promise&lt;Object>}</span></h4>
 
     
 
@@ -4280,7 +4325,7 @@ More specifically, when <code>params.fileId</code> is falsy
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
+<span class="param-type">Promise&lt;Object></span>
 
 
     </dd>
@@ -4295,7 +4340,7 @@ More specifically, when <code>params.fileId</code> is falsy
 
     
 
-    <h4 class="name" id="upload"><span class="type-signature">(async) </span>upload<span class="signature">(params)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+    <h4 class="name" id="upload"><span class="type-signature">(async) </span>upload<span class="signature">(params)</span><span class="type-signature"> &rarr; {Promise&lt;undefined>}</span></h4>
 
     
 
@@ -4307,7 +4352,7 @@ More specifically, when <code>params.fileId</code> is falsy
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line130">line 130</a>
+        <a href="lib_upload.js.html">lib/upload.js</a>, <a href="lib_upload.js.html#line137">line 137</a>
     </li></ul></dd>
     
 
@@ -4348,8 +4393,13 @@ More specifically, when <code>params.fileId</code> is falsy
 
 <div class="description usertext">
     Uploads a file or folder to Google Drive.
-If both <code>params.parentId</code> and <code>params.parentName</code>
-aren't specified, the file/folder will be uploaded at the root folder.
+When uploading a folder, errors for individual files/folders
+don't stop execution. They are listed under a single error
+that is thrown at the end of execution if any errors did occur.
+If both <code>params.parentIdentifiers.parentId</code> and
+<code>params.parentIdentifiers.parentName</code>
+aren't specified, the local file/folder will be uploaded to
+the Google Drive root folder.
 </div>
 
 
@@ -4418,9 +4468,10 @@ utilsGDrive.upload("path/to/folderName");</code></pre>
 
             
 
-            <td class="description last">Function parameters.
-A string containing the path to the file/folder to be uploaded may be passed
-instead. In this case, the file/folder will be uploaded at the root folder
+            <td class="description last">Function parameters
+A string containing the path to the local file/folder to be uploaded
+may be passed instead. In this case, the file/folder will be uploaded
+to the Google Drive root folder
                 <h6>Properties</h6>
                 
 
@@ -4472,7 +4523,7 @@ instead. In this case, the file/folder will be uploaded at the root folder
 
             
 
-            <td class="description last">Path to file or folder on disk</td>
+            <td class="description last">Path to local file or folder</td>
         </tr>
 
     
@@ -4546,6 +4597,39 @@ existing files/folders. Default value is <code>false</code></td>
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>errors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Internal parameter</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -4586,7 +4670,7 @@ existing files/folders. Default value is <code>false</code></td>
     </dt>
     <dd>
         
-<span class="param-type">undefined</span>
+<span class="param-type">Promise&lt;undefined></span>
 
 
     </dd>
@@ -4616,7 +4700,7 @@ existing files/folders. Default value is <code>false</code></td>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Wed Nov 18 2020 10:21:34 GMT-0500 (Eastern Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Sun May 16 2021 17:22:04 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

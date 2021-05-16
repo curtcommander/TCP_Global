@@ -85,7 +85,7 @@ module.exports = {
  * &lt;code>name&lt;/code>, &lt;code>mimeType&lt;/code>, and &lt;code>parents&lt;/code>.
  * &lt;code>parents&lt;/code> is a list with a single string corresponding
  * to the parent id
- * @return {undefined} None
+ * @return {Promise&lt;undefined>} None
  * @access private
  */
 async function _overwrite({name, mimeType, parents}) {
@@ -94,7 +94,7 @@ async function _overwrite({name, mimeType, parents}) {
   const data = await this.listFiles({q: q});
   if (data) {
     if (data.files.length > 0) {
-      this.del(data.files[0].id);
+      await this.del(data.files[0].id);
     }
   }
 }
@@ -113,7 +113,7 @@ async function _overwrite({name, mimeType, parents}) {
  * new folder will be created
  * @param {boolean} [params.overwrite] - Whether to overwrite
  * an existing folder. Default value is &lt;code>false&lt;/code>
- * @return {string} Id of the folder created
+ * @return {Promise&lt;string>} Id of the folder created
  * @example
  * // make a new folder named "newFolder" in the folder "parentFolder"
  * utilsGDrive.makeFolder({
@@ -140,7 +140,7 @@ async function makeFolder({
 
   const parentId = await this._resolveId(parentIdentifiers);
   fileMetadata.parents = [parentId];
-  if (overwrite) this._overwrite(fileMetadata);
+  if (overwrite) await this._overwrite(fileMetadata);
   const responseData = await this.api('files', 'create', {
     resource: fileMetadata,
     fields: 'id',
@@ -150,19 +150,26 @@ async function makeFolder({
 
 /**
  * Uploads a file or folder to Google Drive.
- * If both &lt;code>params.parentId&lt;/code> and &lt;code>params.parentName&lt;/code>
- * aren't specified, the file/folder will be uploaded at the root folder.
- * @param {Object|string} params - Function parameters.
- * A string containing the path to the file/folder to be uploaded may be passed
- * instead. In this case, the file/folder will be uploaded at the root folder
- * @param {string} params.localPath - Path to file or folder on disk
+ * When uploading a folder, errors for individual files/folders
+ * don't stop execution. They are listed under a single error
+ * that is thrown at the end of execution if any errors did occur.
+ * If both &lt;code>params.parentIdentifiers.parentId&lt;/code> and
+ * &lt;code>params.parentIdentifiers.parentName&lt;/code>
+ * aren't specified, the local file/folder will be uploaded to
+ * the Google Drive root folder.
+ * @param {Object|string} params - Function parameters
+ * A string containing the path to the local file/folder to be uploaded
+ * may be passed instead. In this case, the file/folder will be uploaded
+ * to the Google Drive root folder
+ * @param {string} params.localPath - Path to local file or folder
  * @param {Object} [params.parentIdentifiers] - Same as
  * &lt;code>identifiers&lt;/code> in other methods
  * (e.g. {@link getMime}) but for the parent folder
  * where the file/folder is to be uploaded to
  * @param {boolean} [params.overwrite] - Whether to overwrite
  * existing files/folders. Default value is &lt;code>false&lt;/code>
- * @return {undefined} None
+ * @param {Object} [params.errors] - Internal parameter
+ * @return {Promise&lt;undefined>} None
  * @example
  * // upload folder "folderName" to the folder "parentName" in Google Drive
  * utilsGDrive.upload({
@@ -177,7 +184,10 @@ async function upload({
   localPath,
   parentIdentifiers = {},
   overwrite=false,
+  errors,
 }) {
+  if (!errors) errors = [];
+
   // parent id
   let parentId;
   if (typeof(arguments[0]) === 'string') {
@@ -210,20 +220,34 @@ async function upload({
 
   // handle directories
   if (isDir) {
-    const parentIdChildren = await this.makeFolder({
-      folderName: fileName,
-      parentIdentifiers: parentId,
-      overwrite,
-    });
-    fileId = parentIdChildren;
-    const children = fs.readdirSync(localPath);
-    for (const child of children) {
-      const localPathChild = path.join(localPath, child);
-      await this.upload({
-        localPath: localPathChild,
-        parentIdentifiers: parentIdChildren,
+    let parentIdChildren;
+    let flagError;
+    try {
+      parentIdChildren = await this.makeFolder({
+        folderName: fileName,
+        parentIdentifiers: parentId,
         overwrite,
       });
+    } catch (err) {
+      flagError = true;
+      errors.push({
+        path: localPath,
+        error: err.stack,
+        response: err.response,
+      });
+    }
+
+    if (!flagError) {
+      fileId = parentIdChildren;
+      const children = fs.readdirSync(localPath);
+      for (const child of children) {
+        const localPathChild = path.join(localPath, child);
+        await this.upload({
+          localPath: localPathChild,
+          parentIdentifiers: parentIdChildren,
+          overwrite,
+        });
+      }
     }
 
   // handle files
@@ -232,11 +256,27 @@ async function upload({
     // error while uploading file doesn't stop execution
     try {
       fileId = await this._uploadFile(localPath, fileMetadata);
-    } catch (e) {
-      console.error(
-          `Error while uploading file ${localPath}`);
-      console.error(e);
+    } catch (err) {
+      errors.push({
+        path: localPath,
+        error: err.stack,
+        response: err.response,
+      });
     }
+  }
+  // construct error message
+  if (errors.length > 0) {
+    const err = new Error(
+        'Some files/folders weren\'t uploaded successfully. See list below.');
+    for (const file of errors) {
+      err.stack += '\n\n' + file.path;
+      if (file.response) {
+        err.stack +=
+          `\nResponse: ${file.response.status} ${file.response.statusText}`;
+      }
+      err.stack += '\n' + file.error;
+    }
+    throw err;
   }
 
   return fileId;
@@ -249,7 +289,7 @@ async function upload({
  * &lt;code>name&lt;/code>, &lt;code>mimeType&lt;/code>, and &lt;code>parents&lt;/code>.
  * &lt;code>parents&lt;/code> is a list with a single string corresponding
  * to the parent id
- * @return {undefined} None
+ * @return {Promise&lt;undefined>} None
  * @access private
  */
 async function _uploadFile(localPath, fileMetadata) {
@@ -278,7 +318,7 @@ async function _uploadFile(localPath, fileMetadata) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Wed Nov 18 2020 10:21:34 GMT-0500 (Eastern Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Sun May 16 2021 17:22:04 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
