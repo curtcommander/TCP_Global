@@ -1,3 +1,10 @@
+### v4.0.0 — *May 16, 2021*
+* `download` and `upload` now throw errors. Errors for individual files/folders
+don't stop execution as before, but these errors are no longer handled by 
+`download` and `upload`. Instead, they are listed under a single error that is
+thrown at the end of execution if any errors did occur
+* Updated README and docs
+
 ### v3.0.3 — *April 9, 2021*
 * Fixed `batch` and `refreshAccessToken` referencing token before creation
 
