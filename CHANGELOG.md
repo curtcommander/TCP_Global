@@ -1,3 +1,6 @@
+### v4.0.1 — *June 23, 2021*
+* Fixed `upload` returning before overwrite complete when uploading a file
+
 ### v4.0.0 — *May 16, 2021*
 * `download` and `upload` now throw errors. Errors for individual files/folders
 don't stop execution as before, but these errors are no longer handled by 
